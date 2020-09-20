@@ -1,4 +1,6 @@
-# Machine-Learning-Experiments
+# Neural Networks
+
+
 
 ### Resources:
 - <a href="https://www.manning.com/books/grokking-deep-learning">Grokking Deep Learning</a>
