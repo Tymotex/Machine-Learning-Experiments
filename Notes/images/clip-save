@@ -1,9 +1,0 @@
-#!/bin/sh
-
-if test $# -lt 1; then
-    echo "Usage: $0 <output img name>"
-    exit 1
-fi;
-
-name=$1
-xclip -selection clipboard -t image/png -o > ${name}.png
