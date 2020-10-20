@@ -2,7 +2,7 @@
 <html>
 <head><meta charset="utf-8" />
 
-<title>Neural-Networks-Comprehensive-Notes</title>
+<title>PyTorch</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
@@ -13074,27 +13074,32 @@ div#notebook {
   <div tabindex="-1" id="notebook" class="border-box-sizing">
     <div class="container" id="notebook-container">
 
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[2]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Dependencies:</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Introduction">Introduction<a class="anchor-link" href="#Introduction">&#182;</a></h2><p>Deep learning is a subset of machine learning, which is a subset of artificial intelligence.</p>
-<table>
-    <tr>
-        <th style="text-align: center;">AI subfields</th>
-        <th style="text-align: center;">A neural network</th>
-    </tr>
-    <tr>
-        <td>            
-            <img src="images/ai-subsets.png">
-        </td>
-        <td>
-            <img src="images/neural-net.png">
-            <p style="text-align: left;">
-                As a biological brain analogue, each node represents a neuron and each edge represents a synaptic connection
-            </p>
-        </td>
-    <tr>
-</table><p>Deep learning focuses on a particular class of machine learning algorithms called neural networks &mdash; deep neural networks in particular.</p>
+<h2 id="Tensors:">Tensors:<a class="anchor-link" href="#Tensors:">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Tensors are multi-dimensional arrays with support for <code>autograd</code> operations like <code>backward()</code>. Tensors in PyTorch are similar to tensors in NumPy, except that they can be used on a GPU.</p>
 
 </div>
 </div>
@@ -13102,52 +13107,10 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Activation-Functions-(Nonlinearities):">Activation Functions (Nonlinearities):<a class="anchor-link" href="#Activation-Functions-(Nonlinearities):">&#182;</a></h2><p>An activation function is a function associated with a given node which takes in the weighted sum (plus bias) and maps it to another number. Activation functions mimic the firing of neurons in biological neural networks.</p>
-<p>Activation functions should have the properties:</p>
-<ul>
-<li>Continuous and differentiable at every $x$ in the real numbers</li>
-<li><em>Injective</em> &mdash; one unique output for each unique input. Simple tests: check the derivative is monotonically increasing or use the horizontal line test</li>
-<li><em>Non-linear</em> &mdash; not just a straight line. The relu function is a piecewise function so it's not linear in that way. Having a non-linear function is necessary for <em>conditional correlation</em></li>
-<li>Efficient to compute &mdash; because the activation function could be called a massive number of times</li>
-</ul>
-<p>The purpose of activation functions is to introduce non-linearity to the output of a neuron.</p>
-<ul>
-<li>Non-linearity can be thought of as “the outcome does not change in proportion to a change in any of the inputs”</li>
+<h3 id="Creating-Tensors:">Creating Tensors:<a class="anchor-link" href="#Creating-Tensors:">&#182;</a></h3><ul>
+<li>$\texttt{torch.rand(shape)}$ &mdash; returns a tensor with random values drawn from a uniform distribution on interval $[0, 1)$</li>
+<li>$\texttt{torch.zeros(shape)}$ &mdash; returns a tensor where all components are initialised with zeroes</li>
+<li>$\texttt{torch.tensor(data)}$ &mdash; creates a tensor from the supplied data list/array </li>
 </ul>
 
 </div>
@@ -13156,70 +13119,248 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Activation-Functions-for-the-Hidden-Layer:">Activation Functions for the Hidden Layer:<a class="anchor-link" href="#Activation-Functions-for-the-Hidden-Layer:">&#182;</a></h3><ul>
-<li>$\texttt{logistic sigmoid}$: $\frac{1}{1+e^{-x}}$ &mdash; maps weighted sums to a value in the interval $(0, 1)$<ul>
-<li><strong>Derivative:</strong> suppose $z=\frac{1}{1+e^{-x}}$, then $\frac{dz}{dx}=z(1-z)$</li>
-<li>This lets you interpret the output of a neuron as a probability measure</li>
+<h3 id="Tensor-Properties:">Tensor Properties:<a class="anchor-link" href="#Tensor-Properties:">&#182;</a></h3><p>Tensors have the following methods:</p>
+<ul>
+<li>$\texttt{size()}$ &mdash; returns a tuple-like object containing the tensor's shape</li>
+<li>$\texttt{transpose(dim0, dim1)}$ &mdash; returns a transposed tensor<ul>
+<li>Eg. <code>x.transpose(0, 1)</code> transposes a 2D tensor</li>
+</ul>
+</li>
+<li>$\texttt{reshape(shape)}$ &mdash; returns a reshaped tensor, containing the same data</li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[64]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;===== Original tensor =====&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Size: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">()))</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;===== Transpose =====&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;===== Reshape ====&quot;</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>===== Original tensor =====
+tensor([[0.1869, 0.9153, 0.8237],
+        [0.8429, 0.8415, 0.9888]])
+Size: torch.Size([2, 3])
+===== Transpose =====
+tensor([[0.1869, 0.8429],
+        [0.9153, 0.8415],
+        [0.8237, 0.9888]])
+tensor([[0.1869, 0.8429, 0.9153, 0.8415, 0.8237, 0.9888]])
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Tensor-operations:">Tensor operations:<a class="anchor-link" href="#Tensor-operations:">&#182;</a></h3><p>The elementwise math operators <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code> can be used on any two size-compatible tensors.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[66]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">])</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">4.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">,</span> <span class="mf">6.0</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;x = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;y = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;===== Operations =====&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;x + y = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;x - y = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">y</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;x * y = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="n">y</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;x / y = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span> <span class="o">/</span> <span class="n">y</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>x = tensor([1., 2., 3.])
+y = tensor([4., 5., 6.])
+===== Operations =====
+x + y = tensor([5., 7., 9.])
+x - y = tensor([-3., -3., -3.])
+x * y = tensor([ 4., 10., 18.])
+x / y = tensor([0.2500, 0.4000, 0.5000])
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Converting-between-torch-tensor-and-numpy-array:">Converting between torch tensor and numpy array:<a class="anchor-link" href="#Converting-between-torch-tensor-and-numpy-array:">&#182;</a></h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[78]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;===== torch.Tensor to numpy.ndarray =====&quot;</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Torch tensor: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Numpy array:  </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;===== numpy.ndarray to torch.Tensor =====&quot;</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Numpy array:  </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Torch tensor: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>===== torch.Tensor to numpy.ndarray =====
+Torch tensor: tensor([1, 2, 3])
+Numpy array:  [1 2 3]
+===== numpy.ndarray to torch.Tensor =====
+Numpy array:  [1 2 3]
+Torch tensor: tensor([1, 2, 3])
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="CUDA-Tensors:">CUDA Tensors:<a class="anchor-link" href="#CUDA-Tensors:">&#182;</a></h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[98]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># let us run this cell only if CUDA is available</span>
+<span class="c1"># We will use ``torch.device`` objects to move tensors in and out of GPU</span>
+<span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">():</span>
+    <span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;cuda&quot;</span><span class="p">)</span>          <span class="c1"># a CUDA device object</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>  <span class="c1"># directly create a tensor on GPU</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>                       <span class="c1"># or just use strings ``.to(&quot;cuda&quot;)``</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">z</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s2">&quot;cpu&quot;</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">double</span><span class="p">))</span>       <span class="c1"># ``.to`` can also change dtype together!</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>tensor([[1.0929, 2.1365, 3.7604]], device=&#39;cuda:0&#39;)
+tensor([[1.0929, 2.1365, 3.7604]], dtype=torch.float64)
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2>Autograd &mdash; Automatic Differentiation:</h2>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The <code>autograd</code> package provides automatic differentiation for all operations on Tensors.</p>
+<ul>
+<li>Enabling tracking:<ul>
+<li>Setting <code>requires_grad=True</code> on a new tensor tracks all the computation done on it. Once the computations are done, you can call <code>.backward()</code> to have all the gradients computed automatically. </li>
+</ul>
+</li>
+<li>Disabling tracking:<ul>
+<li><code>.detach()</code> method prevents computation tracking</li>
+<li>Wrapping the code block in <code>with torch.no_grad()</code> blocks tracking for everything within the block. Useful for when we're testing the model rather than training</li>
 </ul>
 </li>
 </ul>
-<p><img src="images/sigmoid.png" style="width: 35%"></p>
-<ul>
-<li>$\texttt{tanh(x)}=\frac{e^{x}-e^{-x}}{e^{x}+e^{-x}}=\frac{2}{1+e^{-2x}} - 1=2 \cdot S(2x) - 1$ &mdash; basically a scaled and offsetted version of logistic sigmoid.maps weighted sums to a value in the interval $(-1, 1)$. <ul>
-<li><strong>Derivative:</strong> suppose $z=\tanh(x)$, then $\frac{dz}{dx}=1-z^2$ </li>
-<li>$\texttt{tanh}$ can give a measure of negative correlation, rather than <em>just</em> positive correlation in the case of logistic sigmoid. It generally outperforms sigmoid for hidden layers because of its ability to measure negative correlation</li>
-<li>$\texttt{tanh}$ has a steeper gradient around the neighbourhood of $x=0$ </li>
-</ul>
-</li>
-</ul>
-<p><img src="images/tanh.png" style="width: 35%"></p>
-<ul>
-<li>$\texttt{ReLU}=\texttt{max(0, x)}$ &mdash; suppresses firing below 0, otherwise echoes the same input to the next layer.<ul>
-<li>Computationally cheaper than the sigmoid functions.</li>
-<li>Unbounded y-values in the positive direction means the activation can 'blow-up'</li>
-<li>'Dying ReLU problem' &mdash; for nodes that output 0, their weight cannot be adjusted during gradient descent since the gradient is 0. A substantial number of nodes in the network can become 'passive' because of that<ul>
-<li>Leaky ReLU aims to mitigate this problem by ensuring nodes never have a non-zero gradient</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<table>
-    <tr>
-        <th style="text-align: center;">ReLU</th>
-        <th style="text-align: center;">Leaky ReLU</th>
-    </tr>
-    <tr>
-        <td>            
-            <img src="images/relu-graph.png">
-        </td>
-        <td>
-            <img src="images/leaky-relu-graph.png">
-        </td>
-    <tr>
-</table>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Activation-Functions-for-the-Output-Layer:">Activation Functions for the Output Layer:<a class="anchor-link" href="#Activation-Functions-for-the-Output-Layer:">&#182;</a></h3><p>The choice of activation function in the <em>output layer</em> depends on what prediction is being made.</p>
-<ul>
-<li>$\texttt{sigmoid}$ &mdash; for yes/no probability predictions. <ul>
-<li>Eg. is this a dog?</li>
-</ul>
-</li>
-<li>$\texttt{softmax}$ &mdash; for classifications, based on highest probabilities (selecting a single label out of many possible labels). <ul>
-<li>Eg. does this number look like a 1, a 3 or a 7? ]</li>
-<li>$\texttt{softmax}$ serves as a normalising function for when the network needs to classify an input in two or more classes</li>
-</ul>
-</li>
-<li>No activation function for the output layer &mdash; for non-probability predictions. <ul>
-<li>Eg. what will the temperature be tomorrow?</li>
-</ul>
-</li>
-</ul>
 
 </div>
 </div>
@@ -13227,245 +13368,123 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<hr />
+<h4 id="Computation-tracking-example:">Computation tracking example:<a class="anchor-link" href="#Computation-tracking-example:">&#182;</a></h4>
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Loss-Functions:">Loss Functions:<a class="anchor-link" href="#Loss-Functions:">&#182;</a></h3><p>A loss function measures how closely the prediction matches the true label.</p>
-<ul>
-<li><p>Regression Loss Functions:</p>
-<ul>
-<li><strong><em>Mean squared error</em></strong>: $E(t, z) = \frac{1}{2}\sum_{i=1}^{m} (t-z)^2$ &mdash; the sum of the squared difference between expected value $t$ and the forward-propagation's predicted value $z$</li>
-</ul>
-</li>
-<li><p>Binary Classification Loss Functions:</p>
-<ul>
-<li><strong><em>Cross-entropy</em></strong>: $E(t, z) = -(t\log z + (1-t)\log (1-z))$ &mdash; where $t$ is the expected value and $z$ is the forward-propagation's prediction</li>
-<li>When $t=1$, the second term disappears, leaving $E(t, z) = -t\log z$</li>
-<li>When $t=0$, the first term disappears, leaving $E(t, z) = -(1-t)\log (1-z)$</li>
-</ul>
-</li>
-<li><p>Multi-Class Classification Loss Functions:</p>
-<ul>
-<li><strong><em>KL-Divergence Loss</em></strong> &mdash; TODO</li>
-</ul>
-</li>
-</ul>
-<h4 id="Cost-Function">Cost Function<a class="anchor-link" href="#Cost-Function">&#182;</a></h4><p>Cost function: $J(w, b) = \frac{1}{m}\sum_{i=1}^m E(t^{(i)}, z^{(i)})$ &mdash; the average of the sum of loss values for all training samples $1 \leq i \leq m$, where $w$ and $b$ are the weight and bias.</p>
-<ul>
-<li>The loss function measures how well the network performed on a single training example</li>
-<li>The cost function measures how well the network's parameters $w$ and $b$ performed on the entire training set</li>
-<li>Eg. if our loss function was cross-entropy, then the cost function would be: $J(w, b) = -\frac{1}{m}\sum_{i=1}^m \big( t^{(i)}\log y^{(i)} + (1-t^{(i)}) \log (1-z^{(i)}) \big)$.</li>
-</ul>
-<p>The 'learning' of a neural network is the process of finding $w$ and $b$ so as to minimise $J$. This is done through an optimisation algorithm such as <strong><em>gradient descent</em></strong>.</p>
-<h4 id="Error/Cost-Landscape:">Error/Cost Landscape:<a class="anchor-link" href="#Error/Cost-Landscape:">&#182;</a></h4><p>If we think of $E$ has height, then each the loss function defines an 'error landscape' on the weight space. The aim of neural network training then is just to find a configuration of weights where $E$ takes the global minimum.</p>
-<table>
-    <tr>
-        <th style="text-align: center;">Error landscape</th>
-        <th style="text-align: center;">Cost landscape</th>
-    </tr>
-    <tr>
-        <td>            
-            <img src="images/error-landscape.png">
-        </td>
-        <td>
-            <img src="images/cost-landscape.png">
-            <div style="text-align: left;">
-                Where $w$ and $b$ are real numbers just to make this possible to visualise. Of course, $w$ would be higher dimensional. 
-            </div>
-        </td>
-    <tr>
-</table><p>The partial derivative $\frac{\partial J(w, b)}{\partial w}$ gives the slope along the $w$ axis, while $\frac{\partial J(w, b)}{\partial b}$ gives the slope along the $b$ axis. When you 'nudge' $w$ a little bit, the derivative $\frac{\partial J(w, b)}{\partial w}$ tells you how much $J(w, b)$ changes.</p>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[12]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">requires_grad</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;x = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+
+<span class="n">y</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">2</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;y = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;y.grad_fn = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">grad_fn</span><span class="p">))</span>   <span class="c1"># y was created as a result of an operation on x, so it has a grad_fn</span>
+
+<span class="n">z</span> <span class="o">=</span> <span class="n">y</span> <span class="o">*</span> <span class="n">y</span> <span class="o">*</span> <span class="mi">3</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;z = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">z</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;z.grad_fn = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">z</span><span class="o">.</span><span class="n">grad_fn</span><span class="p">))</span>
+
+<span class="n">theta</span> <span class="o">=</span> <span class="n">z</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Theta of z = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">theta</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Theta.grad_fn = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">theta</span><span class="o">.</span><span class="n">grad_fn</span><span class="p">))</span>
+
+<span class="c1"># Doing backpropagation:  (note that calling backward() is only valid on a scalar)</span>
+<span class="n">theta</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;dθ/dx = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">grad</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>x = tensor([[1., 1.],
+        [1., 1.]], requires_grad=True)
+y = tensor([[3., 3.],
+        [3., 3.]], grad_fn=&lt;AddBackward0&gt;)
+y.grad_fn = &lt;AddBackward0 object at 0x7f785d98e1f0&gt;
+z = tensor([[27., 27.],
+        [27., 27.]], grad_fn=&lt;MulBackward0&gt;)
+z.grad_fn = &lt;MulBackward0 object at 0x7f785d9bc250&gt;
+Theta of z = 27.0
+Theta.grad_fn = &lt;MeanBackward0 object at 0x7f785d9bc3a0&gt;
+dθ/dx = tensor([[4.5000, 4.5000],
+        [4.5000, 4.5000]])
+</pre>
+</div>
+</div>
 
 </div>
 </div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Gradient-Descent:">Gradient Descent:<a class="anchor-link" href="#Gradient-Descent:">&#182;</a></h3><p>Gradient descent is an optimisation algorithm for finding the local minimum of a differentiable function.</p>
-<p>It works by repeatedly taking steps proportional to the negative of the gradient, until the weight converges on a global minimum:</p>
-$$w_{new} = w_{old} - \underbrace{\eta \frac{\partial E}{\partial w}}_\text{step}$$<p>Where $\eta$ is the learning rate &mdash; how big of step the weight update should take, or how fast the gradient descends towards an optimal weight.</p>
-<ul>
-<li><p>The subtraction of the derivative term or slope value, $\frac{\partial E}{\partial w}$, will always be push the value in the 'downhill' direction</p>
-</li>
-<li><p>Higher learning rates can cause gradient descent to overshoot and 'bounce' up the convex error landscape. Slower learning rates cause slower training time and may cause the network to get stuck</p>
-</li>
-</ul>
-<table>
-    <tr>
-        <th style="text-align: center;">Gradient Descent</th>
-        <th style="text-align: center;">Fast vs. slow learning rate</th>
-    </tr>
-    <tr>
-        <td>            
-            <img src="images/gradient-descent-demo.png">
-        </td>
-        <td>
-            <img src="images/gradient-descent-fast-vs-slow.png">
-        </td>
-    <tr>
-</table>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Optimisers:">Optimisers:<a class="anchor-link" href="#Optimisers:">&#182;</a></h3><p>Given an algorithm f(x), an optimization algorithm help in either minimizing or maximizing the value of f(x). In deep learning, we use optimisers to train the neural network by minimising the error/cost function.</p>
-<table>
-    <tr>
-        <td width="50%">   
-            <p style="text-align: center;">
-                <strong>A few standard optimisers</strong>
-            </p>
-            <img src="images/optimisers.png">
-        </td>
-        <td>
-            <p style="text-align: center;">
-                <strong>Different optimisers traversing the error landscape</strong>
-            </p>
-            <img src="images/optimisers-visualised.gif">
-        </td>
-    <tr>
-</table><p>The best optimiser is the one that traverse the error landscape for the specific problem the best. The choice of optimiser is made empirically rather than mathemtically, mostly.</p>
 
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="Stochastic-Gradient-Descent:">Stochastic Gradient Descent:<a class="anchor-link" href="#Stochastic-Gradient-Descent:">&#182;</a></h4><p>Stochastic gradient descent is when we update the weights after each training example rather than after a whole epoch (vanilla gradient descent).</p>
-<ul>
-<li>The problem with this is that a noisy training sample can steer the jump away from the optimum.</li>
-</ul>
-<h4 id="Stochastic-Gradient-Descent-+-Momentum:">Stochastic Gradient Descent + Momentum:<a class="anchor-link" href="#Stochastic-Gradient-Descent-+-Momentum:">&#182;</a></h4><p>One way to decrease the noise associated with stochastic gradient descent is to add momentum. With this, it can pay less attention to the occasional noisy samples that throw it off.</p>
-<p><em>coefficient of momentum</em> &mdash; the percentage of gradient from previous iterations that is retained. The gradient changes of the more recent steps have a greater weighting.</p>
-
-<pre><code>- Usually initialised as $\eta = 0.5$ and may be changed over later epochs
-
-</code></pre>
-<p><img src="images/sgd-momentum.png" width="70%"></p>
-<p>Since the steps taken can get larger and larger, it may be easy to overshoot the minima.</p>
-<p>Momentum takes into account the gradient of previous steps.</p>
-<p>Momentum helps gradient descent converge quicker towards one direction and dampens oscillations.</p>
-<h4 id="Stochastic-Gradient-Descent-+-Momentum-+-Acceleration:">Stochastic Gradient Descent + Momentum + Acceleration:<a class="anchor-link" href="#Stochastic-Gradient-Descent-+-Momentum-+-Acceleration:">&#182;</a></h4><p>One way to decrease the noise associated with stochastic gradient descent is to add momentum. With this, it can pay less attention to the occasional noisy samples that throw it off.</p>
-<h4 id="Mini-Batch-Gradient-Descent:">Mini-Batch Gradient Descent:<a class="anchor-link" href="#Mini-Batch-Gradient-Descent:">&#182;</a></h4><p>Mini-batch gradient descent &mdash; only updating after $m$ number of training examples are done, rather than after a whole epoch or after 1 training sample.</p>
-<h4>NAG &mdash; Nesterov Accelerated Gradient:</h4>
-<h4>Adagrad &mdash; Adaptive Gradient:</h4>
-<h4 id="Adadelta:">Adadelta:<a class="anchor-link" href="#Adadelta:">&#182;</a></h4><h4 id="RMSProp:">RMSProp:<a class="anchor-link" href="#RMSProp:">&#182;</a></h4><h4>Adam &mdash; Adaptive Moment Optimisation:</h4>
-<p>Combines momentum and RMSProp?</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Computational-Graph">Computational Graph<a class="anchor-link" href="#Computational-Graph">&#182;</a></h3><p>Fundamentally, all neural networks are just a single big mathematical function.</p>
-<p>When trying to find a neural network that works for a particular application, you're implicitly saying 'there exists some mathematical function that will reasonably approximate the observed behaviour'. The training of neural networks is to find this approximating function.</p>
-<p>A computational graph is a way of representing math functions in graph theory.</p>
-<h4 id="Representing-Functions:">Representing Functions:<a class="anchor-link" href="#Representing-Functions:">&#182;</a></h4><p>Each node is either an input node, or a function node. Function nodes take in input and produce an output.</p>
-<table>
-    <tr>
-        <th style="text-align: center;">Representing $f(x, y, z)=(x+y) \cdot z$</th>
-        <th style="text-align: center;">Representing $f(x, y)=ax^2+bxy+cy^2$</th>
-    </tr>
-    <tr>
-        <td>            
-            <img src="images/simple-computational-graph.png">
-        </td>
-        <td>
-            <img src="images/another-computational-graph.png">
-            <p style="text-align: left;">
-                This could technically be considered a neural network. It's possible to train it with gradient descent and backprop and tune $a, b$ and $c$ if we had a training dataset
-            </p>
-        </td>
-    <tr>
-</table><h4 id="Representing-Neural-Networks:">Representing Neural Networks:<a class="anchor-link" href="#Representing-Neural-Networks:">&#182;</a></h4><p>Even simple neural networks may have hundreds of thousands of nodes and edges in their computational graph, which would be impossible to represent in standard function notation.</p>
-<p>Each node in a neural network encapsulates smaller function nodes for: performing a weighted sum (plus bias), then computing a non-linear activation function.</p>
-<p><img src="images/neural-node-computational-graph.png" width="50%" /></p>
-<p>With deep neural nets, we could have millions of individual weights, plus thousands of biases to individually tune. This is why a massive dataset and a massive amount of computing power is required.</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Back-Propagation">Back-Propagation<a class="anchor-link" href="#Back-Propagation">&#182;</a></h2>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>The aim of back-propagation + gradient descent is to update the weights based on the error function value after forward-propagation. The aim is to attribute the <em>cause of the error</em>, ie. to assign a proportionate magnitude of 'blame' or 'praise', to each node to penalise/boost their output weight accordingly.</p>
-<p>Gradient descent requires the concrete values of $\frac{\partial E}{\partial w_{ij}}$ &mdash; the amount $E$ changes when you nudge $w_{ij}$ &mdash; to be known for each weight in the network. Backpropagation is the algorithm used to calculate these gradients, it does not do anything more than that.</p>
-<p>Gradients are calculated from the last layer to the first layer. Partial computation of the gradient from one layer is reused in the computation of the gradients in the previous layer.</p>
-<ul>
-<li>The reuse of calculated gradients from each layer is what makes backpropagation more efficient than the naive approach of individually calculating the gradients $\frac{\partial E}{\partial w_{ij}}$ for all $i, j$.</li>
-</ul>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="Visualised">Visualised<a class="anchor-link" href="#Visualised">&#182;</a></h4>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p><img src="images/backprop-simple.png" width="100%"></p>
-
-</div>
-</div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 $$
-\frac{\partial C}{\partial w^{(3)}}
-    =
-    \frac{\partial C}{\partial a^{(3)}}
-    \frac{\partial a^{(3)}}{\partial z^{(3)}}
-    \frac{\partial z^{(3)}}{\partial w^{(3)}}
-\tag{Weights from layer 2 to 3}
-$$$$
-\frac{\partial C}{\partial w^{(2)}}
-    =
-    \underbrace{
-    \frac{\partial C}{\partial a^{(3)}}
-    \frac{\partial a^{(3)}}{\partial z^{(3)}}
-    }_\text{From $w^{(3)}$}
-    \,
-    \frac{\partial z^{(3)}}{\partial a^{(2)}}
-    \frac{\partial a^{(2)}}{\partial z^{(2)}}
-    \frac{\partial z^{(2)}}{\partial w^{(2)}}
-$$$$
-\frac{\partial C}{\partial w^{(1)}}
-    =
-    \underbrace{
-    \frac{\partial C}{\partial a^{(3)}}
-    \frac{\partial a^{(3)}}{\partial z^{(3)}}
-    }_\text{From $w^{(3)}$}
-    \,
-    \underbrace{
-    \frac{\partial z^{(3)}}{\partial a^{(2)}}
-    \frac{\partial a^{(2)}}{\partial z^{(2)}}
-    }_\text{From $w^{(2)}$}
-    \,
-    \frac{\partial z^{(2)}}{\partial a^{(1)}}
-    \frac{\partial a^{(1)}}{\partial z^{(1)}}
-    \frac{\partial z^{(1)}}{\partial w^{(1)}}
+\begin{split}
+    \frac{\partial \theta}{\partial x} &amp; = \frac{\partial \theta}{\partial z} \cdot \frac{\partial z}{\partial y} \cdot \frac{\partial y}{\partial x} \\
+    &amp; = 
+        \begin{pmatrix}
+            \frac{1}{4} &amp; \frac{1}{4}\\
+            \frac{1}{4} &amp; \frac{1}{4}
+        \end{pmatrix}
+     \cdot 6\big(
+        \begin{pmatrix}
+            x_{11} &amp; x_{12} \\
+            x_{21} &amp; x_{22}
+        \end{pmatrix}
+     +
+        \begin{pmatrix}
+            2 &amp; 2 \\
+            2 &amp; 2
+        \end{pmatrix}
+    \big) \cdot 
+        \begin{pmatrix}
+            1 &amp; 1 \\
+            1 &amp; 1
+        \end{pmatrix}
+    \\
+    &amp; = 
+        \begin{pmatrix}
+            \frac{1}{4} &amp; \frac{1}{4}\\
+            \frac{1}{4} &amp; \frac{1}{4}
+        \end{pmatrix}
+    \cdot 6\big(
+        \begin{pmatrix}
+            1 &amp; 1 \\
+            1 &amp; 1
+        \end{pmatrix}
+    +
+        \begin{pmatrix}
+            2 &amp; 2 \\
+            2 &amp; 2
+        \end{pmatrix}
+    \big) \cdot 
+        \begin{pmatrix}
+            1 &amp; 1 \\
+            1 &amp; 1
+        \end{pmatrix} \\
+    &amp; = 
+        \begin{pmatrix}
+            4.5 &amp; 4.5 \\
+            4.5 &amp; 4.5 
+        \end{pmatrix}
+\end{split}
 $$
 </div>
 </div>
@@ -13473,6 +13492,7 @@ $$
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Network-Example:">Network Example:<a class="anchor-link" href="#Network-Example:">&#182;</a></h3><p>Below is a network that classifies handwritten digits.</p>
 
 </div>
 </div>
@@ -13480,23 +13500,343 @@ $$
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Resources:">Resources:<a class="anchor-link" href="#Resources:">&#182;</a></h3>
+<p><img src="images/pytorch-sample-network.png" width="100%"></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[30]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
+<span class="kn">import</span> <span class="nn">torch.nn.functional</span> <span class="k">as</span> <span class="nn">F</span>
+
+
+<span class="k">class</span> <span class="nc">Net</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Net</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        
+        <span class="c1"># Convolutional layers</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conv1</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>  <span class="c1"># 1 input image channel, 6 output channels, 3x3 convolution kernel</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conv2</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="c1"># 6 input channels, 16 output channels, 3x3 kernels</span>
+        
+        <span class="c1"># Fully connected layers</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fc1</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">16</span> <span class="o">*</span> <span class="mi">6</span> <span class="o">*</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">120</span><span class="p">)</span>  <span class="c1"># 6*6 from image dimension</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fc2</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">120</span><span class="p">,</span> <span class="mi">84</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fc3</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">84</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+
+    <span class="c1"># Note: the backward() function is automatically defined by autograd</span>
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">max_pool2d</span><span class="p">(</span><span class="n">F</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conv1</span><span class="p">(</span><span class="n">x</span><span class="p">)),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span> <span class="c1"># Max pooling over a (2, 2) window on conv1</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">max_pool2d</span><span class="p">(</span><span class="n">F</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conv2</span><span class="p">(</span><span class="n">x</span><span class="p">)),</span> <span class="mi">2</span><span class="p">)</span>      <span class="c1"># Max pooling over a (2, 2) window on conv2</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_flat_features</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>       <span class="c1"># Flattening(?)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fc1</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fc2</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fc3</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x</span>
+
+    <span class="k">def</span> <span class="nf">num_flat_features</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">()[</span><span class="mi">1</span><span class="p">:]</span>  <span class="c1"># all dimensions except the batch dimension</span>
+        <span class="n">num_features</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">size</span><span class="p">:</span>
+            <span class="n">num_features</span> <span class="o">*=</span> <span class="n">s</span>
+        <span class="k">return</span> <span class="n">num_features</span>
+
+
+<span class="n">net</span> <span class="o">=</span> <span class="n">Net</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">net</span><span class="p">)</span>
+
+<span class="c1"># Network parameters are accessible under net.parameters()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Network parameters&quot;</span><span class="p">)</span>
+<span class="n">params</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">net</span><span class="o">.</span><span class="n">parameters</span><span class="p">())</span>
+<span class="k">for</span> <span class="n">each_layer</span> <span class="ow">in</span> <span class="n">net</span><span class="o">.</span><span class="n">parameters</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">each_layer</span><span class="o">.</span><span class="n">size</span><span class="p">()))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Net(
+  (conv1): Conv2d(1, 6, kernel_size=(3, 3), stride=(1, 1))
+  (conv2): Conv2d(6, 16, kernel_size=(3, 3), stride=(1, 1))
+  (fc1): Linear(in_features=576, out_features=120, bias=True)
+  (fc2): Linear(in_features=120, out_features=84, bias=True)
+  (fc3): Linear(in_features=84, out_features=10, bias=True)
+)
+Network parameters
+    torch.Size([6, 1, 3, 3])
+    torch.Size([6])
+    torch.Size([16, 6, 3, 3])
+    torch.Size([16])
+    torch.Size([120, 576])
+    torch.Size([120])
+    torch.Size([84, 120])
+    torch.Size([84])
+    torch.Size([10, 84])
+    torch.Size([10])
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Predicting:">Predicting:<a class="anchor-link" href="#Predicting:">&#182;</a></h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[41]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Making a prediction, zeroing the gradients, then backpropagating:</span>
+
+<span class="nb">input</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">)</span>
+<span class="n">out</span> <span class="o">=</span> <span class="n">net</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Output layer: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">out</span><span class="p">))</span>
+
+<span class="n">net</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>   <span class="c1"># Need to zero the gradients prior to backpropagation</span>
+<span class="n">out</span><span class="o">.</span><span class="n">backward</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Output layer: tensor([[ 0.0034,  0.0779, -0.0674,  0.0440,  0.0717,  0.0629, -0.1683,  0.0298,
+         -0.1209,  0.0345]], grad_fn=&lt;AddmmBackward&gt;)
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Computing-Loss:">Computing Loss:<a class="anchor-link" href="#Computing-Loss:">&#182;</a></h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[42]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">output</span> <span class="o">=</span> <span class="n">net</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span>
+<span class="n">target</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>     <span class="c1"># a dummy target, for example</span>
+<span class="n">target</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># Flatten it to the same shape as output</span>
+<span class="n">criterion</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">MSELoss</span><span class="p">()</span>
+
+<span class="n">loss</span> <span class="o">=</span> <span class="n">criterion</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">loss</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>tensor(0.7599, grad_fn=&lt;MseLossBackward&gt;)
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>This is the sequence of computations in a forward pass:</p>
+<p><img src="images/pytorch-sample-feedforward-sequence.png" width="50%"></p>
+
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Backpropagation:">Backpropagation:<a class="anchor-link" href="#Backpropagation:">&#182;</a></h4><p>Now, calling <code>loss.backward()</code>, the whole computational graph is differentiated.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[43]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">net</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>     <span class="c1"># zeroes the gradient buffers of all parameters</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;=== conv1.bias.grad before backward() ===&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">net</span><span class="o">.</span><span class="n">conv1</span><span class="o">.</span><span class="n">bias</span><span class="o">.</span><span class="n">grad</span><span class="p">)</span>
+
+<span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;=== conv1.bias.grad after backward() ===&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">net</span><span class="o">.</span><span class="n">conv1</span><span class="o">.</span><span class="n">bias</span><span class="o">.</span><span class="n">grad</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>=== conv1.bias.grad before backward() ===
+tensor([0., 0., 0., 0., 0., 0.])
+=== conv1.bias.grad after backward() ===
+tensor([-0.0092,  0.0256,  0.0169, -0.0281, -0.0075,  0.0155])
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Using-optimisers:">Using optimisers:<a class="anchor-link" href="#Using-optimisers:">&#182;</a></h4><p>All that's left to do at this point is to update the weights using an optimiser.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">torch.optim</span> <span class="k">as</span> <span class="nn">optim</span>
+
+<span class="n">optimiser</span> <span class="o">=</span> <span class="n">optim</span><span class="o">.</span><span class="n">SGD</span><span class="p">(</span><span class="n">net</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
+
+<span class="c1"># This goes in the training loop:</span>
+<span class="n">optimiser</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+<span class="n">output</span> <span class="o">=</span> <span class="n">net</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span>
+<span class="n">loss</span> <span class="o">=</span> <span class="n">criterion</span><span class="p">(</span><span class="n">ouptut</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
+<span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+<span class="n">optimiser</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>      <span class="c1"># step() proceeds with the update</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<hr style="height: 2px;" />
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="`Torch.nn`"><a href="https://pytorch.org/docs/stable/nn.html">`Torch.nn`</a><a class="anchor-link" href="#`Torch.nn`">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><code>nn.Module</code> &mdash; base class for all neural network modules. Convenient for encapsulating parameters, keep track of state and has helpers for moving them to the GPU</p>
 <ul>
-<li>Introduction:<ul>
-<li><a href="https://medium.com/tebs-lab/introduction-to-deep-learning-a46e92cb0022">Intro to deep learning</a></li>
+<li><code>parameters()</code> &mdash; returns an iterator containing the network's parameters</li>
+<li><code>zero_grad()</code> &mdash; zeroes the gradient buffers of all parameters. It's necessary to zero the gradients prior to backpropagation because PyTorch accumulates gradients on subsequent backward passes by default</li>
 </ul>
-</li>
-<li><a href="https://medium.com/datadriveninvestor/overview-of-different-optimizers-for-neural-networks-e0ed119440c3">Types of optimisers</a></li>
-<li>Computation graph: <ul>
-<li><a href="https://medium.com/tebs-lab/deep-neural-networks-as-computational-graphs-867fcaa56c9#:~:text=A%20computational%20graph%20is%20a,or%20functions%20for%20combining%20values.">Basics of computational graphs</a></li>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Loss-Functions:">Loss Functions:<a class="anchor-link" href="#Loss-Functions:">&#182;</a></h4><p>There are several different error functions available in the <code>nn</code> package. They all take in an $\texttt{(prediction, target)}$ pair and give back a value that indicates the magnitude of prediction error</p>
+<ul>
+<li><code>MSELoss</code> &mdash; mean squared error</li>
+<li><code>CrossEntropyLoss</code> &mdash; cross entropy error</li>
 </ul>
-</li>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Optimisers-(from-torch.optim):">Optimisers (from <code>torch.optim</code>):<a class="anchor-link" href="#Optimisers-(from-torch.optim):">&#182;</a></h3><ul>
+<li><code>SGD(net.parameters(), lr, momentum)</code></li>
+<li><code>Adam([var, var2], lr)</code></li>
+</ul>
+<h4 id="Optimiser-methods:">Optimiser methods:<a class="anchor-link" href="#Optimiser-methods:">&#182;</a></h4><ul>
+<li><code>zero_grad()</code></li>
+<li><code>step()</code> &mdash; updates the network parameters. Called once the gradients have been computed by <code>backward()</code></li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Building-Blocks:">Building Blocks:<a class="anchor-link" href="#Building-Blocks:">&#182;</a></h3><ul>
+<li><code>Linear(in_size, out_size)</code> &mdash; applies linear transformation: $y=xA^T+b$</li>
+<li><code>Conv2d(in_channels, out_channels, kernel_size, stride, padding)</code> &mdash; a 2D convolutional layer</li>
+<li><code>MaxPool2d()</code></li>
 </ul>
 
 </div>

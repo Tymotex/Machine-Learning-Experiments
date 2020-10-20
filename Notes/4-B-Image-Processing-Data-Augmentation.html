@@ -2,7 +2,7 @@
 <html>
 <head><meta charset="utf-8" />
 
-<title>Neural-Networks-Comprehensive-Notes</title>
+<title>4-B-Image-Processing-Data-Augmentation</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
@@ -13077,146 +13077,17 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Introduction">Introduction<a class="anchor-link" href="#Introduction">&#182;</a></h2><p>Deep learning is a subset of machine learning, which is a subset of artificial intelligence.</p>
-<table>
-    <tr>
-        <th style="text-align: center;">AI subfields</th>
-        <th style="text-align: center;">A neural network</th>
-    </tr>
-    <tr>
-        <td>            
-            <img src="images/ai-subsets.png">
-        </td>
-        <td>
-            <img src="images/neural-net.png">
-            <p style="text-align: left;">
-                As a biological brain analogue, each node represents a neuron and each edge represents a synaptic connection
-            </p>
-        </td>
-    <tr>
-</table><p>Deep learning focuses on a particular class of machine learning algorithms called neural networks &mdash; deep neural networks in particular.</p>
-
+<h2 id="Data-Augmentation:">Data Augmentation:<a class="anchor-link" href="#Data-Augmentation:">&#182;</a></h2>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Activation-Functions-(Nonlinearities):">Activation Functions (Nonlinearities):<a class="anchor-link" href="#Activation-Functions-(Nonlinearities):">&#182;</a></h2><p>An activation function is a function associated with a given node which takes in the weighted sum (plus bias) and maps it to another number. Activation functions mimic the firing of neurons in biological neural networks.</p>
-<p>Activation functions should have the properties:</p>
 <ul>
-<li>Continuous and differentiable at every $x$ in the real numbers</li>
-<li><em>Injective</em> &mdash; one unique output for each unique input. Simple tests: check the derivative is monotonically increasing or use the horizontal line test</li>
-<li><em>Non-linear</em> &mdash; not just a straight line. The relu function is a piecewise function so it's not linear in that way. Having a non-linear function is necessary for <em>conditional correlation</em></li>
-<li>Efficient to compute &mdash; because the activation function could be called a massive number of times</li>
-</ul>
-<p>The purpose of activation functions is to introduce non-linearity to the output of a neuron.</p>
-<ul>
-<li>Non-linearity can be thought of as “the outcome does not change in proportion to a change in any of the inputs”</li>
-</ul>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Activation-Functions-for-the-Hidden-Layer:">Activation Functions for the Hidden Layer:<a class="anchor-link" href="#Activation-Functions-for-the-Hidden-Layer:">&#182;</a></h3><ul>
-<li>$\texttt{logistic sigmoid}$: $\frac{1}{1+e^{-x}}$ &mdash; maps weighted sums to a value in the interval $(0, 1)$<ul>
-<li><strong>Derivative:</strong> suppose $z=\frac{1}{1+e^{-x}}$, then $\frac{dz}{dx}=z(1-z)$</li>
-<li>This lets you interpret the output of a neuron as a probability measure</li>
-</ul>
-</li>
-</ul>
-<p><img src="images/sigmoid.png" style="width: 35%"></p>
-<ul>
-<li>$\texttt{tanh(x)}=\frac{e^{x}-e^{-x}}{e^{x}+e^{-x}}=\frac{2}{1+e^{-2x}} - 1=2 \cdot S(2x) - 1$ &mdash; basically a scaled and offsetted version of logistic sigmoid.maps weighted sums to a value in the interval $(-1, 1)$. <ul>
-<li><strong>Derivative:</strong> suppose $z=\tanh(x)$, then $\frac{dz}{dx}=1-z^2$ </li>
-<li>$\texttt{tanh}$ can give a measure of negative correlation, rather than <em>just</em> positive correlation in the case of logistic sigmoid. It generally outperforms sigmoid for hidden layers because of its ability to measure negative correlation</li>
-<li>$\texttt{tanh}$ has a steeper gradient around the neighbourhood of $x=0$ </li>
-</ul>
-</li>
-</ul>
-<p><img src="images/tanh.png" style="width: 35%"></p>
-<ul>
-<li>$\texttt{ReLU}=\texttt{max(0, x)}$ &mdash; suppresses firing below 0, otherwise echoes the same input to the next layer.<ul>
-<li>Computationally cheaper than the sigmoid functions.</li>
-<li>Unbounded y-values in the positive direction means the activation can 'blow-up'</li>
-<li>'Dying ReLU problem' &mdash; for nodes that output 0, their weight cannot be adjusted during gradient descent since the gradient is 0. A substantial number of nodes in the network can become 'passive' because of that<ul>
-<li>Leaky ReLU aims to mitigate this problem by ensuring nodes never have a non-zero gradient</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<table>
-    <tr>
-        <th style="text-align: center;">ReLU</th>
-        <th style="text-align: center;">Leaky ReLU</th>
-    </tr>
-    <tr>
-        <td>            
-            <img src="images/relu-graph.png">
-        </td>
-        <td>
-            <img src="images/leaky-relu-graph.png">
-        </td>
-    <tr>
-</table>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Activation-Functions-for-the-Output-Layer:">Activation Functions for the Output Layer:<a class="anchor-link" href="#Activation-Functions-for-the-Output-Layer:">&#182;</a></h3><p>The choice of activation function in the <em>output layer</em> depends on what prediction is being made.</p>
-<ul>
-<li>$\texttt{sigmoid}$ &mdash; for yes/no probability predictions. <ul>
-<li>Eg. is this a dog?</li>
-</ul>
-</li>
-<li>$\texttt{softmax}$ &mdash; for classifications, based on highest probabilities (selecting a single label out of many possible labels). <ul>
-<li>Eg. does this number look like a 1, a 3 or a 7? ]</li>
-<li>$\texttt{softmax}$ serves as a normalising function for when the network needs to classify an input in two or more classes</li>
-</ul>
-</li>
-<li>No activation function for the output layer &mdash; for non-probability predictions. <ul>
-<li>Eg. what will the temperature be tomorrow?</li>
+<li>Random image cropping:<ul>
+<li>Taking multiple croppings of the same image (without losing the meaningful data in them), passing each through the network, then averaging the resultant loss can improve the knowledge gained from an image</li>
+<li>In the case of AlexNet, convolutional filters with a stride of 4 are used in their first convolutional layer. Even if some input features are skipped for one input, applying the convolution filtering on multiple random croppings should factor in those input features that were skipped </li>
 </ul>
 </li>
 </ul>
@@ -13227,58 +13098,29 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<hr />
+
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Loss-Functions:">Loss Functions:<a class="anchor-link" href="#Loss-Functions:">&#182;</a></h3><p>A loss function measures how closely the prediction matches the true label.</p>
+<h2 id="Dealing-with-deeper-networks:">Dealing with deeper networks:<a class="anchor-link" href="#Dealing-with-deeper-networks:">&#182;</a></h2><p>Deep neural networks with tens of layers can be very sensitive to initial random weights.</p>
 <ul>
-<li><p>Regression Loss Functions:</p>
-<ul>
-<li><strong><em>Mean squared error</em></strong>: $E(t, z) = \frac{1}{2}\sum_{i=1}^{m} (t-z)^2$ &mdash; the sum of the squared difference between expected value $t$ and the forward-propagation's predicted value $z$</li>
+<li>10+ layers:<ul>
+<li>Weight initialisation &mdash; choosing intial weights that will make backpropagation work better. Normally, we initialise weights by drawing values at random from a normal distribution with $\mu = 0$. With weight initialisation, we're selecting the value for standard deviation $\sigma$ more carefully. </li>
+<li>Batch normalisation &mdash;</li>
 </ul>
 </li>
-<li><p>Binary Classification Loss Functions:</p>
-<ul>
-<li><strong><em>Cross-entropy</em></strong>: $E(t, z) = -(t\log z + (1-t)\log (1-z))$ &mdash; where $t$ is the expected value and $z$ is the forward-propagation's prediction</li>
-<li>When $t=1$, the second term disappears, leaving $E(t, z) = -t\log z$</li>
-<li>When $t=0$, the first term disappears, leaving $E(t, z) = -(1-t)\log (1-z)$</li>
+<li>30+ layers:<ul>
+<li>Skip connections &mdash;</li>
 </ul>
 </li>
-<li><p>Multi-Class Classification Loss Functions:</p>
-<ul>
-<li><strong><em>KL-Divergence Loss</em></strong> &mdash; TODO</li>
+<li>100+ layers:<ul>
+<li>Identity skip connections &mdash;</li>
 </ul>
 </li>
 </ul>
-<h4 id="Cost-Function">Cost Function<a class="anchor-link" href="#Cost-Function">&#182;</a></h4><p>Cost function: $J(w, b) = \frac{1}{m}\sum_{i=1}^m E(t^{(i)}, z^{(i)})$ &mdash; the average of the sum of loss values for all training samples $1 \leq i \leq m$, where $w$ and $b$ are the weight and bias.</p>
-<ul>
-<li>The loss function measures how well the network performed on a single training example</li>
-<li>The cost function measures how well the network's parameters $w$ and $b$ performed on the entire training set</li>
-<li>Eg. if our loss function was cross-entropy, then the cost function would be: $J(w, b) = -\frac{1}{m}\sum_{i=1}^m \big( t^{(i)}\log y^{(i)} + (1-t^{(i)}) \log (1-z^{(i)}) \big)$.</li>
-</ul>
-<p>The 'learning' of a neural network is the process of finding $w$ and $b$ so as to minimise $J$. This is done through an optimisation algorithm such as <strong><em>gradient descent</em></strong>.</p>
-<h4 id="Error/Cost-Landscape:">Error/Cost Landscape:<a class="anchor-link" href="#Error/Cost-Landscape:">&#182;</a></h4><p>If we think of $E$ has height, then each the loss function defines an 'error landscape' on the weight space. The aim of neural network training then is just to find a configuration of weights where $E$ takes the global minimum.</p>
-<table>
-    <tr>
-        <th style="text-align: center;">Error landscape</th>
-        <th style="text-align: center;">Cost landscape</th>
-    </tr>
-    <tr>
-        <td>            
-            <img src="images/error-landscape.png">
-        </td>
-        <td>
-            <img src="images/cost-landscape.png">
-            <div style="text-align: left;">
-                Where $w$ and $b$ are real numbers just to make this possible to visualise. Of course, $w$ would be higher dimensional. 
-            </div>
-        </td>
-    <tr>
-</table><p>The partial derivative $\frac{\partial J(w, b)}{\partial w}$ gives the slope along the $w$ axis, while $\frac{\partial J(w, b)}{\partial b}$ gives the slope along the $b$ axis. When you 'nudge' $w$ a little bit, the derivative $\frac{\partial J(w, b)}{\partial w}$ tells you how much $J(w, b)$ changes.</p>
 
 </div>
 </div>
@@ -13286,193 +13128,44 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Gradient-Descent:">Gradient Descent:<a class="anchor-link" href="#Gradient-Descent:">&#182;</a></h3><p>Gradient descent is an optimisation algorithm for finding the local minimum of a differentiable function.</p>
-<p>It works by repeatedly taking steps proportional to the negative of the gradient, until the weight converges on a global minimum:</p>
-$$w_{new} = w_{old} - \underbrace{\eta \frac{\partial E}{\partial w}}_\text{step}$$<p>Where $\eta$ is the learning rate &mdash; how big of step the weight update should take, or how fast the gradient descends towards an optimal weight.</p>
-<ul>
-<li><p>The subtraction of the derivative term or slope value, $\frac{\partial E}{\partial w}$, will always be push the value in the 'downhill' direction</p>
-</li>
-<li><p>Higher learning rates can cause gradient descent to overshoot and 'bounce' up the convex error landscape. Slower learning rates cause slower training time and may cause the network to get stuck</p>
-</li>
-</ul>
-<table>
-    <tr>
-        <th style="text-align: center;">Gradient Descent</th>
-        <th style="text-align: center;">Fast vs. slow learning rate</th>
-    </tr>
-    <tr>
-        <td>            
-            <img src="images/gradient-descent-demo.png">
-        </td>
-        <td>
-            <img src="images/gradient-descent-fast-vs-slow.png">
-        </td>
-    <tr>
-</table>
+<h3 id="Weight-Initialisation">Weight Initialisation<a class="anchor-link" href="#Weight-Initialisation">&#182;</a></h3>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Optimisers:">Optimisers:<a class="anchor-link" href="#Optimisers:">&#182;</a></h3><p>Given an algorithm f(x), an optimization algorithm help in either minimizing or maximizing the value of f(x). In deep learning, we use optimisers to train the neural network by minimising the error/cost function.</p>
-<table>
-    <tr>
-        <td width="50%">   
-            <p style="text-align: center;">
-                <strong>A few standard optimisers</strong>
-            </p>
-            <img src="images/optimisers.png">
-        </td>
-        <td>
-            <p style="text-align: center;">
-                <strong>Different optimisers traversing the error landscape</strong>
-            </p>
-            <img src="images/optimisers-visualised.gif">
-        </td>
-    <tr>
-</table><p>The best optimiser is the one that traverse the error landscape for the specific problem the best. The choice of optimiser is made empirically rather than mathemtically, mostly.</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="Stochastic-Gradient-Descent:">Stochastic Gradient Descent:<a class="anchor-link" href="#Stochastic-Gradient-Descent:">&#182;</a></h4><p>Stochastic gradient descent is when we update the weights after each training example rather than after a whole epoch (vanilla gradient descent).</p>
-<ul>
-<li>The problem with this is that a noisy training sample can steer the jump away from the optimum.</li>
-</ul>
-<h4 id="Stochastic-Gradient-Descent-+-Momentum:">Stochastic Gradient Descent + Momentum:<a class="anchor-link" href="#Stochastic-Gradient-Descent-+-Momentum:">&#182;</a></h4><p>One way to decrease the noise associated with stochastic gradient descent is to add momentum. With this, it can pay less attention to the occasional noisy samples that throw it off.</p>
-<p><em>coefficient of momentum</em> &mdash; the percentage of gradient from previous iterations that is retained. The gradient changes of the more recent steps have a greater weighting.</p>
-
-<pre><code>- Usually initialised as $\eta = 0.5$ and may be changed over later epochs
-
-</code></pre>
-<p><img src="images/sgd-momentum.png" width="70%"></p>
-<p>Since the steps taken can get larger and larger, it may be easy to overshoot the minima.</p>
-<p>Momentum takes into account the gradient of previous steps.</p>
-<p>Momentum helps gradient descent converge quicker towards one direction and dampens oscillations.</p>
-<h4 id="Stochastic-Gradient-Descent-+-Momentum-+-Acceleration:">Stochastic Gradient Descent + Momentum + Acceleration:<a class="anchor-link" href="#Stochastic-Gradient-Descent-+-Momentum-+-Acceleration:">&#182;</a></h4><p>One way to decrease the noise associated with stochastic gradient descent is to add momentum. With this, it can pay less attention to the occasional noisy samples that throw it off.</p>
-<h4 id="Mini-Batch-Gradient-Descent:">Mini-Batch Gradient Descent:<a class="anchor-link" href="#Mini-Batch-Gradient-Descent:">&#182;</a></h4><p>Mini-batch gradient descent &mdash; only updating after $m$ number of training examples are done, rather than after a whole epoch or after 1 training sample.</p>
-<h4>NAG &mdash; Nesterov Accelerated Gradient:</h4>
-<h4>Adagrad &mdash; Adaptive Gradient:</h4>
-<h4 id="Adadelta:">Adadelta:<a class="anchor-link" href="#Adadelta:">&#182;</a></h4><h4 id="RMSProp:">RMSProp:<a class="anchor-link" href="#RMSProp:">&#182;</a></h4><h4>Adam &mdash; Adaptive Moment Optimisation:</h4>
-<p>Combines momentum and RMSProp?</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Computational-Graph">Computational Graph<a class="anchor-link" href="#Computational-Graph">&#182;</a></h3><p>Fundamentally, all neural networks are just a single big mathematical function.</p>
-<p>When trying to find a neural network that works for a particular application, you're implicitly saying 'there exists some mathematical function that will reasonably approximate the observed behaviour'. The training of neural networks is to find this approximating function.</p>
-<p>A computational graph is a way of representing math functions in graph theory.</p>
-<h4 id="Representing-Functions:">Representing Functions:<a class="anchor-link" href="#Representing-Functions:">&#182;</a></h4><p>Each node is either an input node, or a function node. Function nodes take in input and produce an output.</p>
-<table>
-    <tr>
-        <th style="text-align: center;">Representing $f(x, y, z)=(x+y) \cdot z$</th>
-        <th style="text-align: center;">Representing $f(x, y)=ax^2+bxy+cy^2$</th>
-    </tr>
-    <tr>
-        <td>            
-            <img src="images/simple-computational-graph.png">
-        </td>
-        <td>
-            <img src="images/another-computational-graph.png">
-            <p style="text-align: left;">
-                This could technically be considered a neural network. It's possible to train it with gradient descent and backprop and tune $a, b$ and $c$ if we had a training dataset
-            </p>
-        </td>
-    <tr>
-</table><h4 id="Representing-Neural-Networks:">Representing Neural Networks:<a class="anchor-link" href="#Representing-Neural-Networks:">&#182;</a></h4><p>Even simple neural networks may have hundreds of thousands of nodes and edges in their computational graph, which would be impossible to represent in standard function notation.</p>
-<p>Each node in a neural network encapsulates smaller function nodes for: performing a weighted sum (plus bias), then computing a non-linear activation function.</p>
-<p><img src="images/neural-node-computational-graph.png" width="50%" /></p>
-<p>With deep neural nets, we could have millions of individual weights, plus thousands of biases to individually tune. This is why a massive dataset and a massive amount of computing power is required.</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Back-Propagation">Back-Propagation<a class="anchor-link" href="#Back-Propagation">&#182;</a></h2>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>The aim of back-propagation + gradient descent is to update the weights based on the error function value after forward-propagation. The aim is to attribute the <em>cause of the error</em>, ie. to assign a proportionate magnitude of 'blame' or 'praise', to each node to penalise/boost their output weight accordingly.</p>
-<p>Gradient descent requires the concrete values of $\frac{\partial E}{\partial w_{ij}}$ &mdash; the amount $E$ changes when you nudge $w_{ij}$ &mdash; to be known for each weight in the network. Backpropagation is the algorithm used to calculate these gradients, it does not do anything more than that.</p>
-<p>Gradients are calculated from the last layer to the first layer. Partial computation of the gradient from one layer is reused in the computation of the gradients in the previous layer.</p>
-<ul>
-<li>The reuse of calculated gradients from each layer is what makes backpropagation more efficient than the naive approach of individually calculating the gradients $\frac{\partial E}{\partial w_{ij}}$ for all $i, j$.</li>
-</ul>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="Visualised">Visualised<a class="anchor-link" href="#Visualised">&#182;</a></h4>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p><img src="images/backprop-simple.png" width="100%"></p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
+<p>Suppose $y = \sum_{k=1}^{n} w_k x_k$. If $x_k, x_k$ are independent, then 
 $$
-\frac{\partial C}{\partial w^{(3)}}
-    =
-    \frac{\partial C}{\partial a^{(3)}}
-    \frac{\partial a^{(3)}}{\partial z^{(3)}}
-    \frac{\partial z^{(3)}}{\partial w^{(3)}}
-\tag{Weights from layer 2 to 3}
-$$$$
-\frac{\partial C}{\partial w^{(2)}}
-    =
-    \underbrace{
-    \frac{\partial C}{\partial a^{(3)}}
-    \frac{\partial a^{(3)}}{\partial z^{(3)}}
-    }_\text{From $w^{(3)}$}
-    \,
-    \frac{\partial z^{(3)}}{\partial a^{(2)}}
-    \frac{\partial a^{(2)}}{\partial z^{(2)}}
-    \frac{\partial z^{(2)}}{\partial w^{(2)}}
-$$$$
-\frac{\partial C}{\partial w^{(1)}}
-    =
-    \underbrace{
-    \frac{\partial C}{\partial a^{(3)}}
-    \frac{\partial a^{(3)}}{\partial z^{(3)}}
-    }_\text{From $w^{(3)}$}
-    \,
-    \underbrace{
-    \frac{\partial z^{(3)}}{\partial a^{(2)}}
-    \frac{\partial a^{(2)}}{\partial z^{(2)}}
-    }_\text{From $w^{(2)}$}
-    \,
-    \frac{\partial z^{(2)}}{\partial a^{(1)}}
-    \frac{\partial a^{(1)}}{\partial z^{(1)}}
-    \frac{\partial z^{(1)}}{\partial w^{(1)}}
+    \text{Var}(y) = n\text{Var}(w)\text{Var}(x). \tag{1}
+$$</p>
+<p>Consider one layer $(i)$ of a deep network, with values:</p>
+<ul>
+<li>weights $w_{jk}^{(i)}$</li>
+<li>activations $x_{k}^{(i)}$ coming in from the previous layer from $1 \leq k \leq n_{i}$ with $n_i$ being the number of nodes in layer $(i)$</li>
+<li>activations $x_{j}^{(i+1)}$ at the next layer from $1 \leq j \leq n_{i+1}$ with $n_{i+1}$ being the number of nodes in layer $(i+1)$</li>
+</ul>
+<p>The activation value at each node in the next layer is given by:</p>
 $$
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
+    x_j^{(i+1)} = \texttt{activation}(\sum_{k=1}^{n_i} w_{jk}^{(i)} x_{k}^{(i)}). \tag{2}
+$$<p>From $(1)$ and $(2)$, we have</p>
+$$
+    \text{Var}(\sum_{k=1}^{n_i} w_{jk}^{(i)} x_{k}^{(i)}) = n_i \text{Var}(w_{jk}^{(i)}) \text{Var}(x_{k}^{(i)}),
+$$$$
+    \text{Var}(x^{(i+1)}) \approx G_0 n_i \text{Var}(w^{(i)}) \text{Var}(x^{(i)}), \tag{3}
+$$<p>where $G_0$ is a constant to account for the activation function &mdash; normally we just set it to $G_0 = \frac{1}{2}$.</p>
+<p>Suppose a network has $D$ layers, with input vector $x^{(i)}$ and output $z$. From $(3)$ collected across $D$ layers, we have</p>
+$$
+    \text{Var}(z) \approx \underbrace{\prod_{i=1}^{D} \big( G_0 n_i \text{Var}(w_i) \big)}_{\text{We want this to be } \approx \space 1} \cdot \text{Var}(x). \tag{4}
+$$<p>If the product in $(4)$ is less than 1, then the activations going from input towards output will exponentially decay. If the product in $(4)$ is greater than 1, then the activations will exponentially grow going from input layer to output layer.</p>
+<p>Similarly, for backpropagation we have</p>
+$$
+    \text{Var}(\frac{\partial}{\partial x}) \approx \underbrace{\prod_{i=1}^{D} \big( G_1 n_i \text{Var}(w_i) \big)}_{\text{We want this to be } \approx \space 1} \cdot \text{Var}(\frac{\partial}{\partial z}), \tag{5}
+$$<p>where we want the differentials to also not exponentially grow/decay too much across layers.</p>
+<p>The basis for deciding weights in <em>weight initialisation</em> is choosing weights $w_{jk}^{(i)}$ for all layers $i$ such that:</p>
+$$
+    G_1 n_i \text{Var}(w^{(i)}) = 1, \tag{6}
+$$<p>where $G_1 = \frac{1}{2}$, usually.</p>
 
 </div>
 </div>
@@ -13480,23 +13173,75 @@ $$
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Resources:">Resources:<a class="anchor-link" href="#Resources:">&#182;</a></h3>
+<h4 id="Example:">Example:<a class="anchor-link" href="#Example:">&#182;</a></h4><p><img src="images/weight-initialisation-1.png" width="50%">
+<em><p style="text-align: center;">Error on the y axis</p></em></p>
+<p>The above graph shows the difference in training speed for a 22-layer $\texttt{ReLU}$ network for when suboptimal initial weights are chosen (blue line) vs. when weights are chosen according to $(6)$.</p>
+
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Batch-Normalisation:">Batch Normalisation:<a class="anchor-link" href="#Batch-Normalisation:">&#182;</a></h3><p>Technique for making deeper networks faster and stabler by recentering and rescaling the inputs to chosen layers in the network (normalisation) for each <em>mini-batch</em> .</p>
 <ul>
-<li>Introduction:<ul>
-<li><a href="https://medium.com/tebs-lab/introduction-to-deep-learning-a46e92cb0022">Intro to deep learning</a></li>
+<li>Standardisation &mdash; making the mini-batch have $\mu = 0$ and $\sigma = 1$ through $z=\frac{x-\mu_d}{\sigma_d}$ where $\mu_d$ and $\sigma_d$ are calculated from the current mini-batch<ul>
+<li>Without standardising input values, having disproportionately large input values will cause the exploding gradient problem. A large activation value in an earlier layer will be transferred onto the next layer, cascading through the network and causing unstable weight changes</li>
 </ul>
 </li>
-<li><a href="https://medium.com/datadriveninvestor/overview-of-different-optimizers-for-neural-networks-e0ed119440c3">Types of optimisers</a></li>
-<li>Computation graph: <ul>
-<li><a href="https://medium.com/tebs-lab/deep-neural-networks-as-computational-graphs-867fcaa56c9#:~:text=A%20computational%20graph%20is%20a,or%20functions%20for%20combining%20values.">Basics of computational graphs</a></li>
+<li>Covariate Shift &mdash; Covariate shift is the change in the distribution of input values. This may happen, for instance, if the training set comes from images downloaded from the web while the test set comes from an iPhone camera.<ul>
+<li>The aim of batch normalisation is to reduce covariate shift by normalising the activations of each layer.</li>
+<li>Batch normalisation reduces the impact that earlier layers have on the distribution of inputs into later hidden layers. Ie. this 'decouples' the later layer's parameters from the earlier's layer's parameters</li>
 </ul>
 </li>
+</ul>
+<p>Normalising the activations of each layer to have mean $\mu = 0$ and standard deviation $\sigma = 1$ may limit the expressive power of the network.</p>
+<p>Because of this, we introduce addtional trainable parameters $\gamma$ and $\beta$.</p>
+<h4 id="Algorithm:">Algorithm:<a class="anchor-link" href="#Algorithm:">&#182;</a></h4><p>Suppose we have a batch of size $m$</p>
+<table>
+    <tr>
+        <td width="60%">            
+            <img src="images/batch-normalisation.png">
+        </td>
+        <td>
+            <img src="images/batch-norm-gamma-beta.png">
+        </td>
+    <tr>
+</table><p>Where $\mu_{B}$ is the mean of the output predictions, $\sigma_{B}^2$ is the variance of the output predictions.</p>
+<p>Each output prediction $\hat{x}_i$ is then normalised using the formula $\hat{x}_i = \frac{x_i-\mu_B}{\sqrt{\sigma_B^2 + \epsilon}}$ where $\epsilon$ is just a parameter to prevent zero division error. After this, all outgoing activation values have been standardised on this layer &mdash; $N(0, 1)$.</p>
+<p>The final output takes this activation and 'calibrates' it with new learnable parameters $\gamma$ and $\beta$: $y_i = \gamma \hat{x}_i + \beta$.</p>
+<ul>
+<li><p>The $\gamma$ and $\beta$ for each neuron is often initialised to be $1$ and $0$ respectively</p>
+</li>
+<li><p>This introduces more independent parameters to the network, but it keeps the activations within a 'healthy' range</p>
+</li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Skip-Connections:">Skip Connections:<a class="anchor-link" href="#Skip-Connections:">&#182;</a></h3><p>Skip connections are connections that bypass intermediate layers, so the output of one layer is fed directly as the input into some later layer.</p>
+<p><img src="images/skip-connection.png" width="25%"></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Neural-Style-Transfer:">Neural Style Transfer:<a class="anchor-link" href="#Neural-Style-Transfer:">&#182;</a></h3><p>... TODO</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Resources:">Resources:<a class="anchor-link" href="#Resources:">&#182;</a></h3><ul>
+<li><a href="https://mlexplained.com/2018/01/10/an-intuitive-explanation-of-why-batch-normalization-really-works-normalization-in-deep-learning-part-1/">Intuitive explanation of why batch normalisation works</a></li>
 </ul>
 
 </div>
