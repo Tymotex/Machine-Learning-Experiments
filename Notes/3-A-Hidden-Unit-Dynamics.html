@@ -13084,8 +13084,8 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Encoder-Networks:">Encoder Networks:<a class="anchor-link" href="#Encoder-Networks:">&#182;</a></h3><p><img src="images/encoder-identity.png" alt=""></p>
-<p>The goal for this network is to recreate the same input vector through the bottleneck hidden layer.</p>
+<h3 id="Encoder-Networks:">Encoder Networks:<a class="anchor-link" href="#Encoder-Networks:">&#182;</a></h3><p><img src="images/encoder-network.png" width="50%"></p>
+<p>The goal of this <em>encoder network</em> is to reconstruct the same input vector in the output layer after having passing through the bottleneck hidden layer, which forces the input vector's dimension to be reduced from 5 to 3.</p>
 
 </div>
 </div>
@@ -13093,16 +13093,16 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="HIDDEN-UNIT-SPACE-TODO:">HIDDEN UNIT SPACE TODO:<a class="anchor-link" href="#HIDDEN-UNIT-SPACE-TODO:">&#182;</a></h4><p>We're trying to take the weights of the neural network and plot them in a graphical way.</p>
-<p>Consider a 5-2-5 encoder network. From 5-2, we have 10 weights, plus 2 biases. From 2-5, we have 10 weights, plus 5 biases. That's 27 weights in this network.</p>
-<p>We can write them out as a list, but we can get a better understanding when we try to graph it.</p>
-<p>Graphing the hidden unit activations.</p>
-<p>Eg. if we have sigmoid, then the graph spans from 0-1, if we have tanh, then all hidden unit activations are bound from -1 to 1</p>
-<p>The dots represent input to hidden weights?</p>
-<p>The line is the boundary between when the linear combination (weighted sum?) is positive or negative. Lines represent the hidden to output weights.</p>
-<p>After the network is trained, each line should divide one point from the other points. The points get as far away from each other as possible.</p>
-<p>Is each axis representing the 2 hidden node activations? So with 8-3-8 encoders, there would be 8 points representing the input to hidden weights and planes that separate the points</p>
-<p>Each output node can be represented as a line in 2d HU space</p>
+<h3 id="Hidden-Unit-Space:">Hidden Unit Space:<a class="anchor-link" href="#Hidden-Unit-Space:">&#182;</a></h3><p>The hidden unit space is a set of all possible hidden layer vectors. We can graphically represent the hidden unit space with coordinates of the hidden layer activations vector and lines representing the decision boundary formed by the hidden-output weights.</p>
+<p><img src="images/hidden-unit-space-star16.png" width="50%"></p>
+<p>Consider a 5-2-5 encoder network, for example.</p>
+<ul>
+<li>If we use a sigmoid activation, then the activation values are bound in the range $[0, 1]$</li>
+<li>If we have tanh activation, then all hidden unit activations are bound in the range $[-1, 1]$</li>
+</ul>
+<p>The lines in the hidden unit space graph determines the output activation threshold.</p>
+<p>After the network is fully trained, every input vector will be mapped to a hidden unit activation vector that occupies its own decision region. With this, even though we have a bottleneck layer of dimension 2, all 5 1-hot encoded inputs can still be uniquely distinguished and reproduced at the output layer.</p>
+<p>This idea of hidden unit activations being mapped to their own decision boundary generalises to higher dimensions, if we had more than 2 hidden units.</p>
 
 </div>
 </div>
@@ -13111,11 +13111,11 @@ div#notebook {
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h3 id="Weight-Space-Symmetry:">Weight Space Symmetry:<a class="anchor-link" href="#Weight-Space-Symmetry:">&#182;</a></h3><ul>
-<li>Swapping any pair of hidden nodes does not affect the overall network performance</li>
-<li>Reversing the sign of all incoming and outgoing weights in any hidden node won't affect overall network performance (assuming the use of a symmetric transfer function like $\tanh$)</li>
-<li>Hidden nodes tend to do a similar job initially, then gradually specialise</li>
+<li>Swapping the positions of any pair of hidden nodes does not affect the overall network performance</li>
+<li>Reversing the sign of all incoming and outgoing weights in any hidden node won't affect overall network performance, assuming the use of a symmetric transfer function like $\tanh$</li>
+<li>Hidden nodes tend to have similar roles in affecting the output prediction initially, then gradually specialise as training progresses</li>
 </ul>
-<p>The first two points above gives rise to a very large number of other possible weight configurations that would all perform equally well.</p>
+<p>The first two points above gives rise to a very large number of other possible weight configurations that would all perform equally well. Eg. suppose there are 10 nodes in a hidden layer. There are $10!$ ways to permute them, plus $2^{10}$ additional different permutations for the positive/negative signs for the weights coming in and out of each node. This gives $10!\cdot 2^{10}$ other possible configurations in the possible weight space that would all perform equally well.</p>
 
 </div>
 </div>
@@ -13142,26 +13142,29 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Vanishing/Exploding-Gradient:">Vanishing/Exploding Gradient:<a class="anchor-link" href="#Vanishing/Exploding-Gradient:">&#182;</a></h3><ul>
-<li>With a low learning rate, as you backpropagate, the gradients diminish exponentially across each layer from output to input<ul>
+<h3 id="Vanishing/Exploding-Gradient-Problem:">Vanishing/Exploding Gradient Problem:<a class="anchor-link" href="#Vanishing/Exploding-Gradient-Problem:">&#182;</a></h3><ul>
+<li><strong><em>Vanishing gradient problem</em></strong> &mdash; when the gradients diminish exponentially across each layer from output to input<ul>
 <li>Stacking more layers means the weight updates are concentrated on the layers closer to the output layer rather than the layers closer to the input layer.</li>
+<li>Remember in backpropagation, we rely on a product of partial differentials to compute the derivative of the error function with respect to a particular weight parameter. As we go back to earlier layers, this product involves more and more terms. If each of those terms are $&lt;1$, then the overall product is tiny, so applying gradient descent at earlier nodes barely changes anything. </li>
+<li>The weights at the earlier layers effectively get 'stuck' and don't end up contributing much towards the network's minimisation of the error function.</li>
 </ul>
 </li>
-<li>With a high learning rate, the problem reverses where the gradients grow exponentially across each layer from output to input</li>
+<li><strong><em>Exploding gradient problem</em></strong> &mdash; when the gradients grow exponentially across each layer from output to input<ul>
+<li>By similar reasoning, if the partial differentials passed back to earlier layers are $&gt;1$, then the gradients computed at the earlier layers will be large and will not properly converge to optimal weight values.</li>
 </ul>
-<h4 id="Avoiding-vanishing/exploding-gradient:">Avoiding vanishing/exploding gradient:<a class="anchor-link" href="#Avoiding-vanishing/exploding-gradient:">&#182;</a></h4><ul>
-<li><p>Using different activation functions like $\texttt{relu}$ or $\texttt{selu}$:</p>
-<table>
+</li>
+</ul>
+<h4 id="Avoiding-vanishing/exploding-gradient:">Avoiding vanishing/exploding gradient:<a class="anchor-link" href="#Avoiding-vanishing/exploding-gradient:">&#182;</a></h4><p>There are some standard ways for combating the vanishing/exploding gradient problem:</p>
+<ul>
+<li><a href="https://towardsdatascience.com/weight-initialization-in-neural-networks-a-journey-from-the-basics-to-kaiming-954fb9b47c79">*Weight initialisation*</a> &mdash; a set of techniques for setting initial weight values that tend to prevent <em>activations</em> from vanishing/exploding in the feed-forward pass. This then prevents the gradients from vanishing/exploding in the backward-pass</li>
+<li><a href="https://machinelearningmastery.com/batch-normalization-for-training-of-deep-neural-networks/">*Batch normalisation*</a> &mdash; normalising the input vector to the layers of the neural network by scaling and centering the components to a reasonable range.</li>
+<li><em>Layerwise unsupervised pre-training</em> &mdash; involves first training an autoencoder network to achieve a more reasonable weight configuration prior to the training for the original task. This is similar to weight initialisation  </li>
+<li>Using different activation functions like $\texttt{ReLU}$ or $\texttt{SeLU}$:<table width="50%">
     <tr>
       <td> <img src="images/relu.png"></td>
       <td><img src="images/selu.png"></td>
      </tr>
   </table></li>
-<li><p>Weight initialisation</p>
-</li>
-<li>Batch normalisation</li>
-<li>Long short term memory</li>
-<li>Layerwise unsupervised pre-training </li>
 </ul>
 
 </div>
@@ -13170,8 +13173,9 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Avoiding-Overfitting:">Avoiding Overfitting:<a class="anchor-link" href="#Avoiding-Overfitting:">&#182;</a></h3><ul>
-<li>Early stopping — stopping the training when the neural network has achieved a minimal error on the testing or validation dataset 
+<h3 id="Combating-Overfitting:">Combating Overfitting:<a class="anchor-link" href="#Combating-Overfitting:">&#182;</a></h3><p>The following are a few standard methods for combating overfitting in neural networks:</p>
+<ul>
+<li><strong><em>Early stopping</em></strong> — stopping the training when the neural network has achieved a minimal error on the testing or validation dataset 
   <table>
 <pre><code>  &lt;tr&gt;
       &lt;td&gt; 
@@ -13183,15 +13187,14 @@ div#notebook {
   &lt;/tr&gt;
 </code></pre>
   &lt;/table&gt;
-  Experimenting with the number of hidden nodes and number of weight updates and plotting graphs like this helps us decide a good network structure and number of training epochs</li>
-<li>Weight decay</li>
-<li><p>Dropout — randomly choosing a subset of nodes to not be used for each mini- batch. Each node is chosen to be 'dropped' from training with a fixed probability $\pi$ you choose</p>
+  Experimenting with the number of hidden nodes and number of weight updates and plotting graphs like this helps us decide a good number of training epochs to stop training at. In general, the more epochs, the greater the chance of overfitting to the training data.</li>
+<li><p><strong><em>Dropout</em></strong> — randomly choosing a subset of nodes to not be used for each mini- batch. Each node is chosen to be 'dropped' from training with a fixed probability $\pi$ you choose</p>
 <ul>
-<li>When the network is deployed, all nodes are active, but all the activation functions are multiplied by a factor $1 -\pi$ (?). This is so that the overall contribution of each node in total is equal on average to the total contribution when the network had dropped out nodes</li>
+<li>When the network is deployed, all nodes are active, but all the activation functions are multiplied by a factor $1 -\pi$. This is so that the overall contribution of each node in total is equal on average to the total contribution when the network had dropped out nodes</li>
 <li>Inspired by biological neural networks where neurons may 'drop out' and other neurons have to 'fill' in for their contribution to the output</li>
 </ul>
 </li>
-<li><p>Ensembling — training multiple different networks on the same task and then making a prediction as a majority vote across the ensemble of networks.</p>
+<li><p><strong><em>Ensembling</em></strong> — training multiple different networks on the same task and then making a prediction as a majority vote across the ensemble of networks.</p>
 <ul>
 <li>Bagging — each network can be trained on the same 'bag' of datapoints with replacement. For one network, some items will be trained on multiple times or none at all, and this will be different for each network, giving rise to diversity across each network </li>
 <li>Dropout is implicitly a form of ensembling because on deployment, it's like the combination of multiple different architectures</li>
@@ -13202,18 +13205,20 @@ div#notebook {
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span> 
-</pre></div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Resources:">Resources:<a class="anchor-link" href="#Resources:">&#182;</a></h3><ul>
+<li><p><a href="https://towardsdatascience.com/the-vanishing-exploding-gradient-problem-in-deep-neural-networks-191358470c11">Vanishing/Exploding gradient problem</a></p>
+</li>
+<li><p><a href="https://towardsdatascience.com/weight-initialization-in-neural-networks-a-journey-from-the-basics-to-kaiming-954fb9b47c79">Weight Initialisation</a></p>
+</li>
+<li><a href="https://machinelearningmastery.com/batch-normalization-for-training-of-deep-neural-networks/">Batch normalisation</a></li>
+<li><a href="https://machinelearningmastery.com/greedy-layer-wise-pretraining-tutorial/">Layerwise Unsupervised Pretraining</a></li>
+</ul>
 
-    </div>
 </div>
 </div>
-
 </div>
     </div>
   </div>

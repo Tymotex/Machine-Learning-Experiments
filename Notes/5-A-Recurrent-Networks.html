@@ -13092,10 +13092,129 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Processing-Temporal-Sequences:">Processing Temporal Sequences:<a class="anchor-link" href="#Processing-Temporal-Sequences:">&#182;</a></h2><p>Up to now, we've only been processing static inputs.</p>
-<p>A temporal sequence is sequence of input values over time.</p>
-<h4 id="Examples:">Examples:<a class="anchor-link" href="#Examples:">&#182;</a></h4><ul>
-<li>Audio signal inputs &mdash; for speech recognition</li>
+<p>Regular feed-forward networks aren't well suited to processing sequential input data. It also can't effectively learn long-range dependencies.</p>
+<ul>
+<li>With a sequential training sample, having a fixed input layer is problematic</li>
+<li>With some training samples, long-range dependencies have to be learnt which would be difficult for a deep feed-forward network to identify and generalise to<ul>
+<li>Eg. Suppose we need a model to predict the next word in the sentence  "<em>France is where I grew up, but I now live in Boston. I speak fluent</em> _____". Regular feed-forward architectures simply can't generalise well enough to learn this long-range dependency</li>
+</ul>
+</li>
+</ul>
+<p>Recurrent neural networks on the other hand, are good architectures for processing sequential data. Audio signals and English text are examples of sequential data that recurrent neural networks are suited to processing. A recurrent architecture addresses the following:</p>
+<ol>
+<li>Handling variable-length sequential inputs</li>
+<li>Tracking long-range dependencies</li>
+<li>Paying attention to the order of values in the sequence</li>
+<li>Sharing parameters across the sequence (similar to what convolutional neural networks do with their kernels)</li>
+</ol>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Recurrent neural networks, for example, can produce one output for a variable-length sequential input, or it can produce an output for each step in the sequential data. 
+<img src="images/recurrent-architecture-variants.png" width="100%"></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>A regular feedforward network proceeds like this: 
+$$\texttt{input} \to \texttt{hidden layers} \to \texttt{output}.$$
+It's effectively a closed system, so there's no idea of <em>context</em> or <em>memory of the past</em> that is factored into this predictive model. A recurrent neural network introduces this concept of <em>memory</em> by keeping track of what the hidden layer activations of previous timesteps were. The predictive model is then like this:
+$$\texttt{input + previous hidden layer activations} \to \texttt{hidden layers} \to \texttt{output}.$$</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>With this model, the output is also deterministic given the hidden layer, but now the specific hidden layer values is only reachable <em>with the right sequence of inputs</em>.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>From <a href="http://colah.github.io/posts/2015-08-Understanding-LSTMs/">here</a>: "Humans don’t start their thinking from scratch every second. As you read this essay, you understand each word based on your understanding of previous words. You don’t throw everything away and start thinking from scratch again. Your thoughts have persistence.</p>
+<p>Traditional neural networks can’t do this, and it seems like a major shortcoming. For example, imagine you want to classify what kind of event is happening at every point in a movie. It’s unclear how a traditional neural network could use its reasoning about previous events in the film to inform later ones."</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Recurrent-Neural-Networks:">Recurrent Neural Networks:<a class="anchor-link" href="#Recurrent-Neural-Networks:">&#182;</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<table>
+    <tr>
+        <td>    
+            <p style="text-align: center;">
+                <strong>Elman Recurrent Network</strong>
+            </p>
+            <img src="images/elman-recurrent-network.png">
+        </td>
+        <td>
+            <p style="text-align: center;">
+                <strong>Recurrent Network with shortcuts</strong>
+            </p>
+            <img src="images/recurent-network-shortcut.png">
+        </td>
+    <tr>
+</table>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<table>
+    <tr>
+        <td width="65%">            
+            <img src="images/recurrent-network-hidden-state-transfer.gif" width="75%" />
+            <p style="text-align: center;" width="75%">The transfer of hidden layer activations across 4 timesteps. The first timestep has no context layer. The colour of the hidden layer nodes represents the memory of previous hidden layer values</p>
+        </td>
+        <td>
+            <img src="images/rnn-unrolled-sentiment-analysis-architecture.png" width="100%">
+            <p style="text-align: center;" width="75%">
+                An example architecture for sentiment analysis. The orange boxes represent recurrent layers. The silver box represents a fully connected layer that outputs a single prediction.  
+            </p>
+        </td>
+    <tr>
+</table>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>With RNNs, we feed in a single input sequence $X=[x_1, x_2, \ldots, x_t, \ldots, x_N]$, one value at a time, with each input component producing a hidden state vector $h_t = \texttt{RNN}(x_t, h_{t-1})$. The initial hidden state, $h_0$, is often just a vector of zeroes.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<ul>
+<li><strong>Recurrence of information:</strong> 
+With each time step, the input follows the standard feed-forward procedure to the output layer, but the hidden layer activations are copied to the "context" layer, or also called the "hidden state", which will be then be fed as additional input as subsequent timesteps go through the feed-forward procedure.  <ul>
+<li>Eg. Once <code>l1</code> is fed through the network and the output layer is computed, the intermediate hidden layer values are copied over to nodes <code>s1</code>, <code>s2</code> and <code>s3</code> as additional inputs for when <code>l2</code> is passed through the network </li>
+<li>This allows information to persist across timesteps and be factored into future predictions</li>
+</ul>
+</li>
 </ul>
 
 </div>
@@ -13104,6 +13223,30 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<table>
+    <tr>
+        <td width="50%">  
+            <p>
+                A recurrent network can be 'unrolled' into an equivalent feed-forward network. 
+            </p>
+            <img src="images/recurrent-unrolled.png">
+        </td>
+        <td>
+            <img src="images/recurrent-network-unrolled.png">
+            <p>
+               All the weight matrices $W_{xh}, W_{hh}, W_{hy}$ are reused across each time step.
+               $W_{hh}$ transforms the current hidden state to the next hidden state. The total loss $L$ is simply the sum of all the individual losses computed at each timestep: $L_1 + L_2 + ...$
+            </p>
+        </td>
+    <tr>
+</table>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Backpropagation-Through-Time:">Backpropagation Through Time:<a class="anchor-link" href="#Backpropagation-Through-Time:">&#182;</a></h3><p><em>Backpropagation through time</em> &mdash; backpropagation on the unrolled chain of network</p>
 
 </div>
 </div>
@@ -13111,6 +13254,29 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<table>
+    <tr>
+        <td>            
+            <img src="images/backprop-through-time.png" width="100%">
+            <p>
+               At each timestep, we produce a prediction $\hat{y}_t$ which results in a loss function value $L_t$. The sum of all such loss function values gives $L = L_1 + L_2 + \dots + L_t$. 
+            </p>
+        </td>
+        <td>
+            <img src="images/backpropagation-through-time.gif" width="100%">
+            <p>
+                The black node represents the prediction, the yellow represents the error function value, the mustard colour represents the derivatives
+            </p>
+        </td>
+    <tr>
+</table>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Keep in mind, there are only 3 weight matrices involved. Backpropagation through time can be considered as regular backpropagation on the unrolled network, reusing the same 3 weight matrices.</p>
 
 </div>
 </div>
@@ -13118,6 +13284,22 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="LSTM-and-GRU-Architecture">LSTM and GRU Architecture<a class="anchor-link" href="#LSTM-and-GRU-Architecture">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Short-Term-Memory-Problem:">Short Term Memory Problem:<a class="anchor-link" href="#Short-Term-Memory-Problem:">&#182;</a></h4><p><img src="images/short-term-memory-problem.gif" width="25%">
+Short term memory problem &mdash; caused by vanishing gradient problem. In this case, the influence of information from steps from a long time ago diminshes. Long range dependencies aren't effectively learned by normal RNN architectures</p>
+<ul>
+<li>In the above example, the first two 'layers' for "what" and "time" are not considered much in the final prediction</li>
+</ul>
+<p>LSTM, <em>long short-term memory</em>, and GRU, <em>gated recurrent unit</em> are two kinds of recurrent neural network architectures that were designed to combat the short term memory problem in normal recurrent neural networks.</p>
+<ul>
+<li>The use of <em>gates</em> allow for better long range dependency learning. These gates are tensor operators for learning what information to add/remove to the hidden state.</li>
+</ul>
 
 </div>
 </div>
@@ -13125,6 +13307,7 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="LSTMs:">LSTMs:<a class="anchor-link" href="#LSTMs:">&#182;</a></h3><p>A basic recurrent neural network can be thought of as a chain of modules or <em>cells</em>, represented in the following diagram:</p>
 
 </div>
 </div>
@@ -13132,6 +13315,7 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<p><img src="images/rnn-internal-unrolled.png" width="50%"></p>
 
 </div>
 </div>
@@ -13139,6 +13323,7 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<p>An LSTM would still have the same overall structure, but it would introduce further layers acting as gates for allowing or inhibiting information flow into the <em>cell state</em>:</p>
 
 </div>
 </div>
@@ -13146,6 +13331,26 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<table>
+    <tr>
+        <td width="70%">            
+            <img src="images/lstm-internal-unrolled.png" width="100%">
+            <img src="images/lstm-internal-unrolled-labels.png" width="75%">
+        </td>
+        <td>
+            <p style="text-align: center;">Cell state of a module</p>
+            <img src="images/lstm-cell-state.png" width="100%">
+        </td>
+    <tr>
+</table>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The cell state is the horizontal line running through the top of the module as shown above. It can be thought of as a conveyor belt, allowing information to flow along between each module with information sometimes being introduced via the gates.</p>
+<p>The gates are just sigmoid layers and an elementwise multiplication operation. Sigmoid is chosen because it outputs values in the range $[0, 1]$, indicating what proportion of each component should be 'let through the gate'.</p>
 
 </div>
 </div>
@@ -13153,6 +13358,269 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Forget-Gate-Layer:">Forget Gate Layer:<a class="anchor-link" href="#Forget-Gate-Layer:">&#182;</a></h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The first step of the LSTM model is deciding what information to forget, ie. what to exclude from the cell state. This is done by the <em>forget gate</em> which is the</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<table>
+    <tr>
+        <td width="50%">            
+            <img src="images/forget-gate-lstm.png" width="100%">
+        </td>
+        <td>
+            <p>
+                $f_t = \sigma(W_f \cdot [h_{t-1}, x_t] + b_f)$ &mdash; passing the product of the forget gate layer's weight matrix and the concatenation of the hidden state $h_{t-1}$ and input vector $x_t$, plus a bias $b_f$, through sigmoid. 
+            </p>
+            <p>
+                The output vector $f_t$ contains values $[0, 1]$ which is used in an elementwise multiplication with the cell state $C_{t-1}$ to <em>tell</em> the cell state how much of each element to forget or keep. A value of $0$ means "completely forget this component", while a value close to $1$ means "don't forget any part of this component".  
+            </p>
+        </td>
+    <tr>
+</table>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Forget gate's role &mdash; suppose you have a language model trying to predict the next word based on previous words in a string of text. In a string of text such as "she was happy. He was not", when we see a new gender pronoun "he", the previous pronoun "she" must be forgotten. Remember that "he" as the new subject has a significant role in determining the gender-related words used later in the text.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Input-Gate-Layer:">Input Gate Layer:<a class="anchor-link" href="#Input-Gate-Layer:">&#182;</a></h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The next step of the LSTM model is deciding what new information to introduce into the cell state, going from the previous cell state $C_{t-1}$ to the new cell state $C_{t}$.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<table>
+    <tr>
+        <td width="50%">            
+            <img src="images/input-gate-lstm.png" width="100%">
+        </td>
+        <td>
+            <p>
+                $$i_t=\sigma(W_i \cdot [h_{t-1}, x_t] + b_i) \tag{1}$$
+                $$\tilde{C}_t = \tanh(W_C \cdot [h_{t-1}, x_t] + b_C) \tag{2}$$
+            </p>
+            <p>
+                We take the product vector $i_t \times \tilde{C}_t$ and do an elementwise addition with the old cell state $C_{t-1}$, AFTER the forget gate layer has been applied.
+            </p>
+        </td>
+    <tr>
+</table>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<table>
+    <tr>
+        <td width="50%">            
+            <img src="images/cell-state-forget-and-input.png" width="100%">
+        </td>
+        <td>
+            <p>
+                The new cell state produced by this timestep's module is:
+            </p>
+            <p>
+                $$C_t = f_t \times C_{t-1} + i_t \times \tilde{C}_t.$$
+            </p>
+        </td>
+    <tr>
+</table>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Output-Gate-Layer:">Output Gate Layer:<a class="anchor-link" href="#Output-Gate-Layer:">&#182;</a></h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The final step of the LSTM model is deciding what to output from this cell. The output will take the cell state $C_t$ and apply a filter on it</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<table>
+    <tr>
+        <td width="50%">            
+            <img src="images/output-gate-lstm.png" width="100%">
+        </td>
+        <td>
+            <p>
+                We first compute the vector $o_t$, passing the matrix product through sigmoid to get a vector of components in the range $[0, 1]$:
+                $$o_t = \sigma(W_o \cdot [h_{t-1}, x_t] + b_o).$$
+            </p>
+            <p>
+                Then we push $C_t$ through $\tanh$ and multiply it with the output gate layer's output $o_t$:
+                $$h_t = \tanh(C_t) \cdot o_t$$
+            </p>
+        </td>
+    <tr>
+</table>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Variants-on-LSTM-Architecture:">Variants on LSTM Architecture:<a class="anchor-link" href="#Variants-on-LSTM-Architecture:">&#182;</a></h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>There exists many variants on the LSTMs shown here. For example:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<table>
+    <tr>
+        <td>
+            <p style="text-align: center;">Peephole connections</p>
+            <img src="images/coupled-forget-input-gates.png" width="100%">
+        </td>
+        <td>
+            <p style="text-align: center;">Coupled forget gate and input gate</p>
+            <img src="images/peephole-connections-lstm.png" width="100%">
+        </td>
+    <tr>
+</table>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>There also exists the GRU architecture, Gated Recurrent Unit, introduced in 2014 which merges the forget gate layer and input gate layer into a single <em>update gate layer</em>.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><img src="images/gru-architecture-cell.png" width="80%"></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The three main architecture patterns are:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><img src="images/rnn-lstm-gru.png" width="80%"></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Note that standard RNNs train faster since they are computationally lighter than LSTM and GRU architectures.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Gated-Recurrent-Unit:">Gated Recurrent Unit:<a class="anchor-link" href="#Gated-Recurrent-Unit:">&#182;</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>TODO:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Second-Order-Networks:">Second Order Networks:<a class="anchor-link" href="#Second-Order-Networks:">&#182;</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Reber grammar, non-deterministic finite state machine, can be learnt by a simple recurrent network.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>TODO:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Resources:">Resources:<a class="anchor-link" href="#Resources:">&#182;</a></h3><ul>
+<li><a href="https://towardsdatascience.com/illustrated-guide-to-lstms-and-gru-s-a-step-by-step-explanation-44e9eb85bf21">RNNs, LSTMs, GRUs</a></li>
+<li><p><a href="http://colah.github.io/posts/2015-08-Understanding-LSTMs/">Understanding LSTMs</a></p>
+<ul>
+<li><a href="http://proceedings.mlr.press/v37/jozefowicz15.pdf">Paper on popular RNN architecture and comparisons</a></li>
+<li><a href="https://arxiv.org/pdf/1503.04069.pdf">Paper on a plethora of RNN architecture and comparisons, showing some RNN architectures excel at particular tasks</a></li>
+</ul>
+</li>
+<li><p><a href="https://iamtrask.github.io/2015/11/15/anyone-can-code-lstm/">LSTM code explanation</a></p>
+</li>
+<li><a href="https://www.youtube.com/watch?v=SEnXr6v2ifU&ab_channel=AlexanderAmini">MIT Recurrent Neural Networks</a></li>
+</ul>
 
 </div>
 </div>

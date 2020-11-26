@@ -2,7 +2,7 @@
 <html>
 <head><meta charset="utf-8" />
 
-<title>Math-Appendix</title>
+<title>Neural-Networks-Overview</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
@@ -13077,16 +13077,42 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Calculus">Calculus<a class="anchor-link" href="#Calculus">&#182;</a></h1>
+<h2 id="Introduction">Introduction<a class="anchor-link" href="#Introduction">&#182;</a></h2><p>Deep learning is a subset of machine learning, which is a subset of artificial intelligence.</p>
+<table>
+    <tr>
+        <th style="text-align: center;">AI subfields</th>
+        <th style="text-align: center;">A neural network</th>
+    </tr>
+    <tr>
+        <td>            
+            <img src="images/ai-subsets.png">
+        </td>
+        <td>
+            <img src="images/neural-net.png">
+            <p style="text-align: left;">
+                As a biological brain analogue, each node represents a neuron and each edge represents a synaptic connection
+            </p>
+        </td>
+    <tr>
+</table><p>Deep learning focuses on a particular class of machine learning algorithms called neural networks &mdash; deep neural networks in particular.</p>
+
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Activation-Functions-(Nonlinearities):">Activation Functions (Nonlinearities):<a class="anchor-link" href="#Activation-Functions-(Nonlinearities):">&#182;</a></h2><p>An activation function is a function associated with a given node which takes in the weighted sum (plus bias) and maps it to another number. Activation functions mimic the firing of neurons in biological neural networks.</p>
+<p>Activation functions should have the properties:</p>
 <ul>
-<li>Convexity &mdash; a function is called convex if a line drawn between any two points on the graph lies above the graph the whole way.
-  <img src="images/convexity.png" width="25%"></li>
+<li>Continuous and differentiable at every $x$ in the real numbers</li>
+<li><em>Injective</em> &mdash; one unique output for each unique input. Simple tests: check the derivative is monotonically increasing or use the horizontal line test</li>
+<li><em>Non-linear</em> &mdash; not just a straight line. The relu function is a piecewise function so it's not linear in that way. Having a non-linear function is necessary for <em>conditional correlation</em></li>
+<li>Efficient to compute &mdash; because the activation function could be called a massive number of times</li>
+</ul>
+<p>The purpose of activation functions is to introduce non-linearity to the output of a neuron.</p>
+<ul>
+<li>Non-linearity can be thought of as “the outcome does not change in proportion to a change in any of the inputs”</li>
 </ul>
 
 </div>
@@ -13095,13 +13121,71 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Statistics">Statistics<a class="anchor-link" href="#Statistics">&#182;</a></h1>
+<h3 id="Activation-Functions-for-the-Hidden-Layer:">Activation Functions for the Hidden Layer:<a class="anchor-link" href="#Activation-Functions-for-the-Hidden-Layer:">&#182;</a></h3><ul>
+<li>$\texttt{sigmoid}(x)=\frac{1}{1+e^{-x}}$ &mdash; maps weighted sums to a value in the interval $(0, 1)$<ul>
+<li><strong>Derivative:</strong> suppose $z=\frac{1}{1+e^{-x}}$, then $\frac{dz}{dx}=z(1-z)$</li>
+<li>This lets you interpret the output of a neuron as a probability measure</li>
+</ul>
+</li>
+</ul>
+<p><img src="images/sigmoid.png" style="width: 35%"></p>
+<ul>
+<li>$\texttt{tanh(x)}=\frac{e^{x}-e^{-x}}{e^{x}+e^{-x}}=\frac{2}{1+e^{-2x}} - 1=2 \cdot S(2x) - 1$ &mdash; basically a scaled and offsetted version of logistic sigmoid.maps weighted sums to a value in the interval $(-1, 1)$. <ul>
+<li><strong>Derivative:</strong> suppose $z=\tanh(x)$, then $\frac{dz}{dx}=1-z^2$ </li>
+<li>$\texttt{tanh}$ can give a measure of negative correlation, rather than <em>just</em> positive correlation in the case of logistic sigmoid. It generally outperforms sigmoid for hidden layers because of its ability to measure negative correlation</li>
+<li>$\texttt{tanh}$ has a steeper gradient around the neighbourhood of $x=0$ </li>
+</ul>
+</li>
+</ul>
+<p><img src="images/tanh.png" style="width: 35%"></p>
+<ul>
+<li>$\texttt{ReLU}(x)=\texttt{max(0, x)}$ &mdash; suppresses firing below 0, otherwise echoes the same input to the next layer.<ul>
+<li>Computationally cheaper than the sigmoid functions.</li>
+<li>Unbounded y-values in the positive direction means the activation can 'blow-up'</li>
+<li>'Dying ReLU problem' &mdash; for nodes that output 0, their weight cannot be adjusted during gradient descent since the gradient is 0. A substantial number of nodes in the network can become 'passive' because of that<ul>
+<li>Leaky ReLU aims to mitigate this problem by ensuring nodes never have a non-zero gradient</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<table>
+    <tr>
+        <th style="text-align: center;">ReLU</th>
+        <th style="text-align: center;">Leaky ReLU</th>
+    </tr>
+    <tr>
+        <td>            
+            <img src="images/relu-graph.png">
+        </td>
+        <td>
+            <img src="images/leaky-relu-graph.png">
+        </td>
+    <tr>
+</table>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Activation-Functions-for-the-Output-Layer:">Activation Functions for the Output Layer:<a class="anchor-link" href="#Activation-Functions-for-the-Output-Layer:">&#182;</a></h3><p>The choice of activation function in the <em>output layer</em> depends on what prediction is being made.</p>
+<ul>
+<li>$\texttt{sigmoid}(z)$: $\frac{1}{1+e^{-x}}$ &mdash; for yes/no probability predictions. <ul>
+<li>Eg. is this a dog?</li>
+</ul>
+</li>
+<li>$\texttt{softmax}(z)$: $\frac{e^z}{\sum_i e^{z}}$ &mdash; for classifications, based on highest probabilities (selecting a single label out of many possible labels). <ul>
+<li>Eg. does this number look like a 1, a 3 or a 7?</li>
+<li>$\texttt{softmax}$ serves as a normalising function for when the network needs to classify an input in two or more classes
+<img src="images/softmax-approximates-max.png" width="40%"><p style="text-align: center;">$\texttt{softmax}$ is an approximation of the $\texttt{max}$ function</p></li>
+</ul>
+</li>
+<li>No activation function for the output layer &mdash; for non-probability predictions. <ul>
+<li>Eg. what will the temperature be tomorrow?</li>
+</ul>
+</li>
+</ul>
 
 </div>
 </div>
@@ -13109,6 +13193,39 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<hr />
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Loss-Functions:">Loss Functions:<a class="anchor-link" href="#Loss-Functions:">&#182;</a></h3><p>A loss function measures how closely the prediction matches the true label. In all the loss functions, $t$ is the target value and $z$ is the value the network produced. Both $t$ and $z$ could be vectors rather than a single value.</p>
+<p><strong><em>Mean squared error</em></strong> &mdash; the sum of the squared difference between expected value $t$ and the forward-propagation's predicted value $z$,
+$$E(t, z) = \frac{1}{2}\sum_{i=1}^{m} (t-z)^2. \tag{1}$$</p>
+<p><strong><em>Cross-entropy</em></strong> &mdash; very frequently used for classification tasks.
+$$E(t, z)=-\sum_i^C t_i \log (s_i), \tag{2}$$ where $C$ is the number of output classes.</p>
+<ul>
+<li><strong><em>Binary cross-entropy</em></strong> &mdash; used for when there are two output classes. This is just a special case derived from when you substitute $C=2$ in the cross-entropy function $(2)$,
+$$E(t, z) = -(t\log z + (1-t)\log (1-z)).$$ <ul>
+<li>When $t=1$, the second term disappears, leaving $E(t, z) = -t\log z$</li>
+<li>When $t=0$, the first term disappears, leaving $E(t, z) = -(1-t)\log (1-z)$</li>
+</ul>
+</li>
+<li><strong><em>Categorical cross-entropy</em></strong> &mdash; also called <em>softmax loss</em>. This is just a softmax operation, plus a regular cross-entropy loss.</li>
+</ul>
+<p><strong><em>Negative log likelihood</em></strong> &mdash; used in tandem with the softmax activation function at the output layer.
+    $$
+        E(y)=-\log(y),
+    $$
+    where $y$ is the output probability for the correct class.
+    <img src="images/negative-log-likelihood-example.png" width="50%"></p>
+<ul>
+<li>We want to maximise the probability of choosing the correct category, but since most optimisers work by minimising the error function, we add a negative sign so that minimising the negative value is exactly equivalent</li>
+<li>We apply $\texttt{log}$ as a workaround to the fact that computers lose precision for very high or low floating point numbers. Eg. $\ln(10^{-100})=-230.2585\ldots$ which is much easier to represent and do arithmetic with</li>
+<li>Likelihood of $z$ refers to the chance of some calculated parameters producing some known data.</li>
+</ul>
+<p><strong><em>KL-Divergence Loss</em></strong> &mdash; a measure of the distance between the network's output probability distribution and the target probability distribution</p>
 
 </div>
 </div>
@@ -13116,6 +13233,31 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Cost-Function">Cost Function<a class="anchor-link" href="#Cost-Function">&#182;</a></h4><p>Cost function: $J(w, b) = \frac{1}{m}\sum_{i=1}^m E(t^{(i)}, z^{(i)})$ &mdash; the average of the sum of loss values for all training samples $1 \leq i \leq m$, where $w$ and $b$ are the weight and bias.</p>
+<ul>
+<li>The loss function measures how well the network performed on a single training example</li>
+<li>The cost function measures how well the network's parameters $w$ and $b$ performed on the entire training set</li>
+<li>Eg. if our loss function was cross-entropy, then the cost function would be: $J(w, b) = -\frac{1}{m}\sum_{i=1}^m \big( t^{(i)}\log y^{(i)} + (1-t^{(i)}) \log (1-z^{(i)}) \big)$.</li>
+</ul>
+<p>The 'learning' of a neural network is the process of finding $w$ and $b$ so as to minimise $J$. This is done through an optimisation algorithm such as <strong><em>gradient descent</em></strong>.</p>
+<h4 id="Error/Cost-Landscape:">Error/Cost Landscape:<a class="anchor-link" href="#Error/Cost-Landscape:">&#182;</a></h4><p>If we think of $E$ has height, then each the loss function defines an 'error landscape' on the weight space. The aim of neural network training then is just to find a configuration of weights where $E$ takes the global minimum.</p>
+<table>
+    <tr>
+        <th style="text-align: center;">Error landscape</th>
+        <th style="text-align: center;">Cost landscape</th>
+    </tr>
+    <tr>
+        <td>            
+            <img src="images/error-landscape.png">
+        </td>
+        <td>
+            <img src="images/cost-landscape.png">
+            <div style="text-align: left;">
+                Where $w$ and $b$ are real numbers just to make this possible to visualise. Of course, $w$ would be higher dimensional. 
+            </div>
+        </td>
+    <tr>
+</table><p>The partial derivative $\frac{\partial J(w, b)}{\partial w}$ gives the slope along the $w$ axis, while $\frac{\partial J(w, b)}{\partial b}$ gives the slope along the $b$ axis. When you 'nudge' $w$ a little bit, the derivative $\frac{\partial J(w, b)}{\partial w}$ tells you how much $J(w, b)$ changes.</p>
 
 </div>
 </div>
@@ -13123,6 +13265,52 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Gradient-Descent:">Gradient Descent:<a class="anchor-link" href="#Gradient-Descent:">&#182;</a></h3><p>Gradient descent is an optimisation algorithm for finding the local minimum of a differentiable function.</p>
+<p>It works by repeatedly taking steps proportional to the negative of the gradient, until the weight converges on a global minimum:</p>
+$$w_{new} = w_{old} - \underbrace{\eta \frac{\partial E}{\partial w}}_\text{step}$$<p>Where $\eta$ is the learning rate &mdash; how big of step the weight update should take, or how fast the gradient descends towards an optimal weight.</p>
+<ul>
+<li><p>The subtraction of the derivative term or slope value, $\frac{\partial E}{\partial w}$, will always be push the value in the 'downhill' direction</p>
+</li>
+<li><p>Higher learning rates can cause gradient descent to overshoot and 'bounce' up the convex error landscape. Slower learning rates cause slower training time and may cause the network to get stuck</p>
+</li>
+</ul>
+<table>
+    <tr>
+        <th style="text-align: center;">Gradient Descent</th>
+        <th style="text-align: center;">Fast vs. slow learning rate</th>
+    </tr>
+    <tr>
+        <td>            
+            <img src="images/gradient-descent-demo.png">
+        </td>
+        <td>
+            <img src="images/gradient-descent-fast-vs-slow.png">
+        </td>
+    <tr>
+</table>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Optimisers:">Optimisers:<a class="anchor-link" href="#Optimisers:">&#182;</a></h3><p>Given an algorithm f(x), an optimization algorithm help in either minimizing or maximizing the value of f(x). In deep learning, we use optimisers to train the neural network by minimising the error/cost function.</p>
+<table>
+    <tr>
+        <td width="50%">   
+            <p style="text-align: center;">
+                <strong>A few standard optimisers</strong>
+            </p>
+            <img src="images/optimisers.png">
+        </td>
+        <td>
+            <p style="text-align: center;">
+                <strong>Different optimisers traversing the error landscape</strong>
+            </p>
+            <img src="images/optimisers-visualised.gif">
+        </td>
+    <tr>
+</table><p>The best optimiser is the one that traverse the error landscape for the specific problem the best. The choice of optimiser is made empirically rather than mathemtically, mostly.</p>
 
 </div>
 </div>
@@ -13130,6 +13318,198 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<ul>
+<li><strong><em>Stochastic Gradient Descent</em></strong> &mdash; when we update the weights after each training example rather than after a whole epoch, which is what vanilla gradient descent does.<ul>
+<li>The problem with this is that a noisy training sample can steer the jump away from the optimum.</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><strong><em>Stochastic Gradient Descent + Momentum</em></strong> &mdash; one way to decrease the noise associated with stochastic gradient descent is to add momentum. With this, it can pay less attention to the occasional noisy samples that throw it off.<ul>
+<li><em>coefficient of momentum</em> &mdash; the percentage of gradient from previous iterations that is retained. The gradient changes of the more recent steps have a greater weighting.<ul>
+<li>Usually initialised as $\eta = 0.5$ and may be changed over later epochs
+<img src="images/sgd-momentum.png" width="70%"></li>
+</ul>
+</li>
+<li>Since the steps taken can get larger and larger, it may be easy to overshoot the minima.</li>
+<li>Momentum tends to help gradient descent converge quicker towards one direction and dampen oscillations.</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p><strong><em>Stochastic Gradient Descent + Momentum + Acceleration</em></strong> &mdash; one way to decrease the noise associated with stochastic gradient descent is to add momentum. With this, it can pay less attention to the occasional noisy samples that throw it off.</p>
+</li>
+<li><p><strong><em>Mini-Batch Gradient Descent</em></strong> &mdash; only update after $m$ number of training examples are done, rather than after a whole epoch or after 1 training sample.</p>
+</li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Weight-Decay:">Weight Decay:<a class="anchor-link" href="#Weight-Decay:">&#182;</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Weight decay introduces a penalty term to the error function which discourages weights from exploding to high values.</p>
+$$
+    E=\frac{1}{2} \sum_i (z_i - t_i)^2 + \underbrace{\frac{\lambda}{2}\sum_j w_j^2}_{\text{Penalty term}}
+$$<ul>
+<li>By adding the penalty term, the error function is larger when the weights have a high value </li>
+<li>The weight decay parameter $\lambda$ is determined experimentally. Eg. a value of $\lambda=0.00001$ is often chosen</li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Computational-Graph">Computational Graph<a class="anchor-link" href="#Computational-Graph">&#182;</a></h3><p>Fundamentally, all neural networks are just a single big mathematical function.</p>
+<p>When trying to find a neural network that works for a particular application, you're implicitly saying 'there exists some mathematical function that will reasonably approximate the observed behaviour'. The training of neural networks is to find this approximating function.</p>
+<p>A computational graph is a way of representing math functions in graph theory.</p>
+<h4 id="Representing-Functions:">Representing Functions:<a class="anchor-link" href="#Representing-Functions:">&#182;</a></h4><p>Each node is either an input node, or a function node. Function nodes take in input and produce an output.</p>
+<table>
+    <tr>
+        <th style="text-align: center;">Representing $f(x, y, z)=(x+y) \cdot z$</th>
+        <th style="text-align: center;">Representing $f(x, y)=ax^2+bxy+cy^2$</th>
+    </tr>
+    <tr>
+        <td>            
+            <img src="images/simple-computational-graph.png">
+        </td>
+        <td>
+            <img src="images/another-computational-graph.png">
+            <p style="text-align: left;">
+                This could technically be considered a neural network. It's possible to train it with gradient descent and backprop and tune $a, b$ and $c$ if we had a training dataset
+            </p>
+        </td>
+    <tr>
+</table><h4 id="Representing-Neural-Networks:">Representing Neural Networks:<a class="anchor-link" href="#Representing-Neural-Networks:">&#182;</a></h4><p>Even simple neural networks may have hundreds of thousands of nodes and edges in their computational graph, which would be impossible to represent in standard function notation.</p>
+<p>Each node in a neural network encapsulates smaller function nodes for: performing a weighted sum (plus bias), then computing a non-linear activation function.</p>
+<p><img src="images/neural-node-computational-graph.png" width="50%" /></p>
+<p>With deep neural nets, we could have millions of individual weights, plus thousands of biases to individually tune. This is why a massive dataset and a massive amount of computing power is required.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Back-Propagation">Back-Propagation<a class="anchor-link" href="#Back-Propagation">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The aim of back-propagation + gradient descent is to update the weights based on the error function value after forward-propagation. The aim is to attribute the <em>cause of the error</em>, ie. to assign a proportionate magnitude of 'blame' or 'praise', to each node to penalise/boost their output weight accordingly.</p>
+<p>Gradient descent requires the concrete values of $\frac{\partial E}{\partial w_{ij}}$ &mdash; the amount $E$ changes when you nudge $w_{ij}$ &mdash; to be known for each weight in the network. Backpropagation is the algorithm used to calculate these gradients, it does not do anything more than that.</p>
+<p>Gradients are calculated from the last layer to the first layer. Partial computation of the gradient from one layer is reused in the computation of the gradients in the previous layer.</p>
+<ul>
+<li>The reuse of calculated gradients from each layer is what makes backpropagation more efficient than the naive approach of individually calculating the gradients $\frac{\partial E}{\partial w_{ij}}$ for all $i, j$.</li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Visualised">Visualised<a class="anchor-link" href="#Visualised">&#182;</a></h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><img src="images/backprop-simple.png" width="100%"></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Suppose $a^{(i)}$ denotes the activation values at layer $i$ and $z^{(i)}$ denotes the weighted sum at layer $i$.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+$$
+\frac{\partial C}{\partial w^{(3)}}
+    =
+    \frac{\partial C}{\partial a^{(3)}}
+    \frac{\partial a^{(3)}}{\partial z^{(3)}}
+    \frac{\partial z^{(3)}}{\partial w^{(3)}}
+\tag{Weights from layer 2 to 3}
+$$$$
+\frac{\partial C}{\partial w^{(2)}}
+    =
+    \underbrace{
+    \frac{\partial C}{\partial a^{(3)}}
+    \frac{\partial a^{(3)}}{\partial z^{(3)}}
+    }_\text{From $w^{(3)}$}
+    \,
+    \frac{\partial z^{(3)}}{\partial a^{(2)}}
+    \frac{\partial a^{(2)}}{\partial z^{(2)}}
+    \frac{\partial z^{(2)}}{\partial w^{(2)}}
+$$$$
+\frac{\partial C}{\partial w^{(1)}}
+    =
+    \underbrace{
+    \frac{\partial C}{\partial a^{(3)}}
+    \frac{\partial a^{(3)}}{\partial z^{(3)}}
+    }_\text{From $w^{(3)}$}
+    \,
+    \underbrace{
+    \frac{\partial z^{(3)}}{\partial a^{(2)}}
+    \frac{\partial a^{(2)}}{\partial z^{(2)}}
+    }_\text{From $w^{(2)}$}
+    \,
+    \frac{\partial z^{(2)}}{\partial a^{(1)}}
+    \frac{\partial a^{(1)}}{\partial z^{(1)}}
+    \frac{\partial z^{(1)}}{\partial w^{(1)}}
+$$
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Resources:">Resources:<a class="anchor-link" href="#Resources:">&#182;</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<ul>
+<li>Introduction:<ul>
+<li><a href="https://medium.com/tebs-lab/introduction-to-deep-learning-a46e92cb0022">Intro to deep learning</a></li>
+</ul>
+</li>
+<li><a href="https://medium.com/datadriveninvestor/overview-of-different-optimizers-for-neural-networks-e0ed119440c3">Types of optimisers</a></li>
+<li><p>Computation graphs:</p>
+<ul>
+<li><a href="https://medium.com/tebs-lab/deep-neural-networks-as-computational-graphs-867fcaa56c9#:~:text=A%20computational%20graph%20is%20a,or%20functions%20for%20combining%20values.">Basics of computational graphs</a></li>
+</ul>
+</li>
+<li><p>Error functions:</p>
+<ul>
+<li><a href="https://gombru.github.io/2018/05/23/cross_entropy_loss/">Cross-entropy loss and its variants</a></li>
+<li><a href="https://ljvmiranda921.github.io/notebook/2017/08/13/softmax-and-the-negative-log-likelihood/#nll">Negative log likelihood and softmax</a></li>
+</ul>
+</li>
+</ul>
 
 </div>
 </div>

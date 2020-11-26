@@ -2,7 +2,7 @@
 <html>
 <head><meta charset="utf-8" />
 
-<title>1-B-Perceptrons</title>
+<title>5-B-Word-Embeddings</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
@@ -13077,36 +13077,34 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Perceptrons">Perceptrons<a class="anchor-link" href="#Perceptrons">&#182;</a></h1><p>A <em>perceptron</em> models a biological neuron with an algorithm for the supervised learning of a binary classification of inputs. Put simply, a perceptron is just an algorithm for learning a <em>threshold function</em> — ie. a function that maps a vector $x$ to either $0$ or $1$, hence classifying that vector.</p>
-<ul>
-<li>The single-layer perceptron is the simplest example of a feed-forward artificial neural network. It is only capable of learning <em>linearly-separable</em> datapoints
-<img src="images/linearly-separable.png" width="25%"></li>
-</ul>
-
+<h1 id="Word-Representations">Word Representations<a class="anchor-link" href="#Word-Representations">&#182;</a></h1>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="McCulloch-and-Pitts-Neuron-(1943):">McCulloch and Pitts Neuron (1943):<a class="anchor-link" href="#McCulloch-and-Pitts-Neuron-(1943):">&#182;</a></h3><p>McCulloch and Pitts proposed the first computational model of a biological neuron in 1943. This precedes the invention of the perceptron algorithm in 1958.</p>
+<h2 id="Statistical-Language-Models:">Statistical Language Models:<a class="anchor-link" href="#Statistical-Language-Models:">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Counting-Frequencies:">Counting Frequencies:<a class="anchor-link" href="#Counting-Frequencies:">&#182;</a></h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <table>
     <tr>
         <td>            
-            <img src="images/mcculloch-pitts-neuron.png" width="100%">
-            <p style="text-align: center;"><em>This is where it all began</em></p>
-            <p style="text-align: left;">
-                The left side of the neuron takes in inputs and computes an aggregated value, and the right side takes in that aggregated value and outputs a decision.
-            </p>
-            <p style="text-align: left;">
-                The input vector models the electrochemical signals a biological neuron receives through its dendrites.   >
-            <p style="text-align: left;">
-                The function $g$ just directly sums the boolean inputs, plus a bias term. The function $f$ decides to output $0$ or $1$ based on whether $g(x)>\theta$, where $\theta$ is some threshold value.   
-            </p>
-            </p>
+            <img src="images/document-classification-matrix.png">
         </td>
-        <td width="55%">
-            <img src="images/mcculloch-pitts-neuron-vs-biological.png" width="100%">
+        <td>
+            <img src="images/there-was-a-crooked-man.png">
         </td>
     <tr>
 </table>
@@ -13116,14 +13114,16 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Rosenblatt's-Perceptron-(1958):">Rosenblatt's Perceptron (1958):<a class="anchor-link" href="#Rosenblatt's-Perceptron-(1958):">&#182;</a></h3>
+<p>The above table can be turned into a matrix where rows correspond to a single word and columns correspond to a document. The values in the cell represent the frequency of a word in a particular document.</p>
+<p>This tends to work well for document classification problems.</p>
+
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Rosenblatt's perceptron model extends the McCulloch-Pitts neuron model, except it takes in a vector of continuous real numbers and performs a weighted sum rather than a direct sum.</p>
+<h3>N-Gram Model &mdash; Counting Consecutive Word Pair Frequencies:</h3>
 
 </div>
 </div>
@@ -13132,18 +13132,254 @@ div#notebook {
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <table>
-<thead><tr>
-<th style="text-align:center">Single-Layer Perceptron</th>
-<th style="text-align:center">Alternative Diagram</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center"><img src="images/perceptron-annotated.png" alt=""></td>
-<td style="text-align:center"><img src="images/perceptron-alt.png" alt=""></td>
-</tr>
-</tbody>
+    <tr>
+        <td width="50%">  
+            <p style="text-align: center;">
+                <strong>
+                    Consecutive Word Pair Frequency Matrix
+                </strong>
+            </p>          
+            <img src="images/consecutive-word-frequency.png">
+            <p style="text-align: left;">
+                This matrix counts the occurrences of one word appear immediately after another. Eg. "a" is followed immediately by "crooked" 6 times in the input text.
+            </p>
+        </td>
+        <td>
+            <p style="text-align: center;">
+                <strong>
+                    Bi-gram Model
+                </strong>
+            </p>
+            <img src="images/1-gram-consecutive-word-frequency.png">
+            <p style="text-align: left;">
+                The bigram model takes the *consecutive word pair frequency matrix* and divides every entry by the sum of the row's values. This produces a probability distribution for each row.
+            </p>
+        </td>
+    </tr>
 </table>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>With the bi-gram model, we can estimate the probability of any word $w_j$ appearing after word $w_i$. For example, "a" has a $\frac{6}{7}\approx 85.7\%$ chance of being followed by "crooked".</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>N-gram</strong> &mdash; a contiguous sequence of N words. The N-gram model has $N$ dimensions and is used to store the probability of different sequences of $N$ consecutive words occurring together in a document.</p>
+<ul>
+<li><p>N-gram models are language models that can represent the context of words to a language processing network</p>
+<ul>
+<li>Eg. in the string "we need to book our tickets soon" and "we need to read this book soon", the word "book" has different semantics depending on the surrounding words</li>
+<li>Bi-gram models look at every contiguous pair of words, while tri-gram models look at every contiguous triplet of words. In general, the larger the value of $N$, the more unique the set of words are, meaning you'll tend to fail to recognise important <em>pairs</em> of words.  <img src="images/unigram-bigram-trigram.png" width="50%"></li>
+</ul>
+</li>
+<li><p>It's necessary to aggregate statistics across a large collection of similar documents to prevent unusual words like "crooked" from dominating the probability distribution</p>
+</li>
+<li>A bigram model using the English vocabulary would typically be of size $60000 \times 60000$</li>
+<li>An N-gram model would be of size $\underbrace{60000 \times 60000 \times \ldots \times 60000}_{N times}$, taking exponentially more memory as $N$ increases</li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Co-occurrence-Matrix">Co-occurrence Matrix<a class="anchor-link" href="#Co-occurrence-Matrix">&#182;</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<table>
+    <tr>
+        <td>            
+            <p style="text-align: center;">2-Word-Window Co-Occurrence Matrix</p>
+            <img src="images/co-occurrence-matrix-2-window.png">
+        </td>
+        <td>
+            <p style="text-align: center;">10-Word-Window Co-Occurrence Matrix</p>
+            <img src="images/co-occurrence-matrix-10-window.png">
+        </td>
+    <tr>
+</table>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>A <em>co-occurrence matrix</em> stores the probability of a word occurring near another word instead of focusing specifically on whether $w_j$ appears after $w_i$ like for the N-gram model. In other words, with a <em>co-occurrence matrix</em>, we only care about the set of words appearing around a particular central word, rather than the particular order that words occur in.</p>
+<p>A window size of $2$ would count 1 word on either side of a central word. A window size of $10$ would count 5 words on either side of the central word.</p>
+<p>Each word's corresponding row in the co-occurrence matrix can be regarded as the vector representation of that word. With the co-occurrence matrix, words that appear in similar contexts tend to have similar vector representations.</p>
+<p>The word vector dimensions can be on the order of $10^5$ or larger, depending on the size of the vocabulary. One purpose of <em>word embeddings</em> is to find vector representations for words which don't have such a ridiculously large dimension.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Word-Embeddings:">Word Embeddings:<a class="anchor-link" href="#Word-Embeddings:">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The goal of <em>word embeddings</em> is to find a vector representation for each word where 'nearby' representations are likely to occur in similar contexts. <em>Word embeddings</em> are <em>vector representations</em> for words.</p>
+<p>A vector representation for "apple" might look like $[0.7, 1.2, -0.345, ...]$, for example. This word embedding may consist of any number of elements, this is a parameter that we decide. An interesting consequence of numericalising words with a technique like <em>Word2Vec</em> is that the Euclidean distance between any 2 word vectors represents similarity. So vector operations can give you results like $\texttt{apple + purple} \approx \texttt{plum}$.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Singular-Value-Decomposition:">Singular Value Decomposition:<a class="anchor-link" href="#Singular-Value-Decomposition:">&#182;</a></h3><p>Singular value decomposition is frequently used for <em>dimensionality reduction</em>.</p>
+<p>In linear algebra, the <em>singular value decomposition</em> is a factorisation of any matrix $X=USV^T$ of dimensions $L \times M$ where $U_{L\times L}$ and $V_{M \times M}$ are square <em>unitary</em> matrices and $S_{L \times M}$ is a <em>diagonal</em> matrix with non-negative entries $s_1, s_2, ..., s_M \geq 0$.</p>
+<ul>
+<li>A square matrix $A$ is unitary if the inverse is equal to the conjugate transpose: $A^{-1}=(\overline {A})^T$<ul>
+<li>The sum of the squares of the values in each row is equal to 1</li>
+<li>All rows are orthogonal to each other</li>
+</ul>
+</li>
+<li>In the case of a co-occurrence matrix $X$, the dimensions are $L\times L$, where $L$ is the size of the lexicon</li>
+</ul>
+<p>The goal is to obtain an <strong>approximation</strong> for matrix $X$ of a much <strong>smaller rank</strong> $N&lt;M$ by:</p>
+<ul>
+<li>Truncating $U_{L \times L}$ to $\widetilde{U}_{L \times N}$ a matrix with far fewer columns</li>
+<li>Truncating $S_{L \times M}$ to $\widetilde{S}_{N \times N}$ a matrix with far fewer columns and rows</li>
+<li>Truncating $V^T_{M \times M}$ to $\widetilde{V}^T_{N \times M}$, a matrix with far fewer rows</li>
+</ul>
+<p>The product $\widetilde{U}_{L \times N} \cdot \widetilde{S}_{N \times N} \cdot \widetilde{V}^T_{N \times M}$ is a matrix of size $L \times M$, the same dimensions as the original matrix $X$.</p>
+<p>The $k^{th}$ row of $\widetilde{U}$ gives the vector representing word $k$ of the lexicon.</p>
+<p><img src="images/singlar-value-decomposition.png" width="75%"></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<table>
+    <tr>
+        <td width="50%">
+            <p style="text-align: center;">10-Word-Window Co-Occurrence Matrix</p>
+            <img src="images/co-occurrence-matrix-10-window.png">
+        </td>
+        <td>            
+            <p style="text-align: center;">Word vectors of size 2 obtained after running SVD on the co-occurrence matrix</p>
+            <img src="images/singlar-value-decomposition-example.png" width="100%">
+        </td>
+    <tr>
+</table>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The time complexity of SVD is $O(L\times M^2)$, which is impractical if a large lexicon size like $L=60000$ is used. Two alternative ways to generate word vectors are <em>Word2Vec</em> and <em>GloVe</em>.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Word2Vec:">Word2Vec:<a class="anchor-link" href="#Word2Vec:">&#182;</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><img src="images/word2vec-1-word-context-model.png" width="50%"></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Given a word, this network predicts what other words in the lexicon are likely to appear next to that word.</p>
+<ul>
+<li>The inputs are 1-hot encoded.</li>
+<li><p>There are no activations. This hidden layer values are a purely linear function of the input layer, and the output layer values are a purely linear function of the hidden layer.</p>
+</li>
+<li><p>The $k^{th}$ word is represented by the $k^{th}$ row in the matrix $W_{V\times N}$, which we'll call $v_k$. Note that $V$ is the size of the lexicon and $N$ is the number of hidden nodes (the dimension we want to compress to).</p>
+</li>
+<li><p>The $j^{th}$ column of matrix $W'_{N\times V}$ is an <em>alternative</em> vector representation of the $j^{th}$ word, which we'll call $v'_j$.</p>
+</li>
+<li><p>The output probability for a particular word $y_j$ being nearby word $k$ is given by: $y_j=v'^T_j v_k$.</p>
+</li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Word2Vec-replacing-SVD:">Word2Vec replacing SVD:<a class="anchor-link" href="#Word2Vec-replacing-SVD:">&#182;</a></h4><p>With Word2Vec, the input-to-hidden weight matrix takes the place of $\widetilde{U}$ and the hidden-to-output weights takes the place of $\widetilde{V}^T$ in SVD.</p>
+<p>Instead of carrying out regular SVD, we're trying to <em>learn the values</em> of $\widetilde{U}$ and $\widetilde{V}$ with a neural network.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Cost-Function:">Cost Function:<a class="anchor-link" href="#Cost-Function:">&#182;</a></h4><p>Softmax can be used to normalise the output layer values into a probability distribution. Given the input word, the Word2Vec network outputs the probabilty of word $y_j$ occurring next to the input word as:</p>
+$$prob(y_j) = \frac{e^{u_j}}{\sum_{i=i}^V e^{u_i}}.$$
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Suppose the dictionary is numbered from 0-60000 and each word in any document can be mapped to a specific number. Each document can then be considered as just a sequence of numbers: $w_1, w_2, ..., w_T$ where $w_i=j, j\in [0, 60000]$ with $j$ being the $j^{th}$ word in the dictionary.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We then train the network to learn weights that would maximise:</p>
+$$
+    \frac{1}{T}\sum_{t=1}^T \big(\sum_{-c\leq r \leq c, r \neq 0} \log \text{prob}(w_{t+r}|w_t)\big)
+$$<p>where $c$ is the number of words we want to look at before and after the middle word and $T$ is the number of words in the document. Put simply, we're training the network to output high probabilities for words $w_{t+r}$ within the context window that occur around an input word $w_t$.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Working with vanilla softmax, if the true output value is $j^*$, then the cost function is:</p>
+$$
+    E = -u_{j^*} + \log{\sum_{i=1}^V e^{u_{i}}}.
+$$
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<ul>
+<li>The gradient for each output $u_j$ is given by 
+$$e_j=\frac{\partial E}{\partial u_j}=\delta_{jj^*} + \frac{\partial}{\partial u_j} \log{\sum_{i=1}^V e^{u_i}},$$
+where $\delta_{jj^*} = 1$ if the prediction equals the true value $j=j^*$, otherwise $\delta_{jj^*}=0$.</li>
+</ul>
 
 </div>
 </div>
@@ -13152,99 +13388,11 @@ div#notebook {
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <ul>
-<li><p><em>Activation function</em> — translates the aggregated input signals to an output signal. Usually used interchangeably with the term 'transfer function'</p>
-</li>
-<li><p><em>Bias</em> — a constant term that offsets the weighted sum, independent of the input. A positive bias means this neuron is more predisposed to firing</p>
-</li>
+<li>The gradient for hidden-to-output weights:
+$$
+  \frac{\partial E}{\partial w'_{ij}} = \frac{\partial E}{\partial u_j} \cdot \frac{\partial u_j}{\partial w'_{ij}} = e_j h_i
+$$</li>
 </ul>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Perceptron-Learning-Algorithm:">Perceptron Learning Algorithm:<a class="anchor-link" href="#Perceptron-Learning-Algorithm:">&#182;</a></h3><p>The process of 'learning' in a single-layer perceptron model is the process of adjusting the weights until it can correctly map an input to the correct output class.</p>
-<p>The perceptron makes a prediction by taking the <strong>dot product</strong> of the <strong>input vector</strong> and <strong>weight vector</strong> and adding the bias, then passing that through an activation function, for instance, the  Heaviside step function:</p>
-$$g(s) = \begin{cases}
-            1, &amp; s \geq 0,\\
-            0, &amp; s &lt; 0. \tag{1}
-         \end{cases}$$<p></p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="Perceptron-Learning-Rule:">Perceptron Learning Rule:<a class="anchor-link" href="#Perceptron-Learning-Rule:">&#182;</a></h4>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Suppose we have a perceptron that just takes in a vector with 2 components: $x=[x_1, x_2]$.</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p><img src="images/perceptron-learning-rule.png" alt="Rule" style="width: 50%;"/></p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>The perceptron takes in the input vector $x=[x_1, x_2]$ and has weights $w = [w_1, w_2]$ and an additional bias term $w_0$. Taking the dot product, we get $x \cdot w =w_1 x_1 + w_2 x_2$.</p>
-<p>The aggregated sum is $s = w_1 x_1 + w_2 x_2 + w_0$. Once we pass this through the transfer function in $(1)$, $g(s)$, we get the predicted class that the input $x=[x_1, x_2]$ belongs to.</p>
-<p>If the predicted class was incorrect, then we must adjust the weights of the perceptron, $w=[w_1, w_2]$ and $w_0$, so that future predictions will be more likely to correctly classify this input.</p>
-<p>When we make updates to the weights, we use a factor term $\eta$, called the learning rate. This affects how much the weights of the perceptron are updated by. A large learning rate allows the</p>
-<ul>
-<li><p>If $g(s)=0$ but the correct class was $1$, then we reassign the weights:
-  $$</p>
-
-<pre><code>  \begin{align}
-  w_0 &amp;:= w_0 + \eta \\
-  w_1 &amp;:= w_1 + \eta x_1 \\
-  w_2 &amp;:= w_2 + \eta x_2.
-  \end{align}
-</code></pre>
-<p>$$
-Now, in the future when we receive the same input, the value $g(s)$ will be larger and therefore the perceptron will more likely output $g(s)=1$, the correct class.</p>
-</li>
-<li><p>If $g(s)=1$ but the correct class was $0$, then we reassign the weights:
-  $$</p>
-
-<pre><code>  \begin{align}
-  w_0 &amp;:= w_0 - \eta \\
-  w_1 &amp;:= w_1 - \eta x_1 \\
-  w_2 &amp;:= w_2 - \eta x_2.
-  \end{align}
-</code></pre>
-<p>$$
-Now, in the future when we receive the same input, the value $g(s)$ will be lower and therefore the perceptron will more likely output $g(s)=0$, the correct class.</p>
-</li>
-<li><p>If the output class was correct, then no learning is done</p>
-</li>
-</ul>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Linear-Separability:">Linear Separability:<a class="anchor-link" href="#Linear-Separability:">&#182;</a></h3><p>The weight vector of the perceptron model with $w=[w_1, w_2]$ and which takes in inputs $x=[x_1, x_2]$ defines a straight line decision boundary with equation: $w_1x_1 + w_2x_2+w_0=0$.</p>
-<p>Eg. suppose you have a perceptron with weight vector $w=[0.5, -0.24]$ and bias $w_0=0.31$. This defines a decision boundary with the equation $0.5x-0.24y+0.31=0$.
-<img src="images/perceptron-linar-separability.png" width="50%"></p>
-<p>Note: if we had higher dimensional input vectors and weight vectors of size $n$, then the equation $w_0+w_1x_1+\dots + w_nx_n=0$ defines a hyperplane surface instead.</p>
-<p>Rosenblatt mathematically proved that the perceptron learning algorithm guarantees that a decision boundary will be eventually 'learned', provided that the dataset is linearly separable.</p>
-<p>The perceptron learning algorithm unfortunately never learns the correct decision boundary if the learning set is not linearly separable. A dataset is not linearly separable if there exists no hyperplane that can classify all inputs into the correct class.</p>
 
 </div>
 </div>
@@ -13253,15 +13401,10 @@ Now, in the future when we receive the same input, the value $g(s)$ will be lowe
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <ul>
-<li>The classic example of this is the XOR function. XOR can't be learned by a single-layer perceptron because it is not linearly separable:
-<img src="images/perceptron-and-or-xor.png" width="50%">
-The XOR function can be learned by a multi-layer perceptron, however.</li>
-<li><strong>About multi-layer perceptrons:</strong><ul>
-<li>Multi-layer perceptrons can refer generally to any feedforward neural network, that is, any network where the connections between nodes don't form a cycle such that information 'flows' forward
-<img src="images/multilayer-perceptrons.png" width="50%"></li>
-<li>With multi-layer perceptrons containing a <em>hidden layer</em>, we need a more sophisticated training method called <em>backpropagation</em> for updating the weights of the network </li>
-</ul>
-</li>
+<li>The gradient for hidden unit activations:
+$$
+  \frac{\partial E}{\partial h_i} = \sum_{j=1}^V \big( \frac{\partial E}{\partial u_j} \cdot \frac{\partial u_j}{\partial h_i} \big) = \sum_{j=1}^V \big( e_j w'_{ij} \big)
+$$</li>
 </ul>
 
 </div>
@@ -13270,8 +13413,214 @@ The XOR function can be learned by a multi-layer perceptron, however.</li>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Resources:">Resources:<a class="anchor-link" href="#Resources:">&#182;</a></h3><ul>
-<li><a href="https://towardsdatascience.com/mcculloch-pitts-model-5fdf65ac5dd1">McCulloch and Pitts Neuron Model</a></li>
+<ul>
+<li>The gradient for input-to-hidden weights:
+$$
+  \frac{\partial E}{\partial w_{ki}} = \frac{\partial E}{\partial h_i} \cdot \frac{\partial h_i}{\partial w_{ki}} = \sum_{j=1}^V \big( e_j w'_{ij x_k} \big)
+$$</li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>At the completion of training, we typically only keep the input-to-hidden weights and discard the hidden-output weights. The input-to-hidden weights already gives us the word embeddings we're after.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Note: having to compute softmax on an output layer of size 60000 for every word in the text is computationally expensive. Alternatives to softmax are:</p>
+<ul>
+<li>Hierarchical softmax</li>
+<li>Negative sampling</li>
+</ul>
+<p>Both hierarchical softmax and negative sampling are techniques for significantly reducing the amount of computation necessary for training the Word2Vec network, by orders of magnitudes.</p>
+<p>The time complexity for vanilla softmax on the output layer is $O(V)$, where $V$ is the size of the vocabulary. With hierarchical softmax, the time complexity is $O(\log_2 V)$</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Hierarchical-Softmax:">Hierarchical Softmax:<a class="anchor-link" href="#Hierarchical-Softmax:">&#182;</a></h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Hierarchical softmax is applicable to any network that uses softmax at the output layer. It's just a technique for approximating the softmax function.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<table>
+    <tr>
+        <td width="50%">        
+            <p style="text-align: center;">Softmax visualised as a single layer tree</p>
+            <img src="images/softmax-tree.png" width="100%">
+        </td>
+        <td>
+            <p style="text-align: center;">Hierarchical softmax visualised as a Huffman coding tree</p>
+            <img src="images/hierarchical-softmax-tree.png" width="100%">
+        </td>
+    <tr>
+</table>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>All the words in the vocabulary are organised into a Huffman tree, based on the frequency each word in the input text body.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><img src="images/hierarchical-softmax-huffman-tree.png" width="50%"></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We start at the root node. At each internal node, shaded grey, we compute the probability that the correct word is in left subtree or the right subtree by passing the output node's weighted sum through the sigmoid function. The sigmoid output tells you the probability of that the correct word is in the right subtree.</p>
+<p>With this, we're now training the Word2Vec model to produce an output layer that can produce the correct sigmoid activations that can guide you down the Huffman tree to the correct word.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The product of the sigmoid activations in the path down to a leaf is the probability of that word occurring in the context of the input word.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><img src="images/hierarchical-softmax-huffman-tree-probability-path-example.png" width="50%">
+<em><p style="text-align: center;">Here, the network thinks that word $w_2$ has a $0.56 \times 0.23 \times 0.68 \approx 8.75\%$ chance of occurring based on whatever word it received as input</p></em></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Remember, the goal of Word2Vec is not to output a probability distribution for all words, we're just trying to create good word vectors.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Negative-Sampling:">Negative Sampling:<a class="anchor-link" href="#Negative-Sampling:">&#182;</a></h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>A hacky alternative to hierarchical that also produces good word embeddings with significantly less compute time.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Instead of passing through $60000$ inputs, we might sample $20$ words at random that didn't occur with the input word &mdash; this is called <em>negative sampling</em>.</p>
+<p>The goal now is to train the network such that the output of the correct class is larger and the output for the incorrect class is lower, using the following error function:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+$$
+    E = \underbrace{-\log \big( \sigma(v'^T_{j^*} \cdot h) \big)}_{\text{Positive samples correctly predicted}} - \underbrace{\sum_{j\in W_{\text{neg}}} \log \big( \sigma(-v'^T_j \cdot h)\big),}_{\text{Negative samples correctly predicted}} 
+$$
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>where $W_{\text{neg}}$ is a set of negative samples.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Continuous-Bag-of-Words-and-Skip-Gram:">Continuous Bag of Words and Skip-Gram:<a class="anchor-link" href="#Continuous-Bag-of-Words-and-Skip-Gram:">&#182;</a></h4><p>The <em>continuous bag of words</em> model and <em>skip-gram</em> model are 2 different extensions of Word2Vec. Note that Word2Vec only predicts 1 word. These 2 extensions predict multiple words, given 1 input word.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<table>
+    <tr>
+        <td>            
+            <p style="text-align: center;"><strong>Continuous Bag of Words</strong></p>
+            <img src="images/continuous-bag-of-words.png">
+        </td>
+        <td>
+            <p style="text-align: center;"><strong>Skip-Gram</strong></p>
+            <img src="images/skip-gram.png" width="100%">
+        </td>
+    <tr>
+</table>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Suppose we have a context window of size 10.</p>
+<ul>
+<li><em>Continuous bag of words</em> &mdash; given 10 surrounding words as input, we're predicting the word in the middle of those 10 context words</li>
+<li><em>Skip-gram</em> &mdash; given the centre word as input, we're predicting the 10 surrounding words. This is the opposite task of <em>continuous bag of words</em></li>
+<li>Continuous bag of words and skip gram produce more or less the same results. Which one is used depends on which one is faster in the application.</li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Resources:">Resources:<a class="anchor-link" href="#Resources:">&#182;</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<ul>
+<li><a href="https://gist.github.com/aparrish/2f562e3737544cf29aaf1af30362f469">Understanding word vectors</a></li>
+<li><a href="https://towardsdatascience.com/hierarchical-softmax-and-negative-sampling-short-notes-worth-telling-2672010dbe08">Hierarchical softmax and negative sampling</a></li>
 </ul>
 
 </div>

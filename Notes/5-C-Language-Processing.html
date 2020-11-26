@@ -2,7 +2,7 @@
 <html>
 <head><meta charset="utf-8" />
 
-<title>Questions</title>
+<title>5-C-Language-Processing</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
@@ -13077,9 +13077,14 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<ul>
-<li>A 1-layer network can learn to classify linearly separable data. A 2-layer network can learn a wider set of functions (right?) like 'convex' features but can't learn others (eg. Twin Spirals problem). What does adding more layers actually do to increase the learning capacity of a network?</li>
-</ul>
+<h1 id="Language-Processing:">Language Processing:<a class="anchor-link" href="#Language-Processing:">&#182;</a></h1>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Neural-Translation:">Neural Translation:<a class="anchor-link" href="#Neural-Translation:">&#182;</a></h3><p><img src="images/neural-translation-encoder-decoder.png" width="75%"></p>
 
 </div>
 </div>
@@ -13087,9 +13092,57 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<ul>
-<li>The fuck is stochastic gradient descent, momentum and weight decay</li>
-</ul>
+<p>The encoder part of the network above is used to capture the abstract meaning of the English sentence with an LSTM. The decoder part uses an LSTM to decode the encoded English sentence into a sentence of the target language.</p>
+<p>The input English words are 1-hot encoded and converted to word embeddings. Each word is fed to an LSTM one at a time, affecting the  hidden state. The final hidden state is the encoding of the whole sentence.</p>
+<p>The decoder LSTM predicts words one at a time. Each word it predicts then changes the hidden state's contents which can then influence the prediction of the subsequent word.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Bidirectional-Recurrent-Encoder:">Bidirectional Recurrent Encoder:<a class="anchor-link" href="#Bidirectional-Recurrent-Encoder:">&#182;</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><img src="images/bidirectional-recurrent-encoder.png" width="50%"></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>A bidirectional recurrent encoder like the one above runs two LSTMs, training the one going forwards, then training the one going backwards. At each time step, we're producing two sets of hidden units.</p>
+<p>The motivation is to better capture information from the whole sentence.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Attention-Mechanism:">Attention Mechanism:<a class="anchor-link" href="#Attention-Mechanism:">&#182;</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><img src="images/attention-mechanism.png" width="50%"></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Given the output of the bidirectional recurrent encoder, the attention mechanism involves taking a weighted average of each of the pairs of outputs produced at each time step and having a network learn the weights for which to average them.</p>
+<p>The motivation with the <em>attention mechanism</em> is to be able to handle short and long sentences.</p>
 
 </div>
 </div>

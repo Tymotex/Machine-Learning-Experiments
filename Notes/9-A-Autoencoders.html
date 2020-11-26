@@ -2,7 +2,7 @@
 <html>
 <head><meta charset="utf-8" />
 
-<title>1-B-Perceptrons</title>
+<title>9-A-Autoencoders</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
@@ -13077,36 +13077,22 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Perceptrons">Perceptrons<a class="anchor-link" href="#Perceptrons">&#182;</a></h1><p>A <em>perceptron</em> models a biological neuron with an algorithm for the supervised learning of a binary classification of inputs. Put simply, a perceptron is just an algorithm for learning a <em>threshold function</em> — ie. a function that maps a vector $x$ to either $0$ or $1$, hence classifying that vector.</p>
-<ul>
-<li>The single-layer perceptron is the simplest example of a feed-forward artificial neural network. It is only capable of learning <em>linearly-separable</em> datapoints
-<img src="images/linearly-separable.png" width="25%"></li>
-</ul>
-
+<h1 id="Autoencoders:">Autoencoders:<a class="anchor-link" href="#Autoencoders:">&#182;</a></h1>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="McCulloch-and-Pitts-Neuron-(1943):">McCulloch and Pitts Neuron (1943):<a class="anchor-link" href="#McCulloch-and-Pitts-Neuron-(1943):">&#182;</a></h3><p>McCulloch and Pitts proposed the first computational model of a biological neuron in 1943. This precedes the invention of the perceptron algorithm in 1958.</p>
 <table>
     <tr>
-        <td>            
-            <img src="images/mcculloch-pitts-neuron.png" width="100%">
-            <p style="text-align: center;"><em>This is where it all began</em></p>
-            <p style="text-align: left;">
-                The left side of the neuron takes in inputs and computes an aggregated value, and the right side takes in that aggregated value and outputs a decision.
-            </p>
-            <p style="text-align: left;">
-                The input vector models the electrochemical signals a biological neuron receives through its dendrites.   >
-            <p style="text-align: left;">
-                The function $g$ just directly sums the boolean inputs, plus a bias term. The function $f$ decides to output $0$ or $1$ based on whether $g(x)>\theta$, where $\theta$ is some threshold value.   
-            </p>
-            </p>
+        <td width="70%">            
+            <img src="images/autoencoder.png" width="100%">
         </td>
-        <td width="55%">
-            <img src="images/mcculloch-pitts-neuron-vs-biological.png" width="100%">
+        <td>
+            <img src="images/auto-encoder-labeled.png" width="100%">
+            <p style="text-align: center;">If the encoder is given input $x$ and encodes it as $z=f(x)$, then the decoder computes output $g(f(x))$. The goal is to minimise some distance function between input $x$ and the reconstructed output $g(f(x))$:</p>
+            <p style="text-align: center;">$E = L(x, g(f(x)))$</p>
         </td>
     <tr>
 </table>
@@ -13116,14 +13102,10 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Rosenblatt's-Perceptron-(1958):">Rosenblatt's Perceptron (1958):<a class="anchor-link" href="#Rosenblatt's-Perceptron-(1958):">&#182;</a></h3>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Rosenblatt's perceptron model extends the McCulloch-Pitts neuron model, except it takes in a vector of continuous real numbers and performs a weighted sum rather than a direct sum.</p>
+<p>The input is forced through a bottleneck hidden layer which requires features to be extracted and compressed to a smaller dimension.</p>
+<p>This can considered as an alternative to deep Boltzmann machines which do almost the same job. Deep Boltzmann machines are trained by layerwise unsupervised learning while autoencoders are trained by backpropagation.</p>
+<h4 id="Autoencoder-Training-as-Pre-Training:">Autoencoder Training as Pre-Training:<a class="anchor-link" href="#Autoencoder-Training-as-Pre-Training:">&#182;</a></h4><p>When an autoencoder is trained, its decoder network can be substituted for a classification network. In this sense, autoencoder training is a pre-training method for other networks. The resulting weights from the pre-trained network become the initial weights used in another network for another task.</p>
+<p>Autoencoders can be trained in a <em>greedy layerwise</em> manner, similar to deep Boltzmann machines. We can train an autoencoder with one hidden layer to reconstruct the input, then we can train the next hidden layer to reproduce the input it receives and so on. In other words, each subsequent layer is trained to reconstruct the previous layer. The resulting network and its pre-trained parameters can then be attached to a classification layer.</p>
 
 </div>
 </div>
@@ -13131,31 +13113,19 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<table>
-<thead><tr>
-<th style="text-align:center">Single-Layer Perceptron</th>
-<th style="text-align:center">Alternative Diagram</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center"><img src="images/perceptron-annotated.png" alt=""></td>
-<td style="text-align:center"><img src="images/perceptron-alt.png" alt=""></td>
-</tr>
-</tbody>
-</table>
-
+<h2 id="Regularised-Autoencoders:">Regularised Autoencoders:<a class="anchor-link" href="#Regularised-Autoencoders:">&#182;</a></h2>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<p>If there are more hidden units than there are input units, then there is a risk that trivial identity mappings from input to output will be learnt by the encoder. Regularised autoencoders combat this problem:</p>
 <ul>
-<li><p><em>Activation function</em> — translates the aggregated input signals to an output signal. Usually used interchangeably with the term 'transfer function'</p>
-</li>
-<li><p><em>Bias</em> — a constant term that offsets the weighted sum, independent of the input. A positive bias means this neuron is more predisposed to firing</p>
-</li>
+<li>Introducing dropout at hidden layers</li>
+<li>Sparse autoencoders</li>
+<li>Contractive autoencoders</li>
+<li>Denoising autoencoders</li>
 </ul>
 
 </div>
@@ -13164,12 +13134,15 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Perceptron-Learning-Algorithm:">Perceptron Learning Algorithm:<a class="anchor-link" href="#Perceptron-Learning-Algorithm:">&#182;</a></h3><p>The process of 'learning' in a single-layer perceptron model is the process of adjusting the weights until it can correctly map an input to the correct output class.</p>
-<p>The perceptron makes a prediction by taking the <strong>dot product</strong> of the <strong>input vector</strong> and <strong>weight vector</strong> and adding the bias, then passing that through an activation function, for instance, the  Heaviside step function:</p>
-$$g(s) = \begin{cases}
-            1, &amp; s \geq 0,\\
-            0, &amp; s &lt; 0. \tag{1}
-         \end{cases}$$<p></p>
+<h3 id="Sparse-Autoencoder:">Sparse Autoencoder:<a class="anchor-link" href="#Sparse-Autoencoder:">&#182;</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The sparse autoencoder introduces a penalty term to the cost function, determined by the hidden unit activations. This is similar to the weight decay strategy which aims to tone down larger weights, except here we're trying to tone down the hidden unit activations.</p>
+<p>Note: having the hidden unit activations, $z=f(x)$, of the autoencoder follow a normal distribution of $\mu=0$ and $\sigma=1$ allows you to generate new images where we can just sample a random vector $\tilde{z}$ from the standard normal distribution have that produce a completely new image, similar to the training items.</p>
 
 </div>
 </div>
@@ -13177,14 +13150,10 @@ $$g(s) = \begin{cases}
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="Perceptron-Learning-Rule:">Perceptron Learning Rule:<a class="anchor-link" href="#Perceptron-Learning-Rule:">&#182;</a></h4>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Suppose we have a perceptron that just takes in a vector with 2 components: $x=[x_1, x_2]$.</p>
+<p>$L_1\texttt{-regularisation}$ &mdash; penalising the sum of the absolute values of the hidden unit activations:</p>
+$$
+    E = \underbrace{L(x, g(f(x)))}_{\text{Distance function}} + \underbrace{\lambda \sum_i |h_i|}_{\text{Penalty}}, \tag{1}
+$$<p>for each hidden unit activation $h_i$. This is a common choice for how sparse autoencoders penalise the hidden unit activations.</p>
 
 </div>
 </div>
@@ -13192,7 +13161,7 @@ $$g(s) = \begin{cases}
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><img src="images/perceptron-learning-rule.png" alt="Rule" style="width: 50%;"/></p>
+<p>$L_2-\texttt{regularisation}$ penalises the square $h_i^2$ instead of the absolute value $|h_i|$.</p>
 
 </div>
 </div>
@@ -13200,38 +13169,7 @@ $$g(s) = \begin{cases}
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>The perceptron takes in the input vector $x=[x_1, x_2]$ and has weights $w = [w_1, w_2]$ and an additional bias term $w_0$. Taking the dot product, we get $x \cdot w =w_1 x_1 + w_2 x_2$.</p>
-<p>The aggregated sum is $s = w_1 x_1 + w_2 x_2 + w_0$. Once we pass this through the transfer function in $(1)$, $g(s)$, we get the predicted class that the input $x=[x_1, x_2]$ belongs to.</p>
-<p>If the predicted class was incorrect, then we must adjust the weights of the perceptron, $w=[w_1, w_2]$ and $w_0$, so that future predictions will be more likely to correctly classify this input.</p>
-<p>When we make updates to the weights, we use a factor term $\eta$, called the learning rate. This affects how much the weights of the perceptron are updated by. A large learning rate allows the</p>
-<ul>
-<li><p>If $g(s)=0$ but the correct class was $1$, then we reassign the weights:
-  $$</p>
-
-<pre><code>  \begin{align}
-  w_0 &amp;:= w_0 + \eta \\
-  w_1 &amp;:= w_1 + \eta x_1 \\
-  w_2 &amp;:= w_2 + \eta x_2.
-  \end{align}
-</code></pre>
-<p>$$
-Now, in the future when we receive the same input, the value $g(s)$ will be larger and therefore the perceptron will more likely output $g(s)=1$, the correct class.</p>
-</li>
-<li><p>If $g(s)=1$ but the correct class was $0$, then we reassign the weights:
-  $$</p>
-
-<pre><code>  \begin{align}
-  w_0 &amp;:= w_0 - \eta \\
-  w_1 &amp;:= w_1 - \eta x_1 \\
-  w_2 &amp;:= w_2 - \eta x_2.
-  \end{align}
-</code></pre>
-<p>$$
-Now, in the future when we receive the same input, the value $g(s)$ will be lower and therefore the perceptron will more likely output $g(s)=0$, the correct class.</p>
-</li>
-<li><p>If the output class was correct, then no learning is done</p>
-</li>
-</ul>
+<p>With $L_1\texttt{-regularisation}$, some hidden units tend towards zero, producing a sparse hidden unit activation vector.</p>
 
 </div>
 </div>
@@ -13239,12 +13177,17 @@ Now, in the future when we receive the same input, the value $g(s)$ will be lowe
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Linear-Separability:">Linear Separability:<a class="anchor-link" href="#Linear-Separability:">&#182;</a></h3><p>The weight vector of the perceptron model with $w=[w_1, w_2]$ and which takes in inputs $x=[x_1, x_2]$ defines a straight line decision boundary with equation: $w_1x_1 + w_2x_2+w_0=0$.</p>
-<p>Eg. suppose you have a perceptron with weight vector $w=[0.5, -0.24]$ and bias $w_0=0.31$. This defines a decision boundary with the equation $0.5x-0.24y+0.31=0$.
-<img src="images/perceptron-linar-separability.png" width="50%"></p>
-<p>Note: if we had higher dimensional input vectors and weight vectors of size $n$, then the equation $w_0+w_1x_1+\dots + w_nx_n=0$ defines a hyperplane surface instead.</p>
-<p>Rosenblatt mathematically proved that the perceptron learning algorithm guarantees that a decision boundary will be eventually 'learned', provided that the dataset is linearly separable.</p>
-<p>The perceptron learning algorithm unfortunately never learns the correct decision boundary if the learning set is not linearly separable. A dataset is not linearly separable if there exists no hyperplane that can classify all inputs into the correct class.</p>
+<h3 id="Contractive-Autoencoder:">Contractive Autoencoder:<a class="anchor-link" href="#Contractive-Autoencoder:">&#182;</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The penalty term for contractive autoencoders is $L_2 - \texttt{norm}$:
+$$
+    E = \underbrace{L(x, g(f(x)))}_{\text{Distance function}} + \underbrace{\lambda\sum_i \parallel \nabla_x h_i \parallel^2}_{\text{Penalty}}. \tag{2}
+$$</p>
 
 </div>
 </div>
@@ -13252,17 +13195,8 @@ Now, in the future when we receive the same input, the value $g(s)$ will be lowe
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<ul>
-<li>The classic example of this is the XOR function. XOR can't be learned by a single-layer perceptron because it is not linearly separable:
-<img src="images/perceptron-and-or-xor.png" width="50%">
-The XOR function can be learned by a multi-layer perceptron, however.</li>
-<li><strong>About multi-layer perceptrons:</strong><ul>
-<li>Multi-layer perceptrons can refer generally to any feedforward neural network, that is, any network where the connections between nodes don't form a cycle such that information 'flows' forward
-<img src="images/multilayer-perceptrons.png" width="50%"></li>
-<li>With multi-layer perceptrons containing a <em>hidden layer</em>, we need a more sophisticated training method called <em>backpropagation</em> for updating the weights of the network </li>
-</ul>
-</li>
-</ul>
+<p>With this, we are taking $\nabla_x h_i$ which is the vector of derivatives of each hidden unit activation $h_i$ with respect to each input $x_i$. The term $\parallel \nabla_x h_i \parallel^2$ is the square of the length of the gradient vector.</p>
+<p>With error function $(2)$, we can minimise the effect of a small changes in the input. Similar inputs get mapped to similar points in the hidden unit space. This is why it's called 'contractive'.</p>
 
 </div>
 </div>
@@ -13270,9 +13204,104 @@ The XOR function can be learned by a multi-layer perceptron, however.</li>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Resources:">Resources:<a class="anchor-link" href="#Resources:">&#182;</a></h3><ul>
-<li><a href="https://towardsdatascience.com/mcculloch-pitts-model-5fdf65ac5dd1">McCulloch and Pitts Neuron Model</a></li>
-</ul>
+<h3 id="Denoising-Autoencoder:">Denoising Autoencoder:<a class="anchor-link" href="#Denoising-Autoencoder:">&#182;</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Denoising the input is another regularisation method, similar in spirit to contractive autoencoder in that it aims to minimise the effect of small variations in the input layer nodes on the output prediction.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Denoising works by first superimposing noise on the input layer, then training the network to recover the original input layer from the noise.</p>
+<ol>
+<li>Pick a training item $x$ and add a noise vector to it, producing $\tilde{x}$</li>
+<li>Train the network to minimise $E=L(x, g(f(\tilde{x})))$</li>
+<li>Repeat for all training items in the dataset</li>
+</ol>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Variational-Autoencoder:">Variational Autoencoder:<a class="anchor-link" href="#Variational-Autoencoder:">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>For autoencoders, the decoder can be seen as defining a conditional probability distribution $p_\theta(x|z)$ of possible output images given a particular hidden layer vector $z$, based on the decoder network with parameters $\theta$.</p>
+<p>The encoder part can be seen as defining a conditional probability distribution $q_\phi (z | x)$ of possible hidden layer vectors given input image $x$, based on the encoder network with parameters $\phi$.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>For <em>variational autoencoders</em>, instead of producing just a hidden layer vector $z$ for each $x^{(i)}$, the encoder network with parameters $\phi$ can also give the mean $\mu_{z|x^{(i)}}$ and standard deviation $\sigma_{z | x^{(i)}}$ of the normal probability distribution of the possible hidden layer outputs $q_\phi (z | x^{(i)})$, given the input $x^{(i)}$.</p>
+<p>We can then train the system to maximise:</p>
+$$
+    \underbrace{E_{z \text{~} q_\phi(z|x^{(i)})}\big( \log(p_\theta(x^{(i)}|z)) \big)}_{\text{Probability to reproduce image }x^{(i)} \text{ given }z} - \underbrace{D_{KL}\big( q_\phi(z|x^{(i)}) \parallel p(z)\big).}_{\text{KL-divergence between } q_\phi(z|x^{(i)} \text{ and standard normal dist}}
+$$<p>TODO: What the fuck does this even mean. 38:00</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 
 </div>
 </div>

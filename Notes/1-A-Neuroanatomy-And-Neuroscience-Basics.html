@@ -2,7 +2,7 @@
 <html>
 <head><meta charset="utf-8" />
 
-<title>1-B-Perceptrons</title>
+<title>1-A-Neuroanatomy-And-Neuroscience-Basics</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
@@ -13077,73 +13077,7 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Perceptrons">Perceptrons<a class="anchor-link" href="#Perceptrons">&#182;</a></h1><p>A <em>perceptron</em> models a biological neuron with an algorithm for the supervised learning of a binary classification of inputs. Put simply, a perceptron is just an algorithm for learning a <em>threshold function</em> — ie. a function that maps a vector $x$ to either $0$ or $1$, hence classifying that vector.</p>
-<ul>
-<li>The single-layer perceptron is the simplest example of a feed-forward artificial neural network. It is only capable of learning <em>linearly-separable</em> datapoints
-<img src="images/linearly-separable.png" width="25%"></li>
-</ul>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="McCulloch-and-Pitts-Neuron-(1943):">McCulloch and Pitts Neuron (1943):<a class="anchor-link" href="#McCulloch-and-Pitts-Neuron-(1943):">&#182;</a></h3><p>McCulloch and Pitts proposed the first computational model of a biological neuron in 1943. This precedes the invention of the perceptron algorithm in 1958.</p>
-<table>
-    <tr>
-        <td>            
-            <img src="images/mcculloch-pitts-neuron.png" width="100%">
-            <p style="text-align: center;"><em>This is where it all began</em></p>
-            <p style="text-align: left;">
-                The left side of the neuron takes in inputs and computes an aggregated value, and the right side takes in that aggregated value and outputs a decision.
-            </p>
-            <p style="text-align: left;">
-                The input vector models the electrochemical signals a biological neuron receives through its dendrites.   >
-            <p style="text-align: left;">
-                The function $g$ just directly sums the boolean inputs, plus a bias term. The function $f$ decides to output $0$ or $1$ based on whether $g(x)>\theta$, where $\theta$ is some threshold value.   
-            </p>
-            </p>
-        </td>
-        <td width="55%">
-            <img src="images/mcculloch-pitts-neuron-vs-biological.png" width="100%">
-        </td>
-    <tr>
-</table>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Rosenblatt's-Perceptron-(1958):">Rosenblatt's Perceptron (1958):<a class="anchor-link" href="#Rosenblatt's-Perceptron-(1958):">&#182;</a></h3>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Rosenblatt's perceptron model extends the McCulloch-Pitts neuron model, except it takes in a vector of continuous real numbers and performs a weighted sum rather than a direct sum.</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<table>
-<thead><tr>
-<th style="text-align:center">Single-Layer Perceptron</th>
-<th style="text-align:center">Alternative Diagram</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center"><img src="images/perceptron-annotated.png" alt=""></td>
-<td style="text-align:center"><img src="images/perceptron-alt.png" alt=""></td>
-</tr>
-</tbody>
-</table>
+<h1 id="Neuroanatomy-Basics:">Neuroanatomy Basics:<a class="anchor-link" href="#Neuroanatomy-Basics:">&#182;</a></h1><p><img src="images/brain-anatomy-whole.png" width="80%"></p>
 
 </div>
 </div>
@@ -13152,10 +13086,16 @@ div#notebook {
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <ul>
-<li><p><em>Activation function</em> — translates the aggregated input signals to an output signal. Usually used interchangeably with the term 'transfer function'</p>
+<li>Cerebral Cortex — consists of the frontal lobe, parietal lobe, temporal lobe, occipital lobe. Responsible for thought, reasoning, coordinated movement, language, visual processing<ul>
+<li>"Cortex" is latin for "bark"</li>
+</ul>
 </li>
-<li><p><em>Bias</em> — a constant term that offsets the weighted sum, independent of the input. A positive bias means this neuron is more predisposed to firing</p>
+<li>Cerebellum — responsible for balance<ul>
+<li>"Cerebellum" is latin for "little brain"</li>
+</ul>
 </li>
+<li>Thalamus — responsible for relaying sensory information to or from the cerebral cortex</li>
+<li>Hypothalamus — responsible for regulating body temperature, emotions, hunger, thirst and circadian rhythms</li>
 </ul>
 
 </div>
@@ -13164,12 +13104,7 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Perceptron-Learning-Algorithm:">Perceptron Learning Algorithm:<a class="anchor-link" href="#Perceptron-Learning-Algorithm:">&#182;</a></h3><p>The process of 'learning' in a single-layer perceptron model is the process of adjusting the weights until it can correctly map an input to the correct output class.</p>
-<p>The perceptron makes a prediction by taking the <strong>dot product</strong> of the <strong>input vector</strong> and <strong>weight vector</strong> and adding the bias, then passing that through an activation function, for instance, the  Heaviside step function:</p>
-$$g(s) = \begin{cases}
-            1, &amp; s \geq 0,\\
-            0, &amp; s &lt; 0. \tag{1}
-         \end{cases}$$<p></p>
+<h3 id="Limbic-System:">Limbic System:<a class="anchor-link" href="#Limbic-System:">&#182;</a></h3><p><img src="images/brain-anatomy-limbic.png" width="60%"></p>
 
 </div>
 </div>
@@ -13177,60 +13112,13 @@ $$g(s) = \begin{cases}
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="Perceptron-Learning-Rule:">Perceptron Learning Rule:<a class="anchor-link" href="#Perceptron-Learning-Rule:">&#182;</a></h4>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Suppose we have a perceptron that just takes in a vector with 2 components: $x=[x_1, x_2]$.</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p><img src="images/perceptron-learning-rule.png" alt="Rule" style="width: 50%;"/></p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>The perceptron takes in the input vector $x=[x_1, x_2]$ and has weights $w = [w_1, w_2]$ and an additional bias term $w_0$. Taking the dot product, we get $x \cdot w =w_1 x_1 + w_2 x_2$.</p>
-<p>The aggregated sum is $s = w_1 x_1 + w_2 x_2 + w_0$. Once we pass this through the transfer function in $(1)$, $g(s)$, we get the predicted class that the input $x=[x_1, x_2]$ belongs to.</p>
-<p>If the predicted class was incorrect, then we must adjust the weights of the perceptron, $w=[w_1, w_2]$ and $w_0$, so that future predictions will be more likely to correctly classify this input.</p>
-<p>When we make updates to the weights, we use a factor term $\eta$, called the learning rate. This affects how much the weights of the perceptron are updated by. A large learning rate allows the</p>
+<p>Limbic system — responsible for emotions and memory, primarily</p>
 <ul>
-<li><p>If $g(s)=0$ but the correct class was $1$, then we reassign the weights:
-  $$</p>
-
-<pre><code>  \begin{align}
-  w_0 &amp;:= w_0 + \eta \\
-  w_1 &amp;:= w_1 + \eta x_1 \\
-  w_2 &amp;:= w_2 + \eta x_2.
-  \end{align}
-</code></pre>
-<p>$$
-Now, in the future when we receive the same input, the value $g(s)$ will be larger and therefore the perceptron will more likely output $g(s)=1$, the correct class.</p>
-</li>
-<li><p>If $g(s)=1$ but the correct class was $0$, then we reassign the weights:
-  $$</p>
-
-<pre><code>  \begin{align}
-  w_0 &amp;:= w_0 - \eta \\
-  w_1 &amp;:= w_1 - \eta x_1 \\
-  w_2 &amp;:= w_2 - \eta x_2.
-  \end{align}
-</code></pre>
-<p>$$
-Now, in the future when we receive the same input, the value $g(s)$ will be lower and therefore the perceptron will more likely output $g(s)=0$, the correct class.</p>
-</li>
-<li><p>If the output class was correct, then no learning is done</p>
-</li>
+<li>Amygdala — responsible for lower-level emotional responses such as fear or aggression</li>
+<li>Hippocampus — reponsible for 'transferring' short-term memory to long-term memory</li>
+<li>Mammillary bodies — responsible for recall memory</li>
+<li>Cingulate cortex — responsible for linking motivational outcomes to behaviour, for example</li>
+<li>Basal Ganglia — responsible for habit formation</li>
 </ul>
 
 </div>
@@ -13239,12 +13127,31 @@ Now, in the future when we receive the same input, the value $g(s)$ will be lowe
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Linear-Separability:">Linear Separability:<a class="anchor-link" href="#Linear-Separability:">&#182;</a></h3><p>The weight vector of the perceptron model with $w=[w_1, w_2]$ and which takes in inputs $x=[x_1, x_2]$ defines a straight line decision boundary with equation: $w_1x_1 + w_2x_2+w_0=0$.</p>
-<p>Eg. suppose you have a perceptron with weight vector $w=[0.5, -0.24]$ and bias $w_0=0.31$. This defines a decision boundary with the equation $0.5x-0.24y+0.31=0$.
-<img src="images/perceptron-linar-separability.png" width="50%"></p>
-<p>Note: if we had higher dimensional input vectors and weight vectors of size $n$, then the equation $w_0+w_1x_1+\dots + w_nx_n=0$ defines a hyperplane surface instead.</p>
-<p>Rosenblatt mathematically proved that the perceptron learning algorithm guarantees that a decision boundary will be eventually 'learned', provided that the dataset is linearly separable.</p>
-<p>The perceptron learning algorithm unfortunately never learns the correct decision boundary if the learning set is not linearly separable. A dataset is not linearly separable if there exists no hyperplane that can classify all inputs into the correct class.</p>
+<h3 id="Neurons:">Neurons:<a class="anchor-link" href="#Neurons:">&#182;</a></h3><p><img src="images/brain-anatomy-neurons.png" width="60%"></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Neurons are cells comprising the nervous system which can propagate signals through an electrochemical process.</p>
+<ul>
+<li>The brain consists of ~100 billion neurons which an average of 10000 synapses for each neuron</li>
+<li>Dendrites — receives input signals from other neurons</li>
+<li>Axons — outputs a signal to the dendrites of other neurons</li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Synapse">Synapse<a class="anchor-link" href="#Synapse">&#182;</a></h4><ul>
+<li>Synapse — an electrochemical junction
+<img src="images/brain-anatomy-neuron-synapse.png" width="50%"></li>
+</ul>
 
 </div>
 </div>
@@ -13253,25 +13160,8 @@ Now, in the future when we receive the same input, the value $g(s)$ will be lowe
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <ul>
-<li>The classic example of this is the XOR function. XOR can't be learned by a single-layer perceptron because it is not linearly separable:
-<img src="images/perceptron-and-or-xor.png" width="50%">
-The XOR function can be learned by a multi-layer perceptron, however.</li>
-<li><strong>About multi-layer perceptrons:</strong><ul>
-<li>Multi-layer perceptrons can refer generally to any feedforward neural network, that is, any network where the connections between nodes don't form a cycle such that information 'flows' forward
-<img src="images/multilayer-perceptrons.png" width="50%"></li>
-<li>With multi-layer perceptrons containing a <em>hidden layer</em>, we need a more sophisticated training method called <em>backpropagation</em> for updating the weights of the network </li>
-</ul>
-</li>
-</ul>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Resources:">Resources:<a class="anchor-link" href="#Resources:">&#182;</a></h3><ul>
-<li><a href="https://towardsdatascience.com/mcculloch-pitts-model-5fdf65ac5dd1">McCulloch and Pitts Neuron Model</a></li>
+<li>Synaptic vesicle — a 'capsule' of neurotransmitters that are released across the synaptic cleft when the vesicle fuses with the axon terminal's membrane
+<img src="images/brain-anatomy-synaptic-vesicle.png" width="30%"></li>
 </ul>
 
 </div>

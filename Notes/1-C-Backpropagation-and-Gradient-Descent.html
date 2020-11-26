@@ -2,7 +2,7 @@
 <html>
 <head><meta charset="utf-8" />
 
-<title>1-B-Perceptrons</title>
+<title>1-C-Backpropagation-and-Gradient-Descent</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
@@ -13077,10 +13077,42 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Perceptrons">Perceptrons<a class="anchor-link" href="#Perceptrons">&#182;</a></h1><p>A <em>perceptron</em> models a biological neuron with an algorithm for the supervised learning of a binary classification of inputs. Put simply, a perceptron is just an algorithm for learning a <em>threshold function</em> — ie. a function that maps a vector $x$ to either $0$ or $1$, hence classifying that vector.</p>
+<h1 id="Neural-Network-Learning-and-Backpropagation:">Neural Network Learning and Backpropagation:<a class="anchor-link" href="#Neural-Network-Learning-and-Backpropagation:">&#182;</a></h1>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Ockham's-Razor:">Ockham's Razor:<a class="anchor-link" href="#Ockham's-Razor:">&#182;</a></h3><p>Ockham's razor is a problem-solving principle that asserts that "the most likely hypothesis is the simplest one consistent with the data"</p>
+<p><img src="images/ockham's-razor.png" width="50%"></p>
+<p><em>Overfitting</em> is when the learning model is too fine-tuned to the noise rather than the true signal. In the third panel above, the network has learned a decision boundary that doesn't generalise to the true pattern presented by the dataset.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Training-Neural-Networks:">Training Neural Networks:<a class="anchor-link" href="#Training-Neural-Networks:">&#182;</a></h3><p>In the context of neural networks, <em>learning</em> is the process of adjusting a network's weights to achieve a configuration that minimises the <em>error function</em>.</p>
+<h4 id="Error-Functions:">Error Functions:<a class="anchor-link" href="#Error-Functions:">&#182;</a></h4><p>An example <em>error function</em>, also called <em>loss function</em>, that can be used to quantify the incorrectness of a network's prediction is the <em>mean squared error function</em>.</p>
 <ul>
-<li>The single-layer perceptron is the simplest example of a feed-forward artificial neural network. It is only capable of learning <em>linearly-separable</em> datapoints
-<img src="images/linearly-separable.png" width="25%"></li>
+<li><p><em>Mean squared error</em> &mdash; the sum of the squared difference between the network's predicted value $z_i$ and the expected value $t_i$ for all $i$ neurons in the output layer:
+$$
+  E(z_i, t_i)=\frac{1}{2}\sum_{i} (z_i-t_i)^2. \tag{1}
+$$ 
+Note the $\frac{1}{2}$ is chosen so that the coefficient is conveniently canceled when we differentiate this error function with respect to a network weight.</p>
+</li>
+<li><p><em>Cross-entropy loss</em> &mdash;  ... for all $i$ neurons in the output layer:
+$$
+  E(z_i, t_i)=-\sum_{i}t_i\log{(z_i)}. \tag{2}
+$$
+One way to interpret cross-entropy is to see it as a negative log-likelihood for the network to produce $t_i$(?). TODO: What is negative log likelihood even... 
+Cross-entropy is a good error function for measuring the 'distance' between the vector of the output layer's predicted probabilities for each class and the expected label vector (which is 1-hot encoded).</p>
+</li>
+<li>Binary cross-entropy loss &mdash; a variation on regular cross-entropy loss </li>
+<li>Categorical cross-entropy loss &mdash; also called <em>softmax loss</em>. It is just softmax followed by a cross-entropy loss
+<a href="https://gombru.github.io/2018/05/23/cross_entropy_loss/">https://gombru.github.io/2018/05/23/cross_entropy_loss/</a> AMAZING RESOURCE</li>
 </ul>
 
 </div>
@@ -13089,24 +13121,79 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="McCulloch-and-Pitts-Neuron-(1943):">McCulloch and Pitts Neuron (1943):<a class="anchor-link" href="#McCulloch-and-Pitts-Neuron-(1943):">&#182;</a></h3><p>McCulloch and Pitts proposed the first computational model of a biological neuron in 1943. This precedes the invention of the perceptron algorithm in 1958.</p>
+<p>The <strong><em>cost function</em></strong> computes the average of the loss function values across the entire training set: $\frac{1}{m}\sum_{i=1}^m E(z^{(i)}, t^{(i)})$, where $m$ is the total number of training examples and $z^{(i)}$ and $t^{(i)}$ are the prediction and target value for the $i^{\text{th}}$ training sample respectively.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Differentiable-Activation-Functions:">Differentiable Activation Functions:<a class="anchor-link" href="#Differentiable-Activation-Functions:">&#182;</a></h4><p>A requirement for backpropagation in neural networks is a <em>differentiable activation function</em>, since backpropagation uses <em>gradient descent</em> to adjust weights.</p>
+<p>The Heaviside step function's derivative has a value of $0$ everywhere, so gradient descent can't make progress in updating the weights. One very important transition beyond the perceptron model is the introduction of continuous activation functions.</p>
+<p>Alternative differentiable activation functions:</p>
+<ul>
+<li>Logistic sigmoid: $\sigma(s) =\frac{1}{1+e^{-s}}$<ul>
+<li>Output values range: $[0, 1]$</li>
+<li>In statistics, <em>logistic regression</em> is used to model the probability of a binary event (eg. alive/dead, cat/non-cat, etc.). Like all regression analyses, logistic regression is a form of predictive analysis</li>
+</ul>
+</li>
+<li>Hyperbolic tan: $\texttt{tanh}(s)=\frac{e^s-e^{-s}}{e^s+e^{-s}}=2(\frac{1}{1+e^{-s}}) - 1=2\sigma(s)-1$<ul>
+<li>Output values range: $[-1, 1]$</li>
+<li>$\texttt{tanh}$ is just the logistic sigmoid function doubled and then shifted down 1 unit vertically</li>
+</ul>
+</li>
+<li>Rectified linear unit &mdash; 
+$\texttt{ReLU}(s) = \begin{cases}
+x, &amp; s &gt; 0,\\
+0, &amp; s \leq 0. 
+\end{cases}$</li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Gradient-Descent:">Gradient Descent:<a class="anchor-link" href="#Gradient-Descent:">&#182;</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><em>Gradient descent</em> is an <em>optimiser</em> algorithm that neural networks can use to update individual weights. It works by repeatedly application of the following update rule:
+$$
+    w_{jk} := w_{jk} - \eta \frac{\partial E}{\partial w_{jk}} \tag{3}
+$$</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>where the term $\frac{\partial E}{\partial w_{jk}}$ is computed through <em>backpropagation</em>. The term $\frac{\partial E}{\partial w_{jk}}$ can be thought of as a measurement of how much the error function $E$ changes when we make a very small change to $w_{jk}$.</p>
+<p>With every iteration of $(3)$, the weight $w_{jk}$ takes a 'step' downhill the <em>error landscape</em>. Eventually, the weight $w_{jk}$ will settle on a value that is a local minimum.</p>
+<p>A very large learning rate could cause the updated weight value to overstep the local minimum and spiral up the error landscape. A very low learning rate means the network converges on optimal weight values slower.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <table>
     <tr>
         <td>            
-            <img src="images/mcculloch-pitts-neuron.png" width="100%">
-            <p style="text-align: center;"><em>This is where it all began</em></p>
-            <p style="text-align: left;">
-                The left side of the neuron takes in inputs and computes an aggregated value, and the right side takes in that aggregated value and outputs a decision.
-            </p>
-            <p style="text-align: left;">
-                The input vector models the electrochemical signals a biological neuron receives through its dendrites.   >
-            <p style="text-align: left;">
-                The function $g$ just directly sums the boolean inputs, plus a bias term. The function $f$ decides to output $0$ or $1$ based on whether $g(x)>\theta$, where $\theta$ is some threshold value.   
-            </p>
-            </p>
+            <img src="images/gradient-descent-visualised.gif" />
         </td>
-        <td width="55%">
-            <img src="images/mcculloch-pitts-neuron-vs-biological.png" width="100%">
+        <td width="50%">
+            <p style="text-align: left;">
+                We want all weights to take on the global minimum value, but depending on the learning rate and what value the weight initially starts with, gradient descent may cause the weight to settle on a value corresponding to a suboptimal local minimum instead.
+            </p>
+            <img src="images/gradient-descent-minimas-visualised.gif" />
         </td>
     <tr>
 </table>
@@ -13116,15 +13203,31 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Rosenblatt's-Perceptron-(1958):">Rosenblatt's Perceptron (1958):<a class="anchor-link" href="#Rosenblatt's-Perceptron-(1958):">&#182;</a></h3>
+<p>There are variations on gradient descent which introduce concepts like <em>momentum</em> and <em>acceleration</em>.</p>
+<p>There also exists many other optimisers such as <em>adagrad</em>, <em>adam</em>, <em>rms-prop</em>, <em>Nesterov accelerated gradient</em>, etc.</p>
+
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Rosenblatt's perceptron model extends the McCulloch-Pitts neuron model, except it takes in a vector of continuous real numbers and performs a weighted sum rather than a direct sum.</p>
+<h2 id="Backpropagation">Backpropagation<a class="anchor-link" href="#Backpropagation">&#182;</a></h2><p>Backpropagation is an algorithm for computing the derivative of the error function $E$ with respect to individual network weights $w_{ij}$. It is just the systematic application of chain rule starting from the output layer, and passing intermediate results backwards so that earlier derivatives that depend on derivatives from later layers can be computed.</p>
 
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<hr>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Backpropagation-From-First-Principles:">Backpropagation From First Principles:<a class="anchor-link" href="#Backpropagation-From-First-Principles:">&#182;</a></h3>
 </div>
 </div>
 </div>
@@ -13132,30 +13235,49 @@ div#notebook {
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <table>
-<thead><tr>
-<th style="text-align:center">Single-Layer Perceptron</th>
-<th style="text-align:center">Alternative Diagram</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center"><img src="images/perceptron-annotated.png" alt=""></td>
-<td style="text-align:center"><img src="images/perceptron-alt.png" alt=""></td>
-</tr>
-</tbody>
+    <tr>
+        <td>
+            <p style="text-align: center;">
+                Example neural network
+            </p>
+            <img src="images/backprop-network-template.png" width="100%">
+        </td>
+        <td>    
+            <p style="text-align: center;">
+                Weight component $w_{jk}^{(l)}$
+            </p>        
+            <img src="images/backprop-network-template-wjk.png" width="100%">
+        </td>
+        <td> 
+            <p style="text-align: center;">
+                Weight vector $w_{j}^{(l)}$
+            </p> 
+            <img src="images/backprop-network-template-wj.png" width="100%">
+        </td>
+    <tr>
 </table>
-
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<ul>
-<li><p><em>Activation function</em> — translates the aggregated input signals to an output signal. Usually used interchangeably with the term 'transfer function'</p>
+<h4 id="Mathematical-Notation:">Mathematical Notation:<a class="anchor-link" href="#Mathematical-Notation:">&#182;</a></h4><ul>
+<li>$L$ &mdash; number of layers in the network<ul>
+<li>$l$ &mdash; indexing variable for layers $1, 2, \ldots, L-1, L$ </li>
+<li>$j$ &mdash; indexing variable for node $j$ in layer $l$</li>
+<li>$k$ &mdash; indexing variable for node $k$ in layer $l-1$</li>
+<li>$n$ &mdash; the number of nodes in layer $l$</li>
+<li>$m$ &mdash; the number of nodes in layer $l-1$</li>
+</ul>
 </li>
-<li><p><em>Bias</em> — a constant term that offsets the weighted sum, independent of the input. A positive bias means this neuron is more predisposed to firing</p>
-</li>
+<li>$y_j$ &mdash; the expected value of output node $j$ in the output layer</li>
+<li>$E$ &mdash; error function for a single input</li>
+<li>$w_{jk}^{(l)}$ &mdash; the specific weight that connects to node $j$ in layer $l$ from node $k$ in layer $l-1$</li>
+<li>$w_{j}^{(l)}$ &mdash; the vector of all weights from layer $l-1$ towards node $j$ in layer $l$</li>
+<li>$z_j^{(l)}$ &mdash; the weighted sum of inputs into node $j$ at layer $l$</li>
+<li>$g^{(l)}$ &mdash; the activation function applied on the nodes of layer $l$ </li>
+<li>$a_j^{(l)}$ &mdash; the activation value outputted by node $j$ at layer $l$ </li>
 </ul>
 
 </div>
@@ -13164,12 +13286,22 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Perceptron-Learning-Algorithm:">Perceptron Learning Algorithm:<a class="anchor-link" href="#Perceptron-Learning-Algorithm:">&#182;</a></h3><p>The process of 'learning' in a single-layer perceptron model is the process of adjusting the weights until it can correctly map an input to the correct output class.</p>
-<p>The perceptron makes a prediction by taking the <strong>dot product</strong> of the <strong>input vector</strong> and <strong>weight vector</strong> and adding the bias, then passing that through an activation function, for instance, the  Heaviside step function:</p>
-$$g(s) = \begin{cases}
-            1, &amp; s \geq 0,\\
-            0, &amp; s &lt; 0. \tag{1}
-         \end{cases}$$<p></p>
+<h3 id="Error-Function-as-a-Composition-of-Functions:">Error Function as a Composition of Functions:<a class="anchor-link" href="#Error-Function-as-a-Composition-of-Functions:">&#182;</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Suppose we're using the mean squared error function, $(1)$, as our network's error function: 
+$$E=\frac{1}{2}\sum_{j=0}^{n-1} (a_{j}^{(L)}-y_j)^2.$$</p>
+<p>The activation value $a_j^{(L)}$ is given by:
+$$
+    \begin{align}
+    a_j^{(L)}&amp;=g^{(L)}\big( z_j^{(L)}\big) \\
+    &amp;= g^{(L)} \big( \sum_{k=0}^{m-1} w_{jk}^{(L)} \cdot a_k^{(L-1)} \big).
+    \end{align}
+$$</p>
 
 </div>
 </div>
@@ -13177,14 +13309,10 @@ $$g(s) = \begin{cases}
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="Perceptron-Learning-Rule:">Perceptron Learning Rule:<a class="anchor-link" href="#Perceptron-Learning-Rule:">&#182;</a></h4>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Suppose we have a perceptron that just takes in a vector with 2 components: $x=[x_1, x_2]$.</p>
+<p>Now, the error function can be expressed as:
+$$
+    E=\frac{1}{2}\sum_{j=0}^{n-1} \Bigg( \underbrace{g^{(L)} \big( \sum_{k=0}^{m-1} w_{jk}^{(L)} \cdot a_k^{(L-1)} \big)}_{a_j^{(L)}}  -y_j\Bigg)^2. \tag{a}
+$$</p>
 
 </div>
 </div>
@@ -13192,7 +13320,14 @@ $$g(s) = \begin{cases}
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><img src="images/perceptron-learning-rule.png" alt="Rule" style="width: 50%;"/></p>
+<p>The main point is that we recognise that $(a)$ is just a function composition:
+$$
+    \begin{align}
+    E&amp;=\sum_{j=0}^{n-1} E(a_{j}^{(L)}), \tag{$E$ is a function of the activation value} \\ 
+     &amp;=\sum_{j=0}^{n-1} E(a_{j}(z_{j}^{(L)})), \tag{$a$ is a function of the weighted sum} \\ 
+     &amp;=\sum_{j=0}^{n-1} E(a_{j}(z_{j}^{(L)}(w_j^{(L)}))). \tag{$z$ is a function of the weights} \\ 
+    \end{align}
+$$</p>
 
 </div>
 </div>
@@ -13200,38 +13335,15 @@ $$g(s) = \begin{cases}
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>The perceptron takes in the input vector $x=[x_1, x_2]$ and has weights $w = [w_1, w_2]$ and an additional bias term $w_0$. Taking the dot product, we get $x \cdot w =w_1 x_1 + w_2 x_2$.</p>
-<p>The aggregated sum is $s = w_1 x_1 + w_2 x_2 + w_0$. Once we pass this through the transfer function in $(1)$, $g(s)$, we get the predicted class that the input $x=[x_1, x_2]$ belongs to.</p>
-<p>If the predicted class was incorrect, then we must adjust the weights of the perceptron, $w=[w_1, w_2]$ and $w_0$, so that future predictions will be more likely to correctly classify this input.</p>
-<p>When we make updates to the weights, we use a factor term $\eta$, called the learning rate. This affects how much the weights of the perceptron are updated by. A large learning rate allows the</p>
-<ul>
-<li><p>If $g(s)=0$ but the correct class was $1$, then we reassign the weights:
-  $$</p>
-
-<pre><code>  \begin{align}
-  w_0 &amp;:= w_0 + \eta \\
-  w_1 &amp;:= w_1 + \eta x_1 \\
-  w_2 &amp;:= w_2 + \eta x_2.
-  \end{align}
-</code></pre>
-<p>$$
-Now, in the future when we receive the same input, the value $g(s)$ will be larger and therefore the perceptron will more likely output $g(s)=1$, the correct class.</p>
-</li>
-<li><p>If $g(s)=1$ but the correct class was $0$, then we reassign the weights:
-  $$</p>
-
-<pre><code>  \begin{align}
-  w_0 &amp;:= w_0 - \eta \\
-  w_1 &amp;:= w_1 - \eta x_1 \\
-  w_2 &amp;:= w_2 - \eta x_2.
-  \end{align}
-</code></pre>
-<p>$$
-Now, in the future when we receive the same input, the value $g(s)$ will be lower and therefore the perceptron will more likely output $g(s)=0$, the correct class.</p>
-</li>
-<li><p>If the output class was correct, then no learning is done</p>
-</li>
-</ul>
+<h3 id="Backpropagation-Algorithm-Derivation:">Backpropagation Algorithm Derivation:<a class="anchor-link" href="#Backpropagation-Algorithm-Derivation:">&#182;</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Gradient descent requires that we know what the value of $\frac{\partial E}{\partial w_{jk}^{(l)}}$ is for all individual weight parameters $w_{jk}^{(l)}$ in the network. Let's focus on how to calculate the gradient of the error function with respect to one specific weight $w_{12}^{(L)}$, which is $\frac{\partial E}{\partial w_{12}^{(L)}}$, for now.</p>
+<p><img src="images/backprop-network-template-w12.png" width="30%"></p>
 
 </div>
 </div>
@@ -13239,12 +13351,12 @@ Now, in the future when we receive the same input, the value $g(s)$ will be lowe
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Linear-Separability:">Linear Separability:<a class="anchor-link" href="#Linear-Separability:">&#182;</a></h3><p>The weight vector of the perceptron model with $w=[w_1, w_2]$ and which takes in inputs $x=[x_1, x_2]$ defines a straight line decision boundary with equation: $w_1x_1 + w_2x_2+w_0=0$.</p>
-<p>Eg. suppose you have a perceptron with weight vector $w=[0.5, -0.24]$ and bias $w_0=0.31$. This defines a decision boundary with the equation $0.5x-0.24y+0.31=0$.
-<img src="images/perceptron-linar-separability.png" width="50%"></p>
-<p>Note: if we had higher dimensional input vectors and weight vectors of size $n$, then the equation $w_0+w_1x_1+\dots + w_nx_n=0$ defines a hyperplane surface instead.</p>
-<p>Rosenblatt mathematically proved that the perceptron learning algorithm guarantees that a decision boundary will be eventually 'learned', provided that the dataset is linearly separable.</p>
-<p>The perceptron learning algorithm unfortunately never learns the correct decision boundary if the learning set is not linearly separable. A dataset is not linearly separable if there exists no hyperplane that can classify all inputs into the correct class.</p>
+<p>From the previous observation that the error function is a function composition of the activation function and the weighted sum function, we can use the chain rule to obtain $\frac{\partial E}{\partial w_{12}^{(L)}}$:
+$$
+    \frac{\partial E}{\partial w_{12}^{(L)}} = \underbrace{\frac{\partial E}{\partial a_{1}^{(L)}}}_{\text{term 1}} \cdot
+                                               \underbrace{\frac{\partial a_{1}^{(L)}}{\partial z_{1}^{(L)}}}_{\text{term 2}} \cdot
+                                               \underbrace{\frac{\partial z_{1}^{(L)}}{\partial w_{12}^{(L)}}}_{\text{term 3}}. \tag{b}
+$$</p>
 
 </div>
 </div>
@@ -13252,18 +13364,189 @@ Now, in the future when we receive the same input, the value $g(s)$ will be lowe
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<ul>
-<li>The classic example of this is the XOR function. XOR can't be learned by a single-layer perceptron because it is not linearly separable:
-<img src="images/perceptron-and-or-xor.png" width="50%">
-The XOR function can be learned by a multi-layer perceptron, however.</li>
-<li><strong>About multi-layer perceptrons:</strong><ul>
-<li>Multi-layer perceptrons can refer generally to any feedforward neural network, that is, any network where the connections between nodes don't form a cycle such that information 'flows' forward
-<img src="images/multilayer-perceptrons.png" width="50%"></li>
-<li>With multi-layer perceptrons containing a <em>hidden layer</em>, we need a more sophisticated training method called <em>backpropagation</em> for updating the weights of the network </li>
-</ul>
-</li>
-</ul>
+<h5 id="Computing-Term-1:">Computing Term 1:<a class="anchor-link" href="#Computing-Term-1:">&#182;</a></h5><p>We're using the mean squared error, so we have
+$$
+    E=\frac{1}{2}\sum_{j=0}^{n-1} (a_{j}^{(L)}-y_j)^2.
+$$
+Calculating the derivative of $E$ with respect to $a_1^{(L)}$,
+$$
+    \begin{align}
+    \frac{\partial E}{\partial a_1^{(L)}}&amp;=\frac{\partial}{\partial a_1^{(L)}} \Bigg(\frac{1}{2}\sum_{j=0}^{n-1} (a_{j}^{(L)}-y_j)^2 \Bigg),\\
+    &amp;= \frac{\partial}{\partial a_1^{(L)}} \Bigg(\frac{1}{2} \Big( (a_{0}^{(L)}-y_0)^2 + (a_{1}^{(L)}-y_1)^2 + \ldots + (a_{n-1}^{(L)}-y_{n-1})^2 \Big) \Bigg), \\
+    &amp;= \frac{\partial}{\partial a_1^{(L)}} \Bigg(\frac{1}{2} \Big( a_{1}^{(L)}-y_1 \Big)^2  \Bigg), \\
+    &amp;= a_{1}^{(L)}-y_1. \\
+    \end{align}
+$$</p>
 
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h5 id="Computing-Term-2:">Computing Term 2:<a class="anchor-link" href="#Computing-Term-2:">&#182;</a></h5><p>The activation function is given by
+$$
+    a_{1}^{(L)} = g^{(L)}\big(z_1^{(L)}\big),
+$$
+where $g$ is a differentiable function like $\texttt{sigmoid}$ or $\texttt{tanh}$. 
+The derivative of $a_{1}^{(L)}$ with respect to the weighted sum $z_1^{(L)}$ is 
+$$
+    \frac{\partial a_{1}^{(L)}}{\partial z_1^{(L)}} = g'^{(L)}\big( z_1^{(L)} \big).
+$$</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h5 id="Computing-Term-3:">Computing Term 3:<a class="anchor-link" href="#Computing-Term-3:">&#182;</a></h5>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The weighted sum $z_1^{(L)}$ is given by:
+$$
+    z_1^{(L)} = (w_{10}^{(L)}\cdot a_{0}^{(L-1)}) + (w_{11}^{(L)}\cdot a_{1}^{(L-1)}) + (w_{12}^{(L)}\cdot a_{2}^{(L-1)}) + \ldots + (w_{1,n-1}^{(L)}\cdot a_{n-1}^{(L-1)}).
+$$</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The derivative of the weighted sum $z_1^{(L)}$ with respect to <em>one specific weight</em> $w_{12}^{(L)}$ is given by:
+$$
+    \frac{\partial z_{1}^{(L)}}{\partial w_{12}^{(L)}} = a_{2}^{(L-1)},
+$$
+which is just the output activation value of node $2$ in layer $L-1$.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Putting-it-all-back-together:">Putting it all back together:<a class="anchor-link" href="#Putting-it-all-back-together:">&#182;</a></h4><p>Substituting all the computed terms back into $(b)$, we have:
+$$
+    \frac{\partial E}{\partial w_{12}^{(L)}} = \underbrace{(a_{1}^{(L)}-y_1)}_{\text{term 1}} \cdot
+                                               \underbrace{(g'^{(L)}\big( z_1^{(L)}\big))}_{\text{term 2}} \cdot
+                                               \underbrace{(a_{2}^{(L-1)})}_{\text{term 3}}. \tag{c}
+$$</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>So now if we want to apply gradient descent on weight $w_{12}^{(L)}$, we just need to evaluate $(c)$ and run the line of code:
+$$
+    w_{12}^{(L)} := w_{12}^{(L)}-\eta \frac{\partial E}{\partial w_{12}^{(L)}}.
+$$</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Generalising-for-any-weight-in-the-network:">Generalising for any weight in the network:<a class="anchor-link" href="#Generalising-for-any-weight-in-the-network:">&#182;</a></h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We can compute the derivative weight $w_{12}^{(L)}$ using $(c)$, but we need the gradient of $E$ with respect to all weights $w_{jk}^{(l)}$ for all layers $l$ to train the whole network.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><img src="images/backprop-network-template-w22.png" width="50%"></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Suppose now we want to get the derivative of the error function with respect to a specific weight $w_{22}$:
+$$
+    \frac{\partial E}{\partial w_{22}} = \underbrace{\frac{\partial E}{\partial a_{2}^{(L-1)}}}_{\text{term 1}} \cdot
+                                               \underbrace{\frac{\partial a_{2}^{(L-1)}}{\partial z_{2}^{(L-1)}}}_{\text{term 2}} \cdot
+                                               \underbrace{\frac{\partial z_{2}^{(L-1)}}{\partial w_{22}^{(L-1)}}}_{\text{term 3}}, \tag{d}
+$$ 
+which is very similar to equation $(b)$ which was used to calculate the derivative $\frac{\partial E}{\partial w_{12}^{(L)}}$.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Computing terms $2$ and $3$ are done exactly the same as for $\frac{\partial E}{\partial w_{12}^{(L)}}$. The problem is determining term $1$, since</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h5 id="Computing-Term-1:">Computing Term 1:<a class="anchor-link" href="#Computing-Term-1:">&#182;</a></h5><p>The term $\frac{\partial E}{\partial a_{2}^{(L-1)}}$ measures how much the error function changes when you make a small change to the activation of node $2$ in layer $L-1$. The value of this is
+$$
+    \begin{align}
+    \frac{\partial E}{\partial a_{2}^{(L-1)}} &amp;= \sum_{i=0}^{n-1} \Big( \frac{\partial E}{\partial a_j^{(L)}} \cdot \frac{\partial a_j^{(L)}}{\partial z_j^{(L)}} \cdot \frac{\partial z_j^{(L)}}{\partial a_2^{(L-1)}}\Big) \\
+    &amp;= \sum_{i=0}^{n-1} \Big( (a_j^{(L)} - y_j) \cdot (g'^{(L)}) \cdot (w_{j2}^{(L)}) \Big)
+    \end{align}
+$$</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><img src="images/backprop-network-template-w22-term1-third-derivative.png" width="50%"></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Now, the derivative $\frac{\partial E}{\partial w_{22}}$ is given as:
+$$
+    \begin{align}
+    \frac{\partial E}{\partial w_{22}} &amp;= \sum_{i=0}^{n-1} \Big( \underbrace{\frac{\partial E}{\partial a_j^{(L)}} \cdot \frac{\partial a_j^{(L)}}{\partial z_j^{(L)}}}_{\text{Passed back from the layer L}} \cdot \frac{\partial z_j^{(L)}}{\partial a_2^{(L-1)}}\Big) \cdot \underbrace{\frac{\partial a_{2}^{(L-1)}}{\partial z_{2}^{(L-1)}}}_{\text{term 2}} \cdot
+                                               \underbrace{\frac{\partial z_{2}^{(L-1)}}{\partial w_{22}^{(L-1)}}}_{\text{term 3}} \\
+    &amp;= \sum_{i=0}^{n-1} \Big( \underbrace{(a_j^{(L)} - y_j) \cdot (g'^{(L)})}_{\text{Passed back from the layer L}} \cdot (w_{j2}^{(L)}) \Big) \cdot
+                                               \underbrace{\frac{\partial a_{2}^{(L-1)}}{\partial z_{2}^{(L-1)}}}_{\text{term 2}} \cdot
+                                               \underbrace{\frac{\partial z_{2}^{(L-1)}}{\partial w_{22}^{(L-1)}}}_{\text{term 3}}, \tag{d}
+    \end{align}
+$$</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Calculating the derivative of the error with respect to any weight going towards node $j$ in any layer $l$ depends on the value $\frac{\partial E}{\partial a_j^{(l+1)}} \cdot \frac{\partial a_j^{(l+1)}}{\partial z_j^{(l+1)}}$ calculated from the layer in front.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<hr>
 </div>
 </div>
 </div>
@@ -13271,7 +13554,9 @@ The XOR function can be learned by a multi-layer perceptron, however.</li>
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h3 id="Resources:">Resources:<a class="anchor-link" href="#Resources:">&#182;</a></h3><ul>
-<li><a href="https://towardsdatascience.com/mcculloch-pitts-model-5fdf65ac5dd1">McCulloch and Pitts Neuron Model</a></li>
+<li><a href="https://towardsdatascience.com/the-heart-of-artificial-neural-networks-26627e8c03ba">The Math Behind Artificial Neural Networks</a></li>
+<li><a href="https://www.youtube.com/watch?v=XE3krf3CQls&t=496s&ab_channel=deeplizard">Backpropagation Video Derivation Series</a></li>
+<li><a href="https://towardsdatascience.com/epoch-vs-iterations-vs-batch-size-4dfb9c7ce9c9">Epochs, Iterations, Batch Size</a></li>
 </ul>
 
 </div>

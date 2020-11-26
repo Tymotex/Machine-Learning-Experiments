@@ -2,7 +2,7 @@
 <html>
 <head><meta charset="utf-8" />
 
-<title>1-B-Perceptrons</title>
+<title>3-B-Convolutional-Networks-and-Image-Processing</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
@@ -13077,10 +13077,54 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Perceptrons">Perceptrons<a class="anchor-link" href="#Perceptrons">&#182;</a></h1><p>A <em>perceptron</em> models a biological neuron with an algorithm for the supervised learning of a binary classification of inputs. Put simply, a perceptron is just an algorithm for learning a <em>threshold function</em> — ie. a function that maps a vector $x$ to either $0$ or $1$, hence classifying that vector.</p>
+<h1 id="Convolutional-Neural-Networks">Convolutional Neural Networks<a class="anchor-link" href="#Convolutional-Neural-Networks">&#182;</a></h1>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><img src="images/cnn-sequence.png" width="100%"></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><img src="images/convolutional-network-components.png"></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>For regular neural networks, an input layer is fed through through a series of hidden layers until reaching the output layer, with every layer being fully connected.</p>
+<p>With convolutional neural networks, all layers have 3 dimensions. Neurons in one layer are not fully connected to the neurons in the next layer.</p>
 <ul>
-<li>The single-layer perceptron is the simplest example of a feed-forward artificial neural network. It is only capable of learning <em>linearly-separable</em> datapoints
-<img src="images/linearly-separable.png" width="25%"></li>
+<li>Each layer of a convolutional neural network maps a 3D input 'volume' to a 3D output 'volume' of activations.</li>
+<li>CNNs have 2 components: the feature extraction part and the classification part (consisting of fully connected layers you'd see for regular networks).<ul>
+<li>Feature extraction: passing the input image through a series of convolution, activation and pooling operations</li>
+<li>Classification: based on the extracted features, assigns probabilities to each class</li>
+</ul>
+</li>
+</ul>
+<h3 id="Overfitting-and-Reusing-Weights:">Overfitting and Reusing Weights:<a class="anchor-link" href="#Overfitting-and-Reusing-Weights:">&#182;</a></h3><p>In general, the more parameters/weights, the greater the tendency for the neural network to overfit the training dataset &mdash; especially if there is disportionately less training data. Overfitting is concerned with the <em>ratio</em> between the <em>number of weights</em> in the model and the <em>number of datapoints</em> it trains on to learn those weights.</p>
+<p>Using convolutional layers involves using a small set of weights, offsetting the ratio of weights to number of datapoints.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Convolution-Layers:">Convolution Layers:<a class="anchor-link" href="#Convolution-Layers:">&#182;</a></h3><p>The most well-known and widespread structure used in neural networks is called a convolution, and when used in a hidden layer, it's called a convolutional layer. The development of convolutional layers and the reusing of weights is one of the most important innovations in deep learning.</p>
+<ul>
+<li>Just like regular hidden layers in a network, convolutional layers will take in input from the previous layer's nodes, operate on it, then pass on the output to the next layer. It uses <em>linear convolutions</em> over <em>matrix multiplication</em> on the input</li>
+<li>Convolutions revolve around 'reusing a piece of intelligence' in multiple places</li>
+<li>Convolving is the process of 'sliding' across the input image and sampling a different subsection of the image</li>
+<li>Convolutional layers can be stacked &mdash; this allows for hierarchical decomposition of the input </li>
 </ul>
 
 </div>
@@ -13089,24 +13133,22 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="McCulloch-and-Pitts-Neuron-(1943):">McCulloch and Pitts Neuron (1943):<a class="anchor-link" href="#McCulloch-and-Pitts-Neuron-(1943):">&#182;</a></h3><p>McCulloch and Pitts proposed the first computational model of a biological neuron in 1943. This precedes the invention of the perceptron algorithm in 1958.</p>
 <table>
     <tr>
         <td>            
-            <img src="images/mcculloch-pitts-neuron.png" width="100%">
-            <p style="text-align: center;"><em>This is where it all began</em></p>
-            <p style="text-align: left;">
-                The left side of the neuron takes in inputs and computes an aggregated value, and the right side takes in that aggregated value and outputs a decision.
-            </p>
-            <p style="text-align: left;">
-                The input vector models the electrochemical signals a biological neuron receives through its dendrites.   >
-            <p style="text-align: left;">
-                The function $g$ just directly sums the boolean inputs, plus a bias term. The function $f$ decides to output $0$ or $1$ based on whether $g(x)>\theta$, where $\theta$ is some threshold value.   
-            </p>
-            </p>
+            <img src="images/convolving-3d.gif">
         </td>
-        <td width="55%">
-            <img src="images/mcculloch-pitts-neuron-vs-biological.png" width="100%">
+        <td>
+            <img src="images/convolving-compute.gif">
+        </td>
+    <tr>
+</table><table>
+    <tr>
+        <td>
+            <img src="images/convolution-mapping.png">
+        </td>
+        <td>
+            <img src="images/convolutional-layer-size.png">
         </td>
     <tr>
 </table>
@@ -13116,14 +13158,35 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Rosenblatt's-Perceptron-(1958):">Rosenblatt's Perceptron (1958):<a class="anchor-link" href="#Rosenblatt's-Perceptron-(1958):">&#182;</a></h3>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Rosenblatt's perceptron model extends the McCulloch-Pitts neuron model, except it takes in a vector of continuous real numbers and performs a weighted sum rather than a direct sum.</p>
+<ul>
+<li><em>Convolutional filter/kernel</em> &mdash; a small 3D matrix that used to scan across subsections of the image, computing convolutions and producing a <em>feature map</em><ul>
+<li>Also called a 'feature detector'</li>
+<li><em>Receptive field</em> &mdash; the area of the filter</li>
+<li>With RGB images, the kernel will have a 3rd dimension for scanning over each colour channel</li>
+<li>Several different filters can be used to generate different feature maps, all of which are put together as the final output of a convolution layer
+<img src="images/convolutional-filters-visualised.png" width="50%">
+<strong><p style="text-align: center;">Weights of the convolutional filters visualised</p></strong>
+<strong><p style="text-align: center;">Some filters detect lines at certain angles, others detect colour gradients, etc.</p></strong></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p><em>Stride</em> &mdash; how far of a jump the kernel or pooling matrix takes after each convolution</p>
+</li>
+<li><p><em>Feature map</em> or <em>activation map</em> &mdash; the output activations for a given filter</p>
+</li>
+<li><p><em>Padding</em> &mdash; adding layers of zero-value pixels to surround the input, thereby allowing the sliding filter to go beyond the normal image boundaries. This applies to pooling filters as well</p>
+<ul>
+<li>Often used to make the convolutional layer have the same dimension as the input</li>
+<li>Number of outputs in the convolutional layer: $n_{out}=\big[ \frac{n_{in}+2p-k}{s} \big] + 1$ <ul>
+<li>Where $n_{in}$ is the number of inputs (pixels), $k$ is the kernel size, $p$ is the padding size, $s$ is the stride size</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>Kernel size, number of kernels, stride and padding are all hyperparameters that we need to decide on.</p>
+<p><img src="images/convolving-demo.gif" width="75%"></p>
 
 </div>
 </div>
@@ -13131,19 +13194,44 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Convolution-Operation:">Convolution Operation:<a class="anchor-link" href="#Convolution-Operation:">&#182;</a></h4><p>The convolution operation involves taking the elementwise product of the kernel and the current input elements it's scanning, then summing those values to a single scalar.</p>
+<p>The combination of two functions to produce a third function - merging two sets of information.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Pooling-Layer:">Pooling Layer:<a class="anchor-link" href="#Pooling-Layer:">&#182;</a></h3><p>After the convolutional layer, we may pass the output through a <em>pooling layer</em>.</p>
+<p>The purpose of pooling is to reduce the dimensionality and reduce the number of parameters and computation &mdash; combating overfitting and long training times.</p>
+<ul>
+<li>The most frequently used type of pooling is <em>max pooling</em> which extracts the max value in each subsection of the convolutional layer's feature map. </li>
+<li>Other types are <em>average pooling</em> and <em>sum pooling</em></li>
+<li>Pooling helps reduces the dimensions of the feature map produced by a convolutional layer </li>
+</ul>
 <table>
-<thead><tr>
-<th style="text-align:center">Single-Layer Perceptron</th>
-<th style="text-align:center">Alternative Diagram</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center"><img src="images/perceptron-annotated.png" alt=""></td>
-<td style="text-align:center"><img src="images/perceptron-alt.png" alt=""></td>
-</tr>
-</tbody>
+    <tr>
+        <td>            
+            <img src="images/max-pooling-downsampling.png">
+        </td>
+        <td>
+            <img src="images/pooling-demos.gif">
+            <p style="text-align: left;">
+                Using $2\times 2$ filters with a stride of $2$
+            </p>
+        </td>
+    <tr>
 </table>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Fully-Connected-Layer:">Fully Connected Layer:<a class="anchor-link" href="#Fully-Connected-Layer:">&#182;</a></h3><p>Why have a fully connected layer instead of directly skipping to the output layer? &mdash; The output of the convolutional layers represent high-level features in the data. Connecting this to fully connected layers prior to the output layer allows the network to learn non-linear combination of features</p>
+<p>To 'connect' the output of the pooling layer as input to the fully connected layers, you just have to <em>flatten</em> or reshape the feature map into a straight vector.</p>
+<p><img src="images/pooling-to-fully-connected-flattening.png" width="50%"></p>
 
 </div>
 </div>
@@ -13151,11 +13239,32 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Softmax-in-the-Output-Layer:">Softmax in the Output Layer:<a class="anchor-link" href="#Softmax-in-the-Output-Layer:">&#182;</a></h3><p>The $\texttt{softmax}$ activation function takes in a vector of $N$ real numbers, applies $\texttt{exp}$ to each element, then divides each element by the sum of the vector to return a vector of $N$ numbers between 0 and 1 which sum to 1 in total. The input numbers can be anywhere from $-\infty$ to $\infty$.</p>
+<p>Suppose there are $N$ classes and $z_j$ is the network's predicted probability for class $j$, where $1 \leq j \leq N$,</p>
+$$\texttt{Prob} (i) = \frac{\texttt{exp}(z_i)}{\sum_{j=1}^{N} \texttt{exp}(z_j)},$$$$\texttt{logProb} (i) = z_i - \log \sum_{j=1}^{N} \text{exp}(z_j).$$<p>If the correct class is $i$, we can use $-\texttt{logProb(i)}$ as the loss/cost function. The first term $z_i$ pushes up the correct class $i$ while the second term pushes down all the incorrect class, but preferentially pushes down the class $j$ that had the highest activation. The idea is that every incorrect class is pushed down in proportion to the network's predicted probability for it.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Example:-LeNet-(1998)">Example: LeNet (1998)<a class="anchor-link" href="#Example:-LeNet-(1998)">&#182;</a></h2><p>A convolutional network structure (called LeNet architecture) first introduced by Yann LeCun in 1998:</p>
+<p><img src="images/LeNet.png" width="100%"></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Analysing-the-structure:">Analysing the structure:<a class="anchor-link" href="#Analysing-the-structure:">&#182;</a></h4><p>Suppose the input is $32 \times 32$ and we use 6 convolutional filters of size $5 \times 5$.</p>
 <ul>
-<li><p><em>Activation function</em> — translates the aggregated input signals to an output signal. Usually used interchangeably with the term 'transfer function'</p>
-</li>
-<li><p><em>Bias</em> — a constant term that offsets the weighted sum, independent of the input. A positive bias means this neuron is more predisposed to firing</p>
-</li>
+<li>For each of the 6 convolutional filters, there exists $25$ weights for each colour channel, plus 1 bias, giving $76$ tunable parameters</li>
+<li>The convolution layer output will have dimensions $28 \times 28$. With 6 individual convolutional filters, we generate a 6 feature maps, giving an output of dimension $28 \times 28 \times 6 = 4056
+$</li>
+<li>Each convolutional filter takes their 76 weights (including 1 bias) and operates on $28 \times 28$ subsections of the input image. Repeated 6 times for each filter, this gives a total of $76 \times 28 \times 28 \times 6 = 357504$ different connections </li>
+<li>There are only $6 \times 76 = 456$ individual parameters to tune within the convolution layer</li>
 </ul>
 
 </div>
@@ -13164,12 +13273,15 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Perceptron-Learning-Algorithm:">Perceptron Learning Algorithm:<a class="anchor-link" href="#Perceptron-Learning-Algorithm:">&#182;</a></h3><p>The process of 'learning' in a single-layer perceptron model is the process of adjusting the weights until it can correctly map an input to the correct output class.</p>
-<p>The perceptron makes a prediction by taking the <strong>dot product</strong> of the <strong>input vector</strong> and <strong>weight vector</strong> and adding the bias, then passing that through an activation function, for instance, the  Heaviside step function:</p>
-$$g(s) = \begin{cases}
-            1, &amp; s \geq 0,\\
-            0, &amp; s &lt; 0. \tag{1}
-         \end{cases}$$<p></p>
+<h3 id="Example:-AlexNet-(2012)">Example: AlexNet (2012)<a class="anchor-link" href="#Example:-AlexNet-(2012)">&#182;</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>A state-of-the-art convolutional network that maps images to 1000 different classes with an error rate of $\approx 15\%$.
+<img src="images/AlexNet.png" width="100%"></p>
 
 </div>
 </div>
@@ -13177,60 +13289,12 @@ $$g(s) = \begin{cases}
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="Perceptron-Learning-Rule:">Perceptron Learning Rule:<a class="anchor-link" href="#Perceptron-Learning-Rule:">&#182;</a></h4>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Suppose we have a perceptron that just takes in a vector with 2 components: $x=[x_1, x_2]$.</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p><img src="images/perceptron-learning-rule.png" alt="Rule" style="width: 50%;"/></p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>The perceptron takes in the input vector $x=[x_1, x_2]$ and has weights $w = [w_1, w_2]$ and an additional bias term $w_0$. Taking the dot product, we get $x \cdot w =w_1 x_1 + w_2 x_2$.</p>
-<p>The aggregated sum is $s = w_1 x_1 + w_2 x_2 + w_0$. Once we pass this through the transfer function in $(1)$, $g(s)$, we get the predicted class that the input $x=[x_1, x_2]$ belongs to.</p>
-<p>If the predicted class was incorrect, then we must adjust the weights of the perceptron, $w=[w_1, w_2]$ and $w_0$, so that future predictions will be more likely to correctly classify this input.</p>
-<p>When we make updates to the weights, we use a factor term $\eta$, called the learning rate. This affects how much the weights of the perceptron are updated by. A large learning rate allows the</p>
-<ul>
-<li><p>If $g(s)=0$ but the correct class was $1$, then we reassign the weights:
-  $$</p>
-
-<pre><code>  \begin{align}
-  w_0 &amp;:= w_0 + \eta \\
-  w_1 &amp;:= w_1 + \eta x_1 \\
-  w_2 &amp;:= w_2 + \eta x_2.
-  \end{align}
-</code></pre>
-<p>$$
-Now, in the future when we receive the same input, the value $g(s)$ will be larger and therefore the perceptron will more likely output $g(s)=1$, the correct class.</p>
-</li>
-<li><p>If $g(s)=1$ but the correct class was $0$, then we reassign the weights:
-  $$</p>
-
-<pre><code>  \begin{align}
-  w_0 &amp;:= w_0 - \eta \\
-  w_1 &amp;:= w_1 - \eta x_1 \\
-  w_2 &amp;:= w_2 - \eta x_2.
-  \end{align}
-</code></pre>
-<p>$$
-Now, in the future when we receive the same input, the value $g(s)$ will be lower and therefore the perceptron will more likely output $g(s)=0$, the correct class.</p>
-</li>
-<li><p>If the output class was correct, then no learning is done</p>
-</li>
+<h4 id="Interesting-notes:">Interesting notes:<a class="anchor-link" href="#Interesting-notes:">&#182;</a></h4><ul>
+<li>Contains 62.3 million parameters to tune</li>
+<li>Trains with 90 epochs over five or six days on two GTX 580 GPUs</li>
+<li>Uses $\texttt{ReLU}$ over $\texttt{tanh}$ for non-linearity (increasing training speed by 6 times at the same accuracy)</li>
+<li>Uses a dropout of $0.5$ to deal with overfitting</li>
+<li>SGD with learning rate $\eta = 0.01$, momentum 0.9 and weight decay 0.0005 is used.</li>
 </ul>
 
 </div>
@@ -13239,27 +13303,10 @@ Now, in the future when we receive the same input, the value $g(s)$ will be lowe
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Linear-Separability:">Linear Separability:<a class="anchor-link" href="#Linear-Separability:">&#182;</a></h3><p>The weight vector of the perceptron model with $w=[w_1, w_2]$ and which takes in inputs $x=[x_1, x_2]$ defines a straight line decision boundary with equation: $w_1x_1 + w_2x_2+w_0=0$.</p>
-<p>Eg. suppose you have a perceptron with weight vector $w=[0.5, -0.24]$ and bias $w_0=0.31$. This defines a decision boundary with the equation $0.5x-0.24y+0.31=0$.
-<img src="images/perceptron-linar-separability.png" width="50%"></p>
-<p>Note: if we had higher dimensional input vectors and weight vectors of size $n$, then the equation $w_0+w_1x_1+\dots + w_nx_n=0$ defines a hyperplane surface instead.</p>
-<p>Rosenblatt mathematically proved that the perceptron learning algorithm guarantees that a decision boundary will be eventually 'learned', provided that the dataset is linearly separable.</p>
-<p>The perceptron learning algorithm unfortunately never learns the correct decision boundary if the learning set is not linearly separable. A dataset is not linearly separable if there exists no hyperplane that can classify all inputs into the correct class.</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<ul>
-<li>The classic example of this is the XOR function. XOR can't be learned by a single-layer perceptron because it is not linearly separable:
-<img src="images/perceptron-and-or-xor.png" width="50%">
-The XOR function can be learned by a multi-layer perceptron, however.</li>
-<li><strong>About multi-layer perceptrons:</strong><ul>
-<li>Multi-layer perceptrons can refer generally to any feedforward neural network, that is, any network where the connections between nodes don't form a cycle such that information 'flows' forward
-<img src="images/multilayer-perceptrons.png" width="50%"></li>
-<li>With multi-layer perceptrons containing a <em>hidden layer</em>, we need a more sophisticated training method called <em>backpropagation</em> for updating the weights of the network </li>
+<h2 id="Data-Augmentation:">Data Augmentation:<a class="anchor-link" href="#Data-Augmentation:">&#182;</a></h2><ul>
+<li>Random image cropping:<ul>
+<li>Taking multiple croppings of the same image (without losing the meaningful data in them), passing each through the network, then averaging the resultant loss can improve the knowledge gained from an image</li>
+<li>In the case of AlexNet, convolutional filters with a stride of 4 are used in their first convolutional layer. Even if some input features are skipped for one input, applying the convolution filtering on multiple random croppings should factor in those input features that were skipped </li>
 </ul>
 </li>
 </ul>
@@ -13271,7 +13318,10 @@ The XOR function can be learned by a multi-layer perceptron, however.</li>
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h3 id="Resources:">Resources:<a class="anchor-link" href="#Resources:">&#182;</a></h3><ul>
-<li><a href="https://towardsdatascience.com/mcculloch-pitts-model-5fdf65ac5dd1">McCulloch and Pitts Neuron Model</a></li>
+<li><a href="https://towardsdatascience.com/intuitively-understanding-convolutions-for-deep-learning-1f6f42faee1">Convolutional neural networks from first principles</a></li>
+<li><a href="https://www.freecodecamp.org/news/an-intuitive-guide-to-convolutional-neural-networks-260c2de0a050/#:~:text=The%20main%20special%20technique%20in,describe%20an%20image%20with%20text.">Intuitive guide to convolutional neural nets</a></li>
+<li><a href="https://machinelearningmastery.com/convolutional-layers-for-deep-learning-neural-networks/">Convolutional layers for deep learning neural networks</a></li>
+<li><a href="https://medium.com/@smallfishbigsea/a-walk-through-of-alexnet-6cbd137a5637">AlexNet architecture</a></li>
 </ul>
 
 </div>

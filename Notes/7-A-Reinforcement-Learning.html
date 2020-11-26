@@ -2,7 +2,7 @@
 <html>
 <head><meta charset="utf-8" />
 
-<title>Building-Neural-Networks</title>
+<title>7-A-Reinforcement-Learning</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
@@ -13077,29 +13077,50 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Common-steps-for-pre-processing-a-dataset:">Common steps for pre-processing a dataset:<a class="anchor-link" href="#Common-steps-for-pre-processing-a-dataset:">&#182;</a></h3><ol>
-<li>Figure out the dimensions and shapes of the problem (m_train, m_test, num_px, ...)</li>
-<li>Reshape the datasets such that each example is now a vector of size (num_px * num_px * 3, 1)</li>
-<li>Standardise the data. For instance, a common strategy is to 'center and standardise' the dataset by getting the average $\mu$ of an array's values, subtracting that average from each element, then dividing all elements by the standard deviation $\sigma$ of the whole array</li>
-</ol>
-
+<h2 id="Reinforcement-Learning-Framework">Reinforcement Learning Framework<a class="anchor-link" href="#Reinforcement-Learning-Framework">&#182;</a></h2>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Building-the-network:">Building the network:<a class="anchor-link" href="#Building-the-network:">&#182;</a></h3><ol>
-<li>Define the network structure &mdash; Eg. number of input features, number of hidden layers, number of nodes for hidden layers, etc. </li>
-<li>Initialize the model's parameters &amp;mdash</li>
-<li>Loop:<ul>
-<li>Calculate current loss (forward propagation)</li>
-<li>Calculate current gradient (backward propagation)</li>
-<li>Update parameters (gradient descent)</li>
+<table>
+    <tr>
+        <td>            
+            <img src="images/agent-environment.png" width="100%">
+        </td>
+        <td>
+            <p style="text-align: center;"><strong>Markov Decision Process</strong></p>
+            <img src="images/markov-decision-process.png" width="100%">
+        </td>
+    <tr>
+</table>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We model reinforcement learning situations using a mathematical framework called the <em>Markov Decision Process</em>.</p>
+<p>In reinforcement learning with the <em>Markov Decision Process</em>, we have an <em>agent</em> which interacts with its <em>environment</em> to transition between different <em>states</em> and obtain <em>rewards</em> for transitioning to particular states. The interaction between the agent and the environment is considered in a sequence of time steps $t=1$, $t=2$, and so on.</p>
+<p>The environment defines a set $S$ of <em>states</em> and a set $A$ of actions.</p>
+<ul>
+<li>At each time step $t$, the agent is in some state $s_t$ where it must choose an action $a_t$ to receive reward $r_t=R(s_t, a_t)$ transition to the next state $s_{t+1} = \delta(s_t, a_t)$. The agent starts in state $s_0$<ul>
+<li>$\delta$ &mdash; the state transition function which maps a state and action to a state: $\delta : S \times A \to S$</li>
+<li>$R$ &mdash; is the reward function that maps a state and action to a reward value: $R: S \times A \to \mathbb{R}$<ul>
+<li>Both $\delta$ and $R$ are defined by the <em>environment</em></li>
 </ul>
 </li>
-</ol>
-<p>You often build 1-3 separately and integrate them into one function we call <code>model()</code>.</p>
+<li>The agent has a <em>policy</em> function, $\pi: S \to A$, that maps states into actions</li>
+</ul>
+</li>
+</ul>
+<p>Functions $\delta$, $R$ and $\pi$ can each be <em>stochastic</em> rather than <em>determinstic</em>, that is, randomly decided in some way (eg. in a game with dice rolling mechanics). In this case, we write each function as probability distributions</p>
+<ul>
+<li>$\delta(s_{t+1}=s|s_t, a_t)$ &mdash; the probability that next state $s_{t+1}$ is the state $s$</li>
+<li>$R(r_t=r|s_t, a_t)$ &mdash; the probability that next reward $r_{t+1}$ is the reward value $r$</li>
+<li>$\pi(a_t=a|s_t)$ &mdash; the probability that next action taken $a_{t+1}$ is the state $a$</li>
+</ul>
 
 </div>
 </div>
@@ -13107,7 +13128,808 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<p>The goal of reinforcement learning is to find a sequence of actions $a_1, a_2, \ldots$ which maximises the expected reward.</p>
+<p>There are a few approaches to this:</p>
+<ul>
+<li><em>Value-function learning</em> &mdash; optimising the value function $V^\pi$. The agent decides which state to transition to each time step based on which state has the greatest $V^\pi$ value<ul>
+<li><em>Temporal Difference Learning</em> &mdash; </li>
+<li><em>Q-Learning</em> &mdash;</li>
+</ul>
+</li>
+<li><em>Policy learning</em> &mdash; determining the optimal policy $\pi$ that maximises the cumulative reward, rather than using a value function</li>
+</ul>
 
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Models-of-Optimality">Models of Optimality<a class="anchor-link" href="#Models-of-Optimality">&#182;</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>There's 3 standard ways for defining the optimality of short-term rewards vs long-term rewards.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<ul>
+<li><p><em>Finite horizon reward</em> &mdash; when you set a 'stopping point' or 'horizon' sometime in the future and you only consider the sum of rewards <em>up to that point and not any further</em></p>
+<ul>
+<li>Simpler computation, but could result in poorer choices
+$$\texttt{total reward} = \sum_{i=0}^{h-1} \big( r_{t + i} \big)$$</li>
+</ul>
+</li>
+<li><p><em>Infinite discounted reward</em> &mdash; summing rewards all the way in the future, but applying a <em>discount factor</em> $\gamma$. The further in the future a reward is, the less emphasis it has on our next decision</p>
+<ul>
+<li>This optimality model is used most frequently
+$$\texttt{total reward} = \sum_{i=0}^{\infty} \big( \gamma^i r_{t+i} \big), \text{ where } 0 \leq \gamma &lt; 1$$</li>
+</ul>
+</li>
+<li><p><em>Average reward</em> &mdash; we pick some number $h$, add up all the rewards up to $h$, then take the average, and observe what the value is as $h$ approaches infinity
+$$\texttt{total reward} = \lim_{h \to \infty} \big( \frac{1}{h} \sum_{i=0}^{h-1} r_{t+i} \big)$$</p>
+</li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<table>
+    <tr>
+        <td width="50%">    
+            <p>
+                Here is an <em>environment</em> which models a finite state machine. Following paths $a_1, a_2$ or $a_3$ leads to different reward loops. The best path is $a_3$
+            </p>
+            <img src="images/models-of-optimality-comparison.png" width="100%">
+        </td>
+        <td>
+            <p>
+                Finite horizon with $k=4$ &mdash; $a_1$ is preferred
+            </p>
+            <p>
+                Infinite discounted reward with $\gamma=0.9$ &mdash; $a_2$ is preferred 
+            </p>
+            <p>
+                Average reward &mdash; $a_3$ is preferred 
+            </p>
+        </td>
+    <tr>
+</table>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Value-Function-Learning:">Value Function Learning:<a class="anchor-link" href="#Value-Function-Learning:">&#182;</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The goal of an agent is to maximise its <em>cumulative reward</em>.</p>
+<p>The <em>value</em> $V(s)$ of a state $s$ is a measurement of the <em>maximum future rewards</em> from being in state $s$. Decisions made by the agent shouldn't always greedily aim for highest immediate rewards but instead aim for entering the next state which has the highest <em>value</em>.</p>
+<p>In essence, the value function gives a quantitative measure of how <em>good it is to reach certain states</em>.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><img src="images/tic-tac-toe-value-states.png" width="25%">
+<em><p style="text-align: center;">The agent picks the next state based on the highest value available</p></em></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Suppose an agent is in state $s$ and chooses actions based on policy $\pi$. Every policy $\pi$ determines a <em>value function</em> that maps states to numbers,</p>
+$$V^{\pi}:S\to \mathbb{R},$$<p></p>
+<p>with the value of a particular state being:</p>
+$$V^{\pi}(s) = \text{average discounted reward received by the agent, if they start in state } s.$$<ul>
+<li>Every value function is conditional on a policy. We have the $\pi$ subscript in $V^\pi$ to stress that fact.</li>
+<li>The value $V^\pi(s)$ is the expected value of being in state $s$ if they follow policy $\pi$ forever
+<img src="images/value-function-expression.png" width="50%"></li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>For an optimal policy function, $\pi = \pi^*$, the value $V^*(s)$ is the <em>maximum discounted reward</em> achievable at state $s$. The value $V^\pi(s)$ is an estimate of the 'true' value $V^*(s)$.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The aim of <em>value function learning</em> is to start with a random value function $V^\pi$ initially, then iteratively improve it, trying to converge towards $V^*$.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><img src="images/env-policy-value-game.png" width="100%">
+<em>
+    <p style="text-align: center;">
+        (a) is the environment, (b) is the policy, (c) is the value function $V^\pi$ defined by the policy $\pi$
+    </p>
+</em></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Exploration-Exploitation-Tradeoff:">Exploration-Exploitation Tradeoff:<a class="anchor-link" href="#Exploration-Exploitation-Tradeoff:">&#182;</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>To ensure convergence to the optimal strategy, the agent must try some <em>exploration</em> on unknown states, that is, risking a choice that could have poorer rewards to discover routes to better rewards.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><em>Exploitation</em> is sticking to choosing states that the agent <em>currently knows</em> will produce the best rewards, however it may be sticking to a suboptimal choice because the optimal choice may still be undiscovered.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>With a good balance between exploring and exploiting, and by playing infinitely many games, the value for every state will approach its true probability.</p>
+<ul>
+<li>This good balance between exploring and exploit can be determined by the <em>epsilon greedy parameter</em>. Epsilon-Greedy is a simple method for determining epsilon $\epsilon$, the probability of choosing to explore</li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Two-methods-for-deciding-between-exploration/exploitation:">Two methods for deciding between exploration/exploitation:<a class="anchor-link" href="#Two-methods-for-deciding-between-exploration/exploitation:">&#182;</a></h4><ul>
+<li>Choosing a random action 5% of the time (epsilon-greedy strategy):
+<img src="images/epsilon-greedy.png" width="25%"></li>
+</ul>
+<ul>
+<li>Using softmax/Boltzmann distribution to systematically choose the next action $a$:
+$$
+  P(a)=\frac{e^{\frac{R(a)}{T}}}{\sum_{b \in A} e^{\frac{R(b)}{T}}}  \tag{Probability of choosing action a}
+$$</li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Example-value-function-calculations:">Example value function calculations:<a class="anchor-link" href="#Example-value-function-calculations:">&#182;</a></h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><img src="images/delayed-reinforcement-example.png" width="75%"></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Keep in mind that the agent has no familiarity with the environment and no idea of what the rewards for each state transition.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Suppose we have an optimal policy that maps $\pi(s_2)=a_1$ $\pi(s_3)=a_2$. If $\gamma = 0.9$, then the value of state $s_3$ is given by:</p>
+$$V^\pi(s_3)=2+0.9\cdot 2 + 0.9^2 \cdot 2 + ... = \frac{2}{1-0.9}= 20.$$<p>The value of state $s_2$ is given by:</p>
+$$
+\begin{aligned}
+    V^\pi(s_2) &amp;=-1+0.9\cdot 2 + 0.9^2 \cdot 2 + \ldots \\
+               &amp;= -1 + 0.9(\frac{2}{1-0.9}) = -1 + 0.9\cdot V^\pi (s_3) \\
+               &amp;= 17.
+\end{aligned}
+$$<p>The value of state $s_1$ is given by $V^\pi(s_1) = -1 + 0.9 \cdot V^\pi (s_2) = 14.3$.</p>
+<p>What if the policy mapped $\pi(s_1) = a_1$ instead? The value of state $s_1$ would be $V^\pi(s_1) = 1 + 0.9 \cdot 1 + 0.9^2 \cdot 1 + ... = \frac{1}{1-0.9}=10.$</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Reinforcement-Learning-Algorithms:">Reinforcement Learning Algorithms:<a class="anchor-link" href="#Reinforcement-Learning-Algorithms:">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>There are 2 classical reinforcement learning algorithms: <em>temporal difference learning</em> and <em>Q-learning</em>.</p>
+<ul>
+<li><em>Temporal difference learning</em> tries to learn the optimal value function $V^*$</li>
+<li><em>Q-learning</em> tries to learn the optimal Q-function $Q^*$</li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Temporal-Difference-Learning-(TD-Learning):">Temporal Difference Learning (TD Learning):<a class="anchor-link" href="#Temporal-Difference-Learning-(TD-Learning):">&#182;</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Temporal difference learning is when an agent learns from an environment through episodes with no prior knowledge of the environment. Temporal difference is a model-free reinforcement learning method.</p>
+<ul>
+<li>Model-free &mdash; without using a <em>Markov decision process</em> model of the environments transition and reward functions</li>
+</ul>
+<p>There are multiple TD methods: $\texttt{TD}(0)$, $\texttt{TD}(1)$, $\texttt{TD}(\gamma)$</p>
+<ul>
+<li>$\texttt{TD}(0)$ &mdash; the simplest, tabular approach</li>
+</ul>
+<p>Temporal difference applies <em>Monte Carlo methods</em> and <em>dynamic programming</em>. TD methods involve <em>estimating the rewards at each time step</em>.</p>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Monte_Carlo_method">Monte Carlo methods</a> &mdash; a large class of algorithms involving repeated random sampling to obtain numeric results</li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="TD-Learning-Update-Rule:">TD-Learning Update Rule:<a class="anchor-link" href="#TD-Learning-Update-Rule:">&#182;</a></h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<ul>
+<li>Suppose $R$ and $\delta$ are deterministic. The update rule is:
+$$
+  V(s_t) := r_t + \gamma V(s_{t+1})
+$$</li>
+<li>Suppose $R$ and $\delta$ are stochastic instead. We have to apply this update rule instead, introducing the learning rate $\eta$:
+$$
+  V(s_t) := V(s_t) + \eta \big( r_t + \gamma V(s_{t+1}) - V(s_t) \big)   \tag{1}
+$$</li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Monte-Carlo-Approach-vs.-TD-Learning-Approach:">Monte Carlo Approach vs. TD Learning Approach:<a class="anchor-link" href="#Monte-Carlo-Approach-vs.-TD-Learning-Approach:">&#182;</a></h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The Monte Carlo approach to reinforcement learning involves collecting the rewards at the <strong>end of the episode and then calculating the maximum expected future reward</strong> for each state taken, $V(s_t)$.</p>
+<p>The $\texttt{TD}(0)$ learning approach doesn't wait until the end of the episode to update the maximum expected rewards for each state. Instead, we update $V^\pi(s_t)$ at every time step.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<table>
+    <tr>
+        <td>       
+            <strong><p style="text-align: center;">Monte Carlo update rule</p></strong>
+            <img src="images/monte-carlo-update-rule.png" width="100%">
+            <p style="text-align: center;"><em>Where $G(t)$ is the total discounted reward accumulated</em></p>
+        </td>
+        <td>
+            <strong><p style="text-align: center;">TD-learning update rule (same as equation $(1)$ above)</p></strong>
+            <img src="images/td-learning-update-rule.png" width="100%">
+            <p style="text-align: center;"><em>Where $R_{t+1} + \gamma \cdot V(s_{t+1})$ is the TD-target &mdash; the estimation of what $V(s_t)$ should be</em></p>
+        </td>
+    <tr>
+</table>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Q-Learning:">Q-Learning:<a class="anchor-link" href="#Q-Learning:">&#182;</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Q-learning is a reinforcement learning algorithm that learns the quality of actions at every state $s \in S$. The goal of Q-learning is to find the optimal policy by learning the optimal <em>Q-value table</em>.</p>
+<p>The 'Q' in Q-learning means <em>quality of action</em>. Q-learning is a model-free reinforcement learning method.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<ul>
+<li>The goal of the traditional Q-learning algorithm is to build up a Q-table. The Q-table is just a lookup table that records the <em>maximum expected future reward</em> for each action at each state. The rows of the Q-table are states, the columns are actions that can be taken at those states. Each cell holds the Q-value: $Q(s, a)$<ul>
+<li>Example of an environment and its corresponding Q-table 
+<img src="images/q-table-example.png" width="50%"></li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<ul>
+<li>We don't implement a policy in Q-learning. We just improve our Q-table and then our 'policy' is just to always pick the best action at each state, according to the Q-table. Think of the Q-table as a cheatsheet</li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Q-Function:">Q-Function:<a class="anchor-link" href="#Q-Function:">&#182;</a></h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The Q-function is similar to the value function, but it maps a state <em>and an action</em> to a reward: $Q^\pi : S \times A \to \mathbb{R}$.</p>
+<ul>
+<li>The output Q-value, $Q^\pi(s, a)$, is the average discounted reward received by the agent when they begin in state $s$ having chosen action $a$ at the <strong>first timestep</strong> and then choosing actions based on the policy $\pi$ thereafter.</li>
+<li>$Q^\pi(s, a)$ is the expected value of first taking action $a$ from state $s$, then following policy $\pi$ forever. <ul>
+<li>This contrasts with $V^\pi(s)$ which is the expected value of being in state $s$, following policy $\pi$ forever.</li>
+</ul>
+</li>
+<li>Every $Q$ is conditional on a policy $\pi$. We have superscript $\pi$ in $Q^\pi$ to stress this fact</li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><img src="images/q-function-formula.png" width="70%"></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The Q-function is learnt by applying the following Q-learning algorithm which uses the Bellman equation as the update rule.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Q-learning-algorithm">Q-learning algorithm<a class="anchor-link" href="#Q-learning-algorithm">&#182;</a></h4><table>
+    <tr>
+        <td width="20%">            
+            <img src="images/q-learning-algorithm.png" width="100%">
+        </td>
+        <td>
+            <img src="images/q-learning-algorithm-pseudocode.png" width="100%">
+        </td>
+    <tr>
+</table>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><img src="images/q-learning-algorithm.gif" width="60%"/></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Step 1: Initialise all cells of the Q-table to 0 &mdash; we start knowing absolutely nothing about the environment</p>
+<p>Step 3: Choosing an action $a$ for this time step $t$</p>
+<ul>
+<li><p>At the start, we initialise an exploration rate $\epsilon=1$ &mdash; since initially everything is unexplored, therefore there are no reward pathways we could exploit</p>
+</li>
+<li><p>We generate a random number in the interval $[0, 1]$, and if that number is greater than $\epsilon$, then we favour exploitation rather than exploration</p>
+<ul>
+<li>Initially, we must have a big epsilon value $\epsilon$ that gradually gets smaller. Ie. as the algorithm runs longer and populates the table, the agent becomes <em>greedier</em> 
+<img src="images/q-learning-algorithm-epsilon-tradeoff.png" width="50%"></li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Steps 4 and 5: Evaluating the chosen action $a$</p>
+<ul>
+<li><p>The resulting state after choosing action $a$ is $s'$ and the reward obtained for the transition $\delta(s, a)=s'$ is $R(s, a) = r$.</p>
+</li>
+<li><p>We update the cell's $Q(s, a)$ value using the Bellman equation:</p>
+</li>
+</ul>
+$$
+    Q(s, a) := Q(s, a) + \eta \big( r + \gamma \max Q'(s', a') - Q(s, a) \big)
+$$
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Q-Function-Update-Rule:">Q-Function Update Rule:<a class="anchor-link" href="#Q-Function-Update-Rule:">&#182;</a></h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><img src="images/bellman-equation.png" width="100%"></p>
+<p style="text-align: center;"><em>Alternative annotations of the Bellman equation</em></p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>This is perhaps a more intuitive form of the update rule:
+$$
+    Q(s_t, a_t) := \underbrace{(1-\alpha)Q(s_t, a_t)}_{\text{Retained old value}} + \alpha \big(r_t + \gamma \max_a Q(s_{t+1}, a)\big).
+$$</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<hr />
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Determining-the-Update-Rule:">Determining the Update Rule:<a class="anchor-link" href="#Determining-the-Update-Rule:">&#182;</a></h4><p>For a deterministic environment, the optimal policy $\pi^*$, optimal Q-function $Q^*$ and optimal value function $V^*$ are related by:</p>
+$$
+\begin{align}
+    \pi^*(s) &amp;= \max_a \big( Q^*(s, a) \big) \tag{1} \\
+    Q^*(s, a) &amp;= \underbrace{R(s, a)}_{\text{immediate reward}} + \gamma V^*\big( \underbrace{\delta (s, a) \big)}_{\text{new state}} \tag{2} \\ 
+    V^*(s) &amp;= \max_b\big( Q^*(s, b)\big) \tag{3}
+\end{align}
+$$
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>$(1)$ &mdash; the optimal policy chooses the action at state $s$ to be whichever action corresponds to the highest Q-value</p>
+<p>$(2)$ &mdash; the quality of taking action $a$ at state $s$ is the immediate reward plus the discounted value of the next state</p>
+<p>$(3)$ &mdash; the value of a state $s$ is the best Q-value at that state</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Combining $(2)$ and $(3)$, we get the equation relating $Q^*$ back to itself:</p>
+$$
+    Q^*(s, a) = R(s, a) + \gamma \max_b \big( Q^*\big(\delta(s, a), b\big) \big),
+$$<p>where $b$ is the action that maximises the Q-value of the next state. The update rule in a deterministic environment follows from the above result:</p>
+$$
+    Q(s_t, a_t) := r_t + \gamma \max_b \big( Q(s_{t+1}, b) \big)
+$$
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>If the environment is stochastic, then we introduce a learning rate and keep a running sum in the update rule:
+$$
+    Q(s_t, a_t) := Q(s_t, a_t) + \eta \big( r_t + \gamma \max_{b} \big( Q(s_{t+1}, b) - Q(s_t, a_t) \big) \big)
+$$</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Example-Q-Value-Calculations:">Example Q-Value Calculations:<a class="anchor-link" href="#Example-Q-Value-Calculations:">&#182;</a></h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<table>
+    <tr>
+        <td>            
+            <img src="images/delayed-reinforcement-example.png" width="100%">
+        </td>
+        <td>
+            <p style="text-align: left;">
+    $Q(s_2, a_2)$ is the value of state $s_2$, given that we were forced to choose $a_2$ at the first timestep.
+            </p>
+            <p style="text-align: left;">
+                $Q^*(s_2, a_2) = 1 + 0.9\cdot V^*(s_1) = 1+0.9\cdot 14.3 = 13.87$.
+            </p>
+            <p style="text-align: left;">
+                $Q^*(s_2, a_1) = V^*(s_2) = 17$, since if we were forced to pick $a_1$ at $s_2$, that would've been the same as what the optimal policy would have picked as well.
+            </p>
+            <p style="text-align: left;">
+                $Q^*(s_3, a_1) = 1 + 0.9V^*(s_2) = 16.3$.
+            </p>
+        </td>
+    <tr>
+</table>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Theoretical-Results-and-the-Introduction-of-Neural-Networks-to-Reinforcement-Learning:">Theoretical Results and the Introduction of Neural Networks to Reinforcement Learning:<a class="anchor-link" href="#Theoretical-Results-and-the-Introduction-of-Neural-Networks-to-Reinforcement-Learning:">&#182;</a></h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<ul>
+<li>*Theorem(. Q-learning will eventually converge to the optimal policy for any finite Markov decision process, given infinite exploration time and a partly random policy.</li>
+<li>By a similar theorem, TD-learning will also theoretically converge on the optimal value function</li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The assumptions upon which the theoretical results are derived presents impracticalities during training:</p>
+<ul>
+<li>Delayed reinforcement &mdash; the discovery of better state transitions could take an unreasonably large number of timesteps</li>
+<li>Search space must be finite &mdash; otherwise training becomes uselessly slow</li>
+<li>Can't rely on lookup table for $Q$ values in most practical settings. Building up a Q table for <em>every state</em> and <em>every action possible at those states</em> is impossible to scale up to an environment like chess where there is an unimaginably large set of possible states<ul>
+<li>Instead, we can make use of neural networks to train on a subset of the possible states and generalise</li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Q-learning can be combined with the use of a neural network as a Q-function approximator. This replaces the need for a lookup table and it can be applied to problems with a continuous state space. Deep Q-learning networks have produced extremely well-performing agents in games like chess, Go and even video games like Dota 2.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><img src="images/q-learning-to-deep-q-network.png" width="40%"></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<hr />
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Backgammon-Overview:">Backgammon Overview:<a class="anchor-link" href="#Backgammon-Overview:">&#182;</a></h3><p>One of reinforcement learning's most notable and earliest application was in backgammon in the 1990s. The TD-Gammon model became the best Backgammon player in the world in 1995.</p>
+<table>
+    <tr>
+        <td width="30%">            
+            <img src="images/backgammon-board.png" width="100%">
+        </td>
+        <td>
+            <p style="text-align: left;">
+                <strong>Rules Overview:</strong>
+            </p>
+            <p style="text-align: left;">- The white player moves checkers in increasing numbers, the black player moves their checkers in decreasing numbers
+            </p>
+            <p style="text-align: left;">
+- Two die are rolled on the start of a player's turn and the resulting number on each dice tells the player how many places they're allowed to move any of their checkers by
+            </p>
+            <p style="text-align: left;">
+- Whoever moves their checkers off the board first wins the game
+            </p>
+            <p style="text-align: left;">
+- You are blocked from moving a checker to any point where the opponent currently has 2 or more checkers stacked
+            </p>
+            <p style="text-align: left;">
+- If your checker lands on a point where the opponent only has a single checker, then that checker is sent to the middle bar where the opponent must place it back on the starting position
+            </p>
+        </td>
+    <tr>
+</table>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Backgammon-Neural-Network-Architecture:">Backgammon Neural Network Architecture:<a class="anchor-link" href="#Backgammon-Neural-Network-Architecture:">&#182;</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Input-Representation:">Input Representation:<a class="anchor-link" href="#Input-Representation:">&#182;</a></h4><p>The goal is to represent the board state as an input vector to be fed into a feed-forward neural network.</p>
+<p>There are 24 possible possibles for checkers to occupy in the board. For both the white player and black player, we have:</p>
+<ul>
+<li>One vector of size 24 where we store 1 if a position has exactly 1 checker and 0 if not.</li>
+<li>One vector of size 24 where we store 1 if a position has exactly 2 checkers and 0 if not.</li>
+<li>One vector of size 24 where we store 1 if a position has exactly 3 checkers and 0 if not.</li>
+<li>One vector of size 24 where we store 1 if a position has 4 or more checkers and 0 if not. </li>
+<li>1 input node for checkers that have been pushed to the middle bar by the opponent</li>
+<li>1 input node for checkers that have made it off the board</li>
+</ul>
+<p>This gives a total of $2(96+1+1)=196$ nodes in the input layer.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Why model it precisely this way and not some other way? &mdash; Having 1 piece in a position is considered dangerous because the opponent can potentially send it back to the start and delay your victory. Using 1-hot encoded vectors of size 24 separately based on how many checkers there are in a particular position lets the network treat positions with only 1 checker differently to how it treats positions with 0, 2, 3, 4, ... checkers.</p>
+<p>By applying our knowledge of the domain, we can represent the input in a way that lets the network generalise easier.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The original network had 1 hidden layer consisting of 20 hidden nodes and 1 output layer consisting of 1 output node, using <code>sigmoid</code> to give a probability of winning the game at this current board state.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Applying-Reinforcement-Learning:">Applying Reinforcement Learning:<a class="anchor-link" href="#Applying-Reinforcement-Learning:">&#182;</a></h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The input vector represents a <em>state</em>. The output vector represents the <em>value</em> of this state.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>At the start of the turn, the 2 die are rolled, then every possible board state following the resulting 2 die outcomes are determined, converted to an input vector, then fed through the neural network. Which next board state is chosen depends on which input led to the largest output value.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Backpropagation:">Backpropagation:<a class="anchor-link" href="#Backpropagation:">&#182;</a></h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The update rule for the feed-forward network is: 
+$$w := w + \eta (T-V)\frac{\partial V}{\partial w},$$ 
+where $T$ is the target and $V$ is the predicted output.</p>
+<p>Since this is not supervised learning, we don't have access to a 'true' $T$ value. How do we know what the actual output $V$ <em>should've been</em>?</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We use the value of the next state $V_{t+1}$ as the expected value of $V_{t}$. This is what <em>temporal difference</em> learning does.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="TD-Learning-in-Episodic-Games:">TD-Learning in Episodic Games:<a class="anchor-link" href="#TD-Learning-in-Episodic-Games:">&#182;</a></h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Backgammon is an <em>episodic</em> game, that is, the agent can only receive a reward at the end of the whole game. If the value at the closing state of the game is $V_{m+1}$, it typically has the value 1 for win and -1 for loss.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The game can be reduced to a sequence of estimated values:</p>
+$$
+    V_{t} \to V_{t+1} \to \ldots \to V_{m} \to V_{m+1}
+$$
 </div>
 </div>
 </div>
@@ -13115,7 +13937,10 @@ div#notebook {
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h3 id="Resources:">Resources:<a class="anchor-link" href="#Resources:">&#182;</a></h3><ul>
-<li><a href="https://towardsdatascience.com/computer-vision-101-working-with-color-images-in-python-7b57381a8a54">Image preprocessing</a></li>
+<li><a href="https://towardsdatascience.com/reinforcement-learning-value-function-57b04e911152">Value functions and rewards</a></li>
+<li><a href="https://medium.com/free-code-camp/an-introduction-to-reinforcement-learning-4339519de419">Reinforcement learning with Q-learning</a></li>
+<li><a href="https://towardsdatascience.com/the-complete-reinforcement-learning-dictionary-e16230b7d24e">Reinforcement learning terminology</a></li>
+<li><a href="https://www.youtube.com/watch?v=nyjbcRQ-uQ8&list=PLZbbT5o_s2xoWNVdDudn51XM8lOuZ_Njv&ab_channel=deeplizard">Video series on reinforcement learning</a></li>
 </ul>
 
 </div>

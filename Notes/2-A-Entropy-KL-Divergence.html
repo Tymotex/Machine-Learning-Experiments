@@ -13077,26 +13077,27 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="Entropy:">Entropy:<a class="anchor-link" href="#Entropy:">&#182;</a></h4><p>In statistics, thermodynamics and information theory, <em>entropy</em> is a measure of uncertainty or information (the connection between uncertainty and information is that "an occurrence of an unlikely event gives you more <em>information</em> than the occurrence of a likely event"). The <em>entropy</em> of a discrete probability distribution with $n$ different outcomes, $p=\langle p_1, ..., p_n \rangle$, is:</p>
-$$H(P)=-\sum_{i=1}^{n} p_i \cdot \log_{2}p_i.$$<p>For a continuous probability distribution, $p()$, the entropy is given by:</p>
-$$H(P)=-\int_\theta p(\theta) \cdot \log p(\theta) d\theta.$$<p>For a <em>multivariable</em> Normal distribution:</p>
-$$H(p)=\sum_i \log \sigma_i.$$<h4 id="KL-Divergence:">KL-Divergence:<a class="anchor-link" href="#KL-Divergence:">&#182;</a></h4><p>For two probability distributions: $p=\langle p_1, ..., p_n \rangle$ and $q=\langle q_1, ..., q_n \rangle$, the <em>Kullback-Leibler Divergence</em> between $p$ and $q$ is:</p>
-$$D_{KL}(p \parallel q) = \sum_{i=1}^{n} p_i (\log_2 p_i - \log_2 q_i).$$<p>This gives a measure of similarity or 'distance' between two probability distributions. Note that $D_{KL}(p \parallel q) \neq D_{KL}(q \parallel p)$.</p>
-<p>For continuous distributions, $p and q$, KL-divergence is given by:</p>
-$$D_{KL}(p \parallel q) = \int_\theta p(\theta)(\log p(\theta) - \log q(\theta)) d\theta.$$
+<h1 id="Entropy-and-Kullback-Leibler-Divergence:">Entropy and Kullback-Leibler Divergence:<a class="anchor-link" href="#Entropy-and-Kullback-Leibler-Divergence:">&#182;</a></h1>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Entropy-and-Huffman-Encoding:">Entropy and Huffman Encoding:<a class="anchor-link" href="#Entropy-and-Huffman-Encoding:">&#182;</a></h3><p>The entropy value of a frequency distribution of characters to send in a message gives the <em>average number of bits</em> required to represent a character drawn randomly from the message (in the most efficient character encoding scheme).</p>
-<p>Example 1. Suppose a message consists only of $A$ and $B$ of equal frequency. The huffman encoding would assign $A=\texttt{0}$ and $B=\texttt{1}$, for example.</p>
-<p>The entropy value here would be $H(\langle 0.5, 0.5 \rangle)=-(0.5 \cdot \log_2\frac{1}{2} + 0.5 \cdot \log_2\frac{1}{2}) = 1$ bit.</p>
-<p>Example 2. Suppose a message consists of $A, B \text{ and } C$ with frequencies $0.5, 0.25 \text{ and } 0.25$ respectively. The huffman encoding would assign $A=0, B=10, C=11$, for example.</p>
-<p>The entropy value here would be $H(\langle 0.5, 0.25, 0.25 \rangle)=-(0.5 \cdot \log_2\frac{1}{2} + 0.25 \cdot \log_2\frac{1}{4} + 0.25 \cdot \log_2\frac{1}{4}) = 1.5$ bits.</p>
-<p>Note: $D_{KL}(q \parallel p)$ is the number of 'extraneous' bits that would be transmitted if we designed an encoding scheme based on $q's$ frequency distribution but it turned out the samples would be drawn from $p's$ frequency distribution instead.</p>
-<p>Eg. If we designed a huffman encoding for the alphabet around the frequency distribution in English, but applied for German text, then the number of 'wastage' bits would be $D_{KL}(q \parallel p)$.</p>
+<h4 id="Entropy:">Entropy:<a class="anchor-link" href="#Entropy:">&#182;</a></h4><p>In statistics, thermodynamics and information theory, <em>entropy</em> is a measure of uncertainty or information (the connection between uncertainty and information is that "an occurrence of an unlikely event gives you more <em>information</em> than the occurrence of a likely event"). The <em>entropy</em> of a discrete probability distribution with $n$ different outcomes, $p=\langle p_1, ..., p_n \rangle$, is:</p>
+$$H(p)=-\sum_{i=1}^{n} p_i \cdot \log_{2}p_i. \tag{1}$$<p>For a continuous probability distribution, $p()$, the entropy is given by:</p>
+$$H(P)=-\int_\theta p(\theta) \cdot \log p(\theta) d\theta.$$<p>For a <em>multivariable</em> Normal distribution:</p>
+$$H(p)=\sum_i \log \sigma_i.$$
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Cross-Entropy:">Cross-Entropy:<a class="anchor-link" href="#Cross-Entropy:">&#182;</a></h4><p>Cross-entropy is a measure of the relative entropy between two probability distributions over the same set of events.</p>
+$$
+    H(p, q)=-\sum_{i=1}^{n} p_i \cdot \log_{2}q_i. \tag{2}
+$$<p>The cross-entropy is simply equal to the entropy, if the distributions $p$ and $q$ are equal. If the distributions $p$ and $q$ differ, then the cross-entropy will be larger than the entropy by some amount. The amount by which the cross-entropy value exceeds the entropy value is called the <em>relative entropy</em>, or <em>KL-divergence</em>.</p>
 
 </div>
 </div>
@@ -13104,8 +13105,173 @@ $$D_{KL}(p \parallel q) = \int_\theta p(\theta)(\log p(\theta) - \log q(\theta))
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Forward/Reverse-KL-Divergence:">Forward/Reverse KL-Divergence:<a class="anchor-link" href="#Forward/Reverse-KL-Divergence:">&#182;</a></h3><p>Forward KL-Divergence: when we have a distribution $P$ and we want to choose a Normal distribution $Q$ which is 'close' to $P$, or 'approximately' $P$. In this case, we can use the KL-divergence, $D_{KL}(P \parallel Q)$, as a loss function to minimise.</p>
-<p>Reverse KL-Divergence: when we have a distribution $P$ and we want to choose a Normal distribution that minimises $D_{KL}(Q \parallel P)$ rather than $D_{KL}(P \parallel Q)$.</p>
+<h4 id="KL-Divergence:">KL-Divergence:<a class="anchor-link" href="#KL-Divergence:">&#182;</a></h4><p>For two probability distributions: $p=\langle p_1, ..., p_n \rangle$ and $q=\langle q_1, ..., q_n \rangle$, the <em>Kullback-Leibler Divergence</em> between $p$ and $q$ is:</p>
+$$
+    \begin{align}
+    D_{KL}(p \parallel q) &amp;= \underbrace{H(p, q)}_{\text{Cross-entropy}} - \underbrace{H(p)}_{\text{Entropy}}, \\
+    &amp;= \sum_{i=1}^{n} p_i (\log_2 p_i - \log_2 q_i).\tag{3}
+    \end{align}
+$$<p>This gives a measure of similarity or 'distance' between two probability distributions. Note that KL-divergence is not symmetric: $D_{KL}(p \parallel q) \neq D_{KL}(q \parallel p)$.</p>
+<p><img src="images/kl-divergence-illustrated.png" width="50%"></p>
+<p style="text-align: center;"><em>The KL-divergence value, $D_{KL}(P \parallel Q)$ is the measure of the 'mismatch' when we use probability distribution $Q$ to approximate the true probability distribution $P$</em></p><p>For continuous distributions, $p$ and $q$, KL-divergence is given by:</p>
+$$D_{KL}(p \parallel q) = \int_\theta p(\theta)(\log p(\theta) - \log q(\theta)) d\theta.$$
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<hr>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Example-Calculations:">Example Calculations:<a class="anchor-link" href="#Example-Calculations:">&#182;</a></h4><p>Suppose we have a true probability distribution of different weather conditions and a predicted probability distribution:</p>
+<table>
+    <tr>
+        <td>   
+            <p style="text-align: left;">True probability distribution $p$</p>
+            <img src="images/entropy-weather-projection.png" width="100%">
+        </td>
+        <td>
+            <p style="text-align: left;">Predicted probability distribution $q$</p>
+            <img src="images/entropy-weather-projection-predicted.png" width="100%">
+        </td>
+    <tr>
+</table>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The entropy is of the true probability distribution is:
+$$
+    \begin{align}
+    H(p) = &amp;-\sum_{i=1}^{n} p_i \log_{2}p_i, \\
+     = &amp;-\big( 0.35 \log_2 (0.35) + 0.35 \log_2 (0.35)\\
+     &amp;+ 0.1 \log_2 (0.1) + 0.1 \log_2 (0.1)\\
+     &amp;+ 0.04 \log_2 (0.04) + 0.04 \log_2 (0.04)\\
+     &amp;+ 0.01 \log_2 (0.01) + 0.01 \log_2 (0.01)\big) = 2.22897\ldots.
+    \end{align}
+$$</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The cross-entropy is given by:
+$$
+    \begin{align}
+    H(p, q) = &amp;-\sum_i p_i \log_2 q_i \\
+            = &amp;-\big( 0.35\log_2 0.01 + 0.35\log_2 (0.01)\\
+            &amp;+ 0.1\log_2 0.04 + 0.1\log_2 0.04 \\
+            &amp;+ 0.04\log_2 0.1 + 0.04\log_2 0.1 \\
+            &amp;+ 0.01\log_2 0.35 + 0.01\log_2 0.35 \big) = 5.87551\ldots.
+    \end{align}
+$$</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The KL-divergence is given by:
+$$
+    \begin{align}
+    D_{KL}(p \parallel q) &amp;= \underbrace{H(p, q)}_{\text{Cross-entropy}} - \underbrace{H(p)}_{\text{Entropy}} \\
+        &amp;= 5.87551\ldots - 2.22897\ldots \\
+        &amp;= 3.64654\ldots.
+    \end{align}
+$$</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Another-Example-Calculation:">Another Example Calculation:<a class="anchor-link" href="#Another-Example-Calculation:">&#182;</a></h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>In the context of deep learning, suppose we an image classifer with 5 output classes and we are using cross-entropy loss as the error function.</p>
+<table>
+    <tr>
+        <td>            
+            <img src="images/entropy-animals-categoriser-table.png" width="100%">
+        </td>
+        <td>
+            <img src="images/entropy-animals-categoriser-dog.png" width="20%">
+            <p style="text-align: left;">            
+                Suppose the true label vector is $p=[1, 0, 0, 0, 0]$ and the network's output vector is $q=[0.4, 0.3, 0.05, 0.05, 0.2]$.
+            </p>
+            <p style="text-align: left;">            
+                The cross-entropy loss value is calculated as:
+                $$
+                    \begin{align}
+                    H(p, q) &= -\big( 1\cdot\ln (0.4) + 0 + 0 + 0 + 0 \big)  \\
+                            &= 0.91629\ldots.
+                    \end{align}
+                $$
+            </p>
+            <p style="text-align: left;">            
+                Suppose now after training, the network's predictions are more accurate and produces the output vector $q=[0.98, 0.01, 0, 0, 0.01]$. Here the cross-entropy is:
+                $$
+                    \begin{align}
+                    H(p, q) &= -\big( 1\cdot\ln (0.98) + 0 + 0 + 0 + 0 \big)  \\
+                            &= 0.020207\ldots.
+                    \end{align}
+                $$
+            </p>
+        </td>
+    <tr>
+</table>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<hr>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Entropy-and-Huffman-Encoding:">Entropy and Huffman Encoding:<a class="anchor-link" href="#Entropy-and-Huffman-Encoding:">&#182;</a></h3><p>The concept of <em>entropy</em> was first introduced by Claude Shannon in 1948 in his paper title "<em>A Mathematical Theory of Communication</em>". The aim was to investigate the <strong>smallest possible average size of lossless encoding</strong> for messages transmitted from a source to a destination.</p>
+<p><img src="images/src-dest-message-entropy.png" width="40%"></p>
+<p>The entropy value of a frequency distribution of characters to send in a message, $H(p)$, gives the <em>average number of bits</em> required to represent a character drawn randomly from the message, in the most efficient character encoding scheme generated by Huffman's encoding algorithm.</p>
+<p><strong><em>Example 1.</em></strong> Suppose a message consists only of $A$ and $B$, both with equal frequency. The huffman encoding would assign $A=\texttt{0}$ and $B=\texttt{1}$, for example.</p>
+<ul>
+<li>The entropy value here would be $H(\langle 0.5, 0.5 \rangle)=-(0.5 \cdot \log_2\frac{1}{2} + 0.5 \cdot \log_2\frac{1}{2}) = 1 \texttt{ bit}$ .</li>
+</ul>
+<p><strong><em>Example 2.</em></strong> Suppose a message consists of $A, B \text{ and } C$ with frequencies $0.5, 0.25 \text{ and } 0.25$ respectively. The huffman encoding would assign $A=0, B=10, C=11$, for example.</p>
+<ul>
+<li>The entropy value here would be $H(\langle 0.5, 0.25, 0.25 \rangle)=-(0.5 \cdot \log_2\frac{1}{2} + 0.25 \cdot \log_2\frac{1}{4} + 0.25 \cdot \log_2\frac{1}{4}) = 1.5 \texttt{ bits}$. </li>
+</ul>
+<p>Note: $D_{KL}(q \parallel p)$ is the number of 'extraneous' bits that would be transmitted if we designed an encoding scheme based on $q's$ frequency distribution but it turned out the samples would be drawn from $p's$ frequency distribution instead.</p>
+<ul>
+<li>Eg. If we designed a huffman encoding for the alphabet around the frequency distribution in English, but applied for German text, then the number of 'wastage' bits would be $D_{KL}(q \parallel p)$.</li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Forward/Reverse-KL-Divergence:">Forward/Reverse KL-Divergence:<a class="anchor-link" href="#Forward/Reverse-KL-Divergence:">&#182;</a></h3><p><em>Forward KL-Divergence</em> &mdash; when we have a distribution $P$ and we want to choose a Normal distribution $Q$ which is 'close' to $P$, or 'approximately' $P$. In this case, we can use the KL-divergence, $D_{KL}(P \parallel Q)$, as a loss function to minimise.</p>
+<p><em>Reverse KL-Divergence</em> &mdash; when we have a distribution $P$ and we want to choose a Normal distribution $Q$ that minimises $D_{KL}(Q \parallel P)$ rather than $D_{KL}(P \parallel Q)$.</p>
 
 </div>
 </div>
@@ -13133,32 +13299,22 @@ $$D_{KL}(p \parallel q) = \int_\theta p(\theta)(\log p(\theta) - \log q(\theta))
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Variations-on-Backpropagation:">Variations on Backpropagation:<a class="anchor-link" href="#Variations-on-Backpropagation:">&#182;</a></h2><h3 id="Cross-Entropy">Cross Entropy<a class="anchor-link" href="#Cross-Entropy">&#182;</a></h3><p>Cross-entropy is a measure of the relative entropy between two probability distributions over the same set of events.</p>
+<h3 id="Cross-Entropy-in-Deep-Learning:">Cross Entropy in Deep Learning:<a class="anchor-link" href="#Cross-Entropy-in-Deep-Learning:">&#182;</a></h3><p>Cross-entropy is a measure of the relative entropy between two probability distributions over the same set of events.</p>
 <p>For classification tasks where the output should be either 0 or 1, the mean squared error loss function works poorly.</p>
-<p>Instead, we can use the cross-entropy error function $E=-(t\log (z) + (1-t)\log(1-z))$, where $z$ is the sigmoid function and $t$ is the target value.</p>
+<p>Instead, we can use the cross-entropy error function $E=-(t\log (z) + (1-t)\log(1-z))$, where $z$ is the network's probability prediction and $t$ is the target value.</p>
 <ul>
-<li>If $t=1$, $E=-\log (y)$</li>
-<li>If $t=0$, $E=-\log(1-y)$</li>
+<li>If $t=1$, $E=-\log (z)$</li>
+<li>If $t=0$, $E=-\log(1-z)$, so if $z\approx 1$, then the loss value is very large</li>
 </ul>
 <p>This forces the network to put higher emphasis on misclassifications</p>
-<p>Eg. In the case of detecting credit card fraud, there would be a way bigger proportion of negative instances than positive instances. Cross-entropy would place greater emphasis on the positive instances it misclassifies, which in this application, is extremely important.</p>
-<p>Choosing the cross-entropy error function makes backpropagation computations simpler. Suppose we have the logistic sigmoid activation function: $z=\frac{1}{1+e^{-s}}$. Note how</p>
-$$\frac{\partial E}{\partial z}=\frac{z-t}{z(1-z)},$$<p>and applying the chain rule, we have
-$$\frac{\partial E}{\partial s}=\frac{\partial E}{\partial z}\cdot \frac{\partial z}{\partial s}=z-t,$$</p>
+<ul>
+<li>Eg. In the case of detecting credit card fraud, there would be a significantly larger proportion of negative instances than positive instances. Cross-entropy would place greater emphasis on the positive instances it misclassifies, which in this application, is extremely important.</li>
+</ul>
+<p>Choosing the cross-entropy error function makes backpropagation computations simpler. Suppose we have the logistic sigmoid activation function: $a=\frac{1}{1+e^{-z}}$. Note how</p>
+$$\frac{\partial E}{\partial a}=\frac{a-t}{a(1-a)},$$<p>and applying the chain rule, we have
+$$\frac{\partial E}{\partial z}=\frac{\partial E}{\partial a}\cdot \frac{\partial a}{\partial z}=a-t,$$</p>
 <p>a very simple result.</p>
-<p><a href="https://towardsdatascience.com/cross-entropy-for-dummies-5189303c7735">Good article for clarification on cross-entropy</a></p>
-<h4 id="Maximum-Likelihood:">Maximum Likelihood:<a class="anchor-link" href="#Maximum-Likelihood:">&#182;</a></h4><p>A hypothesis is a particular set of weights.</p>
-<p>$P(D|h)= \text{probability of data } D \text{ being generated under hypothesis } h \in H$, where $H$ is a class of hypotheses. Ie. $P(D|h)$ is the probability that we observe $D$, given a particular set of weights.</p>
-<p>$\log{P(D|h)}$ is called the <em>likelihood</em>.</p>
-<p>We want to maximise $P(D|h)$.</p>
-<p>... TODO. What the fuck is data $D$</p>
-<h3 id="Weight-Decay">Weight Decay<a class="anchor-link" href="#Weight-Decay">&#182;</a></h3><p>When weights 'blow up', it can inhibit the network's learning ability. For instance, when the weights are for a neuron, the output will be large which means a sigmoid activation function is virtually the same as a step function.</p>
-<p>To 'encourage' the weights to remain small, we add a <em>penalty</em> term to the loss function.</p>
-$$E=\frac{1}{2}\sum_i (z_i-t_i)^2+\underbrace{\frac{\lambda}{2}\sum_j w_j^2}_{\text{Penalty term}}$$<p>Since the goal is to <em>minimise</em> the error function, by adding an additional term like $\frac{\lambda}{2}\sum_j w_j^2$, ... TODO wait how does this work</p>
-<p>Where $\lambda$ is empircally determined by fine-tuning. Eg. $\lambda=0.00001$.</p>
-<p>TODO: What is Bayesian inference?</p>
-<h3 id="Momentum">Momentum<a class="anchor-link" href="#Momentum">&#182;</a></h3><p>Dampens oscillations in a 'rain gutter' part of the error landscape. Adding the momentum factor amplifies the descent to the bottom by $\frac{1}{1-\alpha}$</p>
-<p>TODO: ... what</p>
+<p>Note: we use $\log_e$ in the cross-entropy code implementation rather than $\log_2$ since the derivative of $\ln$ is simpler than $\log_2$.</p>
 
 </div>
 </div>
@@ -13166,13 +13322,12 @@ $$E=\frac{1}{2}\sum_i (z_i-t_i)^2+\underbrace{\frac{\lambda}{2}\sum_j w_j^2}_{\t
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Resources:">Resources:<a class="anchor-link" href="#Resources:">&#182;</a></h3><ul>
+<li><a href="https://www.youtube.com/watch?v=ErfnhcEV1O8&ab_channel=Aur%C3%A9lienG%C3%A9ron">Introduction to entropy, cross-entropy and KL-divergence</a></li>
+<li><a href="https://towardsdatascience.com/cross-entropy-for-dummies-5189303c7735">Cross-entropy for dummies</a></li>
+<li><a href="https://naokishibuya.medium.com/demystifying-entropy-f2c3221e2550">Demystifying Entropy</a></li>
+<li><a href="https://naokishibuya.medium.com/demystifying-kl-divergence-7ebe4317ee68">Demystifying KL-Divergence</a></li>
+</ul>
 
 </div>
 </div>

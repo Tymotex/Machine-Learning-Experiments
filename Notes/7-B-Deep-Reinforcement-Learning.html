@@ -2,7 +2,7 @@
 <html>
 <head><meta charset="utf-8" />
 
-<title>1-B-Perceptrons</title>
+<title>7-B-Deep-Reinforcement-Learning</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
@@ -13077,10 +13077,203 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Perceptrons">Perceptrons<a class="anchor-link" href="#Perceptrons">&#182;</a></h1><p>A <em>perceptron</em> models a biological neuron with an algorithm for the supervised learning of a binary classification of inputs. Put simply, a perceptron is just an algorithm for learning a <em>threshold function</em> — ie. a function that maps a vector $x$ to either $0$ or $1$, hence classifying that vector.</p>
+<h1 id="Deep-Reinforcement-Learning:">Deep Reinforcement Learning:<a class="anchor-link" href="#Deep-Reinforcement-Learning:">&#182;</a></h1>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><em>Deep reinforcement learning</em> introduces the use of deep neural networks to solve reinforcement learning problems. For example, in regular Q-learning, we relied on using an algorithm that computed a complete table of optimal Q-values. For environments with a massive state space, like chess, computing this table is impossible. The use of a neural network lets us approximate the Q-values instead.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Policy-Learning">Policy Learning<a class="anchor-link" href="#Policy-Learning">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Policy learning involves trying to learn the optimal policy $\pi$ rather than trying to learn the optimal value function. There are <em>evolution</em> strategies to policy learning and there is the <em>policy gradients</em> approach to policy learning.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>In policy learning, we consider a family of policies: $\pi_\theta : S \to A$, determined by  a neural network with weight parameters $\theta$. Here we're using a network that maps states in the input layer into actions in the output layer, and we wish to train the weights of the network towards a configuration that would correspond to the optimal policy.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The <em>fitness</em> of a policy $\pi_\theta$ is the value function of the initial state $s_0$, ie. the average discounted reward received by the agent if we follow policy $\pi_\theta$:</p>
+$$
+    \text{fitness}(\pi_\theta) = V^{\pi_\theta}(s_0)=E_{\pi_\theta}(r_{\text{total}})
+$$
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>$E_{\pi_\theta}(r_{\text{total}})$ is the expectation of the total reward if we follow policy $\pi_\theta$.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Note: the stoachastic policy $\pi_\theta$ outputs a probability distribution rather than a specific value. So
+$$
+\pi_\theta (a_t|s_t)
+$$ is the probability that the policy chooses action $a_t$ <strong>from</strong> state $s_t$.</p>
+<p>A deterministic policy, on the other hand, outputs the same action for the given state all the time.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3>Hill Climbing &mdash; Evolution Strategy:</h3>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Suppose we have a network $\pi_\theta$ with weights $\theta$ which is the policy function for a particular game.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>At any given time, we have a certain set of weights in this network corresponding to a <em>champion</em>, ie. a particular set of network weights that produce the current best player. Initially, the champion weights would just be a set of weights initialised to $0$, so $\theta_{\text{champ}} = 0$.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>For each trial, we produce a <em>mutant</em> by adding random noise to the champion weights: 
+$$\theta_{\text{mutant}} = \theta_{\text{champ}} + \text{Gaussian noise},$$ drawn from a normal distribution with some fixed standard deviation $\sigma$.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The mutant is evaluated against the champion on the same task. If the mutant performs better than our current champion, then we apply the following update rule on the champion weights:</p>
+$$
+    \theta_{\text{champ}} := \underbrace{(1-\alpha)\theta_{\text{champ}}}_{\text{Retained champ weights}} + \alpha \theta_{\text{mutant}},
+$$<p>where $\alpha = 0.1$, for example. If the champion does better than the mutant, then no updating is done.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3>Policy Gradients &mdash; Episodic:</h3>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Policy gradients is an alternative to the evolution strategy. It uses <em>gradient ascent</em> rather than adding random noise weights to produce a better policy.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Suppose we have an agent playing an episodic game. So it takes the sequence of actions $a_1, a_2, ..., a_t, ... a_m$ and it receives $r_{\text{total}}$ at the end.</p>
+<p>Since we don't have method for determining <em>which</em> actions contributed to the reward, we attribute the contribution of each action $a_t$ to total reward equally.</p>
+<p>If $r_{\text{total}}$ is high, the weights of the policy network are updated so that the agent is more likely to take the same sequence of actions, $a_1, a_2, ..., a_t, ... a_m$, in the future. We do this by training the network to increase the output activation value of each action $a_t$, or in other words, the log probability of each action:</p>
+$$
+    \sum_{t=1}^{m} \log \big( \pi_{\theta} (a_t | s_t) \big) = \log \big( \prod_{t=1}^m \pi_\theta (a_t | s_t) \big), \tag{1}
+$$<p>where $\pi_{\theta} (a_t | s_t)$ is the probability that the policy will choose action $a_t$, given it is at the state $s_t$, and $\prod_{t=1}^m \pi_\theta(a_t | s_t)$ is the probability of the policy network choosing the sequence of actions $a_1, a_2, ..., a_t, ... a_m$. The policy network can compute the probability distribution of actions that it currently thinks is best, $\pi_{\theta} (a_t | s_t)$, by applying the $\texttt{softmax}$ activation function at the output layer.</p>
+<p>If $r_{\text{total}}$ is negative, the weights of the policy network are changed so that the agent is less likely to choose the same actions in the future. We do this by decreasing $(1)$.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>If we want to get the network to increase the log probabilities in $(1)$, we can simply multiply $(1)$ by $r_{\text{total}}$ and take the derivative with respect to every weight $\theta_1, \theta_2, \ldots$:</p>
+$$
+    \triangledown_\theta r_{\text{total}} \sum_{t=1}^m \log \big( \pi_\theta (a_t | s_t) \big) =  r_{\text{total}} \sum_{t=1}^m \triangledown_\theta \log \big( \pi_\theta (a_t | s_t) \big)  \tag{2}
+$$
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>where $\triangledown_\theta \log \big( \pi_\theta (a_t | s_t) \big)$ is the vector of gradients of the log probability with respect to each individual weight $\theta_1,  \theta_2, \ldots, \theta_n$.</p>
+<p>In general, the symbol $\triangledown_y$ means $(\frac{\partial}{\partial y_1}, \frac{\partial}{\partial y_2}, \ldots, \frac{\partial}{\partial y_n})$. The subscript tells you which variable's vector components we are differentiating with respect to.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Reward/Punishment-baseline:">Reward/Punishment baseline:<a class="anchor-link" href="#Reward/Punishment-baseline:">&#182;</a></h4><p>What if the game always gives positive reward values $r_{\text{total}} &gt; 0$, for example between 4 and 5? Suppose that $r_{\text{total}}=4$ corresponds to a loss. Because the reward is positive, the network will always reward actions even if they contributed to a poorer outcome.</p>
+<p>If the game always gives positive rewards $r_{\text{total}}$, then we can substitute $r_{\text{total}}$ in equation $(2)$ to be $r_{\text{total}} - b$, where $b$ is the reward/punishment <em>baseline</em>. We could set $b=4.5$, for example, if the range of values is the interval $[4, 5]$. Any total reward greater than this baseline would lead to the sequence of actions taken being reward while any total reward less than this baseline would lead to the sequence of actions taken being punished.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="REINFORCE-Algorithm:">REINFORCE Algorithm:<a class="anchor-link" href="#REINFORCE-Algorithm:">&#182;</a></h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The following algorithm has successfully been applied in the earlier reinforcement learning models (1992), eg. for playing Pong, where the image of the game is passed into a convolutional neural network for the agent's policy.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <ul>
-<li>The single-layer perceptron is the simplest example of a feed-forward artificial neural network. It is only capable of learning <em>linearly-separable</em> datapoints
-<img src="images/linearly-separable.png" width="25%"></li>
+<li>For each episode:<ul>
+<li>Run the agent through the episode fully and collect the:<ul>
+<li>sequence of states $s_t$</li>
+<li>actions $a_t$ taken </li>
+<li>total reward obtained $r_{\text{total}}$ </li>
+</ul>
+</li>
+<li>For $t=1$ to $m$, the number of time steps in the current trial:
+  $$\theta := \theta + \eta\underbrace{(r_{\text{total}} - b)}_{\text{Reward baseline}} \cdot \underbrace{\triangledown_\theta \log \big ( \pi_\theta (a_t | s_t) \big)}_{\text{Analogous to } \frac{\partial E}{\partial \theta}} \tag{3}$$</li>
+</ul>
+</li>
 </ul>
 
 </div>
@@ -13089,24 +13282,239 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="McCulloch-and-Pitts-Neuron-(1943):">McCulloch and Pitts Neuron (1943):<a class="anchor-link" href="#McCulloch-and-Pitts-Neuron-(1943):">&#182;</a></h3><p>McCulloch and Pitts proposed the first computational model of a biological neuron in 1943. This precedes the invention of the perceptron algorithm in 1958.</p>
+<h3>Policy Gradients &mdash; Non-Episodic:</h3>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Suppose now that we're dealing with a non-episodic game where rewards can be received at different timesteps throughout the game, rather than only at the completion of the game (eg. Pacman).</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Suppose you keep a fixed policy $\pi_\theta$ and you play multiple games, each time recording which states $s \in S$ you were in. Every policy $\pi_\theta$ determines a probability distribution $\rho_{\pi_\theta} (s)$ of states $s \in S$:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+$$
+    \rho_{\pi_\theta} (s) = \sum_{t \geq 0} \gamma^t \text{prob}_{\pi_\theta, t}(s),
+$$
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>where $\text{prob}_{\pi_\theta, t}(s)$ is the probability that after starting in initial state $s_0$, you reach state $s$ after $t$ actions. The value $\rho_{\pi_\theta} (s)$ is the number of times we expect to visit state $s$ if we use policy $\pi_\theta$, discounted by $\gamma^t$.</p>
+<ul>
+<li>This probability distribution is just theoretical, it's not something we compute since the state space could be unfathomably large. The idea is that a <em>good policy</em> network $\pi_\theta$ would have a higher probability of landing you in better game states. Eg. if you were training a Pacman model, then a good policy would have higher probabilities for states where the white dots are mostly eaten. So for 'good' states $s$, we have a higher $\rho_{\pi_\theta} (s)$ value</li>
+</ul>
+<p>We can then define the <em>fitness</em> of a policy network as:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+$$
+    \text{fitness} (\pi_\theta) = \sum_{s \in S} \big( \rho_{\pi_\theta}(s)\cdot \big( \sum_{a \in A} Q^{\pi_\theta} (s, a) \cdot \pi_\theta (a | s) \big) \big), \tag{4}
+$$<p>and the aim of the policy network is to maximise this fitness quantity.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Differentiating $(4)$ with respect to every weight parameter $\theta_1, \theta_2, \ldots$ in the policy network, we have</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+$$
+\begin{align}
+    \triangledown_\theta \text{fitness} (\pi_\theta) &amp;= \sum_{s \in S} \big( \rho_{\pi_\theta}(s)\cdot \big( \sum_{a \in A} Q^{\pi_\theta} (s, a) \cdot \triangledown_\theta \pi_\theta (a | s) \big) \big) \\
+    &amp;= \sum_{s \in S} \big( \rho_{\pi_\theta}(s)\cdot \big( \sum_{a \in A} Q^{\pi_\theta} (s, a) \cdot \triangledown_\theta \pi_\theta (a | s) \big) \\
+    &amp;= \sum_{s \in S} \big( \rho_{\pi_\theta}(s)\cdot \big( \sum_{a \in A} Q^{\pi_\theta} (s, a) \cdot \pi_\theta (a | s) \cdot \frac{\triangledown_\theta \pi_\theta (a | s)}{\pi_\theta (a | s)} \big) \\
+    &amp;= \sum_{s \in S} \big( \rho_{\pi_\theta}(s)\cdot \big( \sum_{a \in A} Q^{\pi_\theta} (s, a) \cdot \pi_\theta (a | s) \cdot \triangledown_\theta \log (\pi_\theta (a | s)) \big) \\
+    &amp;= E_{\pi_\theta}\big( Q^{\pi_\theta} (s, a) \cdot \triangledown_\theta \log(\pi_\theta (a | s)) \big). \tag{5}
+\end{align}
+$$
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Note that the gradient of $ \rho_{\pi_\theta}(s)$ and $Q^{\pi_\theta} (s, a)$ are very hard to determine, so only the gradient of $\pi_\theta (a | s)$ is computed</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Actor-Critic-Paradigm:">Actor-Critic Paradigm:<a class="anchor-link" href="#Actor-Critic-Paradigm:">&#182;</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>An actor network and a critic network are both learnt together. The actor-critic paradigm combines value-function learning with policy learning.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Critic network</strong> &mdash; in $(5)$, we can't easily find a good estimate for $Q^{\pi_\theta}(s, a)$, so we instead train a network on weights $w$ which determines a Q-function $Q_w$ that aims to approximate/converge towards $Q^{\pi_\theta}$.</p>
+<ul>
+<li>The Q function network $Q_W$ with weight parameters $W$ takes in a state and action in the input layer and predicts Q-values in the output layer </li>
+</ul>
+<p><strong>Actor network</strong> &mdash; simultaneously, we are also training a network on weights $\theta$ that determines policy $\pi_\theta$.</p>
+<ul>
+<li>The policy network $\pi_\theta$ with parameters $\theta$ takes in a state in the input layer and predicts the next action to take</li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The actor makes a decision on what action to take, based on the state, and the critic takes in the action as input, along with state, and assesses how good that chosen action was.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The actor-critic method of training tends to take less training time than policy gradient methods.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Actor-Critic-Algorithm:">Actor-Critic Algorithm:<a class="anchor-link" href="#Actor-Critic-Algorithm:">&#182;</a></h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<ul>
+<li>For each episode:<ul>
+<li>We are initially on starting state $s_0$. First we select the initial action $a_0$ from the probability distribution $\pi(a|s_0)$</li>
+<li>For each time step $t$:<ul>
+<li>Get reward at this timestep $r_t$</li>
+<li>Get the next state $s_{t+1}$</li>
+<li>Get the next action $a_{t+1}$, from the probability distribution $\pi(a | s_{t+1})$</li>
+<li>$\frac{dE}{dQ}=-\big( r_t + \gamma Q_w (s_{t+1}, a_{t+1}) - Q_w (s_t, a_t) \big)$</li>
+<li>$\underbrace{\theta := \theta + \eta_\theta \cdot Q_w (s_t, a_t) \cdot \triangledown_\theta \log(\pi_\theta (a_t|s_t))}_{\text{Policy gradient update rule. See (3)}}$</li>
+<li>$w := w - \eta_w \cdot \frac{dE}{dQ} \cdot \triangledown_w Q_w (s_t, a_t)$ </li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Deep-Q-Learning-Network-for-Atari-Games:">Deep Q-Learning Network for Atari Games:<a class="anchor-link" href="#Deep-Q-Learning-Network-for-Atari-Games:">&#182;</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>With traditional Q-learning, we create a lookup table of Q-values to help us determine what action to take on each state. With deep Q-learning, we introduce a neural network to approximate the Q-values instead (since it's impractical to store massive lookup tables, and we need to generalise to unseen situations.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>With a lookup table, Q-learning is guaranteed to converge eventually, however for most applications there are too many states to be reasonably stored in a lookup table.</p>
+<p>Instead, we have $Q_w(s, a)$ determined by network weights $w$, which get updated so as to minimise the error:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+$$
+    E = \big( \underbrace{r_t + \gamma \max_{b} Q_w (s_{t+1}, b)}_{\text{'Correct'}} - \underbrace{Q_w(s_t, a_t)}_{\text{Predicted}} \big)^2,
+$$<p>which is just the mean-squared error function.</p>
+<p>Note that this is not supervised learning, so we don't exactly have a true optimal Q-value to compare the predicted value with. Instead, we just estimate the true optimal Q-value as: $\texttt{true Q-value} = r_t + \gamma \max_{b} Q_w (s_{t+1}, b)$.</p>
+<p>Of course, when the network begins training, the value of $\max_{b} Q_w (s_{t+1}, b)$ is completely wrong. The reward $r_t$, however, is correct, so the network will slowly build up better estimations in a similar fashion to the tabular Q-learning algorithm.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<table>
+    <tr>
+        <td width="45%">            
+            <img src="images/deep-q-learning-vs-lookup.png" width="100%">
+            <p style="text-align: center;">The input to the deep Q network is the current state of the game and the output is the vector of Q-values associated with each of chosen possible actions the agent can take.</p>
+        </td>
+        <td>
+            <img src="images/deep-q-network-overview.png" width="100%">
+            <p style="text-align: center;">
+                The deep-Q network accepts a state vector, for example, a screenshot of the current game frame, and outputs its predictions of the Q-values for each action that the agent can take. No activation function is used at the output layer since we want the raw untransformed output values.
+            </p>
+            <p style="text-align: center;">
+                The agent takes the next action to be the action corresponding to $\texttt{argmax}$ of the output layer.
+            </p>
+        </td>
+    <tr>
+</table>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <table>
     <tr>
         <td>            
-            <img src="images/mcculloch-pitts-neuron.png" width="100%">
-            <p style="text-align: center;"><em>This is where it all began</em></p>
-            <p style="text-align: left;">
-                The left side of the neuron takes in inputs and computes an aggregated value, and the right side takes in that aggregated value and outputs a decision.
-            </p>
-            <p style="text-align: left;">
-                The input vector models the electrochemical signals a biological neuron receives through its dendrites.   >
-            <p style="text-align: left;">
-                The function $g$ just directly sums the boolean inputs, plus a bias term. The function $f$ decides to output $0$ or $1$ based on whether $g(x)>\theta$, where $\theta$ is some threshold value.   
-            </p>
+            <img src="images/q-learning-network-atari.png" width="100%">
+            <p style="text-align: center;">
+                Deep Q networks don't introduce any new neural network architecture. It usually just takes a standard CNN network, plus fully connected layers and uses this network to approximate the optimal Q-values, ie. the best action to take, given the input state.
             </p>
         </td>
-        <td width="55%">
-            <img src="images/mcculloch-pitts-neuron-vs-biological.png" width="100%">
+        <td>
+            <img src="images/q-learning-network-atari-skeleton.png" width="100%">
+            <p style="text-align: center;">
+                The input consists of 4 screenshots of consecutive frames of the game state. If we were training the network to play Atari breakout, for example, then doing this lets the network determine the direction the ball is moving. A single still frame doesn't indicate the direction of the ball, but a sequence of still frames does.
+            </p>
         </td>
     <tr>
 </table>
@@ -13116,46 +13524,21 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Rosenblatt's-Perceptron-(1958):">Rosenblatt's Perceptron (1958):<a class="anchor-link" href="#Rosenblatt's-Perceptron-(1958):">&#182;</a></h3>
+<h4 id="Deep-Q-Learning-with-Experience-Replay:">Deep Q-Learning with Experience Replay:<a class="anchor-link" href="#Deep-Q-Learning-with-Experience-Replay:">&#182;</a></h4>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Rosenblatt's perceptron model extends the McCulloch-Pitts neuron model, except it takes in a vector of continuous real numbers and performs a weighted sum rather than a direct sum.</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<table>
-<thead><tr>
-<th style="text-align:center">Single-Layer Perceptron</th>
-<th style="text-align:center">Alternative Diagram</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center"><img src="images/perceptron-annotated.png" alt=""></td>
-<td style="text-align:center"><img src="images/perceptron-alt.png" alt=""></td>
-</tr>
-</tbody>
-</table>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
+<p><em>Experience replay</em> is a technique we use during deep Q network training.</p>
+<p>We store the agent's 'experiences' at each time step in a dataset called the <strong><em>replay memory</em></strong>.</p>
+<p>The agent's experience at time $t$ is the tuple $e_t=(s_t, a_t, r_{t+1}, s_{t+1})$ &mdash; where $s_t$ is the state the agent was in, $a_t$ is the action the agent took, $r_{t+1}$ is the reward the action received from taking action $a_t$, and $s_{t+1}$ is the state where the agent ended up after taking action $a_t$.</p>
+<p>This tuple summarises the agent's <em>experience</em> at time $t$. The replay memory is a buffer of size $n$ that stores a sequence of experiences $[e_0, e_1, \ldots, e_{n-1}]$. The size is finite, so everytime a new experience is to be added, the oldest experience is popped to make room for the new experience.</p>
+<p>Experience replay is when we randomly sample experiences from the replay memory buffer and training the network on the selected experiences.</p>
+<p>Why not just train the network regularly with a sequence of experiences? By randomly sampling individual experiences to train the network on, we're removing the temporal correlation between game situations.</p>
 <ul>
-<li><p><em>Activation function</em> — translates the aggregated input signals to an output signal. Usually used interchangeably with the term 'transfer function'</p>
-</li>
-<li><p><em>Bias</em> — a constant term that offsets the weighted sum, independent of the input. A positive bias means this neuron is more predisposed to firing</p>
-</li>
+<li>Consider the task of training a CNN image classifier. Training the network on a sequence of 1000 bird images, followed by 1000 car images, etc. performs poorly compared to training on a randomised sequence of images.</li>
 </ul>
 
 </div>
@@ -13164,104 +13547,12 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Perceptron-Learning-Algorithm:">Perceptron Learning Algorithm:<a class="anchor-link" href="#Perceptron-Learning-Algorithm:">&#182;</a></h3><p>The process of 'learning' in a single-layer perceptron model is the process of adjusting the weights until it can correctly map an input to the correct output class.</p>
-<p>The perceptron makes a prediction by taking the <strong>dot product</strong> of the <strong>input vector</strong> and <strong>weight vector</strong> and adding the bias, then passing that through an activation function, for instance, the  Heaviside step function:</p>
-$$g(s) = \begin{cases}
-            1, &amp; s \geq 0,\\
-            0, &amp; s &lt; 0. \tag{1}
-         \end{cases}$$<p></p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="Perceptron-Learning-Rule:">Perceptron Learning Rule:<a class="anchor-link" href="#Perceptron-Learning-Rule:">&#182;</a></h4>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Suppose we have a perceptron that just takes in a vector with 2 components: $x=[x_1, x_2]$.</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p><img src="images/perceptron-learning-rule.png" alt="Rule" style="width: 50%;"/></p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>The perceptron takes in the input vector $x=[x_1, x_2]$ and has weights $w = [w_1, w_2]$ and an additional bias term $w_0$. Taking the dot product, we get $x \cdot w =w_1 x_1 + w_2 x_2$.</p>
-<p>The aggregated sum is $s = w_1 x_1 + w_2 x_2 + w_0$. Once we pass this through the transfer function in $(1)$, $g(s)$, we get the predicted class that the input $x=[x_1, x_2]$ belongs to.</p>
-<p>If the predicted class was incorrect, then we must adjust the weights of the perceptron, $w=[w_1, w_2]$ and $w_0$, so that future predictions will be more likely to correctly classify this input.</p>
-<p>When we make updates to the weights, we use a factor term $\eta$, called the learning rate. This affects how much the weights of the perceptron are updated by. A large learning rate allows the</p>
+<p><em>Prioritised replay</em> &mdash; instead of randomly picking games to train on, each with equal probability, we pick games according to the greatest error value: 
+$$
+    E= |r_t + \gamma \max_{b} Q_w (s_{t+1}, b) - Q_w (s_t, a_t)|
+$$</p>
 <ul>
-<li><p>If $g(s)=0$ but the correct class was $1$, then we reassign the weights:
-  $$</p>
-
-<pre><code>  \begin{align}
-  w_0 &amp;:= w_0 + \eta \\
-  w_1 &amp;:= w_1 + \eta x_1 \\
-  w_2 &amp;:= w_2 + \eta x_2.
-  \end{align}
-</code></pre>
-<p>$$
-Now, in the future when we receive the same input, the value $g(s)$ will be larger and therefore the perceptron will more likely output $g(s)=1$, the correct class.</p>
-</li>
-<li><p>If $g(s)=1$ but the correct class was $0$, then we reassign the weights:
-  $$</p>
-
-<pre><code>  \begin{align}
-  w_0 &amp;:= w_0 - \eta \\
-  w_1 &amp;:= w_1 - \eta x_1 \\
-  w_2 &amp;:= w_2 - \eta x_2.
-  \end{align}
-</code></pre>
-<p>$$
-Now, in the future when we receive the same input, the value $g(s)$ will be lower and therefore the perceptron will more likely output $g(s)=0$, the correct class.</p>
-</li>
-<li><p>If the output class was correct, then no learning is done</p>
-</li>
-</ul>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Linear-Separability:">Linear Separability:<a class="anchor-link" href="#Linear-Separability:">&#182;</a></h3><p>The weight vector of the perceptron model with $w=[w_1, w_2]$ and which takes in inputs $x=[x_1, x_2]$ defines a straight line decision boundary with equation: $w_1x_1 + w_2x_2+w_0=0$.</p>
-<p>Eg. suppose you have a perceptron with weight vector $w=[0.5, -0.24]$ and bias $w_0=0.31$. This defines a decision boundary with the equation $0.5x-0.24y+0.31=0$.
-<img src="images/perceptron-linar-separability.png" width="50%"></p>
-<p>Note: if we had higher dimensional input vectors and weight vectors of size $n$, then the equation $w_0+w_1x_1+\dots + w_nx_n=0$ defines a hyperplane surface instead.</p>
-<p>Rosenblatt mathematically proved that the perceptron learning algorithm guarantees that a decision boundary will be eventually 'learned', provided that the dataset is linearly separable.</p>
-<p>The perceptron learning algorithm unfortunately never learns the correct decision boundary if the learning set is not linearly separable. A dataset is not linearly separable if there exists no hyperplane that can classify all inputs into the correct class.</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<ul>
-<li>The classic example of this is the XOR function. XOR can't be learned by a single-layer perceptron because it is not linearly separable:
-<img src="images/perceptron-and-or-xor.png" width="50%">
-The XOR function can be learned by a multi-layer perceptron, however.</li>
-<li><strong>About multi-layer perceptrons:</strong><ul>
-<li>Multi-layer perceptrons can refer generally to any feedforward neural network, that is, any network where the connections between nodes don't form a cycle such that information 'flows' forward
-<img src="images/multilayer-perceptrons.png" width="50%"></li>
-<li>With multi-layer perceptrons containing a <em>hidden layer</em>, we need a more sophisticated training method called <em>backpropagation</em> for updating the weights of the network </li>
-</ul>
-</li>
+<li>This makes the network place greater emphasis on learning from situations where the Q-value was 'most surprising'. Eg. if you were training a Pacman model, then eating a ghost would give a surprisingly large reward. This situation would be prioritised in experience replay.</li>
 </ul>
 
 </div>
@@ -13271,7 +13562,7 @@ The XOR function can be learned by a multi-layer perceptron, however.</li>
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h3 id="Resources:">Resources:<a class="anchor-link" href="#Resources:">&#182;</a></h3><ul>
-<li><a href="https://towardsdatascience.com/mcculloch-pitts-model-5fdf65ac5dd1">McCulloch and Pitts Neuron Model</a></li>
+<li><a href="https://medium.com/deep-math-machine-learning-ai/ch-13-deep-reinforcement-learning-deep-q-learning-and-policy-gradients-towards-agi-a2a0b611617e">Deep reinforcement learning comprehensive</a></li>
 </ul>
 
 </div>
