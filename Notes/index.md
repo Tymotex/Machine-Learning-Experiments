@@ -1,4 +1,10 @@
-<h1>Quick Links</h1>
+---
+title: Neural Networks
+description: A collection of deep learning resources, neural networks and data science demos
+show_downloads: true
+---
+
+<h1>Neural Networks and Deep Learning Notes</h1>
 [1-A-Neuroanatomy-And-Neuroscience-Basics.html](1-A-Neuroanatomy-And-Neuroscience-Basics.html">1-A-Neuroanatomy-And-Neuroscience-Basics.html)
 [1-A-Neuroanatomy.html](1-A-Neuroanatomy.html">1-A-Neuroanatomy.html)
 [1-B-Perceptrons.html](1-B-Perceptrons.html">1-B-Perceptrons.html)
