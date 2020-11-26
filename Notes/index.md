@@ -3,63 +3,43 @@ title: Neural Networks
 description: A collection of deep learning resources, neural networks and data science demos
 show_downloads: true
 ---
+# Neural Networks and Deep Learning Notes
 
-<h1>Neural Networks and Deep Learning Notes</h1>
-[1-A-Neuroanatomy-And-Neuroscience-Basics.html](1-A-Neuroanatomy-And-Neuroscience-Basics.html">1-A-Neuroanatomy-And-Neuroscience-Basics.html)
+[Neuroanatomy-And-Neuroscience-Basics](1-A-Neuroanatomy-And-Neuroscience-Basics.html)
 
-[1-A-Neuroanatomy.html](1-A-Neuroanatomy.html">1-A-Neuroanatomy.html)
+[Perceptrons](1-B-Perceptrons.html)
 
-[1-B-Perceptrons.html](1-B-Perceptrons.html">1-B-Perceptrons.html)
+[Backpropagation-and-Gradient-Descent](1-C-Backpropagation-and-Gradient-Descent.html)
 
-[1-C-Backpropagation-and-Gradient-Descent.html](1-C-Backpropagation-and-Gradient-Descent.html">1-C-Backpropagation-and-Gradient-Descent.html)
+[Entropy-KL-Divergence](2-A-Entropy-KL-Divergence.html)
 
-[1-C-Backpropagation.html](1-C-Backpropagation.html">1-C-Backpropagation.html)
+[PyTorch](2-B-PyTorch.html)
 
-[2-A-Entropy-KL-Divergence.html](2-A-Entropy-KL-Divergence.html">2-A-Entropy-KL-Divergence.html)
+[Hidden-Unit-Dynamics](3-A-Hidden-Unit-Dynamics.html)
 
-[2-B-PyTorch.html](2-B-PyTorch.html">2-B-PyTorch.html)
+[Convolutional-Networks-and-Image-Processing](3-B-Convolutional-Networks-and-Image-Processing.html)
 
-[3-A-Hidden-Unit-Dynamics.html](3-A-Hidden-Unit-Dynamics.html">3-A-Hidden-Unit-Dynamics.html)
+[Dealing-With-Deeper-Networks](4-A-Dealing-With-Deeper-Networks.html)
 
-[3-B-Convolutional-Networks-and-Image-Processing.html](3-B-Convolutional-Networks-and-Image-Processing.html">3-B-Convolutional-Networks-and-Image-Processing.html)
+[Recurrent-Networks](5-A-Recurrent-Networks.html)
 
-[3-B-Convolutional-Networks.html](3-B-Convolutional-Networks.html">3-B-Convolutional-Networks.html)
+[Word-Embeddings](5-B-Word-Embeddings.html)
 
-[4-A-Dealing-With-Deeper-Networks.html](4-A-Dealing-With-Deeper-Networks.html">4-A-Dealing-With-Deeper-Networks.html)
+[Language-Processing](5-C-Language-Processing.html)
 
-[4-B-Image-Processing-Data-Augmentation.html](4-B-Image-Processing-Data-Augmentation.html">4-B-Image-Processing-Data-Augmentation.html)
+[Reinforcement-Learning](7-A-Reinforcement-Learning.html)
 
-[5-A-Recurrent-Networks.html](5-A-Recurrent-Networks.html">5-A-Recurrent-Networks.html)
+[Deep-Reinforcement-Learning](7-B-Deep-Reinforcement-Learning.html)
 
-[5-B-Word-Embeddings.html](5-B-Word-Embeddings.html">5-B-Word-Embeddings.html)
+[Hopfield-Networks-Boltzmann-Machines](8-A-Hopfield-Networks-Boltzmann-Machines.html)
 
-[5-C-Language-Processing.html](5-C-Language-Processing.html">5-C-Language-Processing.html)
+[Autoencoders](9-A-Autoencoders.html)
 
-[7-A-Reinforcement-Learning.html](7-A-Reinforcement-Learning.html">7-A-Reinforcement-Learning.html)
+[Generative-Adversarial-Networks](9-B-Generative-Adversarial-Networks.html)
 
-[7-B-Deep-Reinforcement-Learning.html](7-B-Deep-Reinforcement-Learning.html">7-B-Deep-Reinforcement-Learning.html)
+[Neural-Networks-Overview](Neural-Networks-Overview.html)
 
-[8-A-Hopfield-Networks-Boltzmann-Machines.html](8-A-Hopfield-Networks-Boltzmann-Machines.html">8-A-Hopfield-Networks-Boltzmann-Machines.html)
+[Regression-Analyses](Regression-Analyses.html)
 
-[9-A-Autoencoders.html](9-A-Autoencoders.html">9-A-Autoencoders.html)
-
-[9-B-Generative-Adversarial-Networks.html](9-B-Generative-Adversarial-Networks.html">9-B-Generative-Adversarial-Networks.html)
-
-[Building-Neural-Networks.html](Building-Neural-Networks.html">Building-Neural-Networks.html)
-
-[Math-Appendix.html](Math-Appendix.html">Math-Appendix.html)
-
-[Neural-Networks-Comprehensive-Notes.html](Neural-Networks-Comprehensive-Notes.html">Neural-Networks-Comprehensive-Notes.html)
-
-[Neural-Networks-Overview.html](Neural-Networks-Overview.html">Neural-Networks-Overview.html)
-
-[PyTorch.html](PyTorch.html">PyTorch.html)
-
-[Questions.html](Questions.html">Questions.html)
-
-[Regression-Analyses.html](Regression-Analyses.html">Regression-Analyses.html)
-
-[Scientific-Python-NumPy.html](Scientific-Python-NumPy.html">Scientific-Python-NumPy.html)
-
-[Scientific-Python.html](Scientific-Python.html">Scientific-Python.html)
+[Scientific-Python-NumPy](Scientific-Python-NumPy.html)
 
