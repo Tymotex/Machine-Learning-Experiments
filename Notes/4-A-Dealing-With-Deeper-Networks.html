@@ -13077,23 +13077,7 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Dealing-with-deeper-networks:">Dealing with deeper networks:<a class="anchor-link" href="#Dealing-with-deeper-networks:">&#182;</a></h1><p>Deep neural networks with tens of layers can be very sensitive to initial random weights.</p>
-<ul>
-<li>10+ layers:<ul>
-<li>Weight initialisation &mdash; choosing intial weights that will make backpropagation work better. Normally, we initialise weights by drawing values at random from a normal distribution with $\mu = 0$. With weight initialisation, we're selecting the value for standard deviation $\sigma$ more carefully. </li>
-<li>Batch normalisation &mdash;</li>
-</ul>
-</li>
-<li>30+ layers:<ul>
-<li>Skip connections &mdash;</li>
-</ul>
-</li>
-<li>100+ layers:<ul>
-<li>Identity skip connections &mdash;</li>
-</ul>
-</li>
-</ul>
-
+<h1 id="Dealing-with-deeper-networks:">Dealing with deeper networks:<a class="anchor-link" href="#Dealing-with-deeper-networks:">&#182;</a></h1>
 </div>
 </div>
 </div>
@@ -13107,15 +13091,16 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Suppose $y = \sum_{k=1}^{n} w_k x_k$. If $x_k, x_k$ are independent, then 
+<p>Suppose we have the weighted sum $y = \sum_{k=1}^{n} w_k x_k$. If $w_k, x_k$ are <em>independent</em>, then 
 $$
-    \text{Var}(y) = n\text{Var}(w)\text{Var}(x). \tag{1}
-$$</p>
-<p>Consider one layer $(i)$ of a deep network, with values:</p>
+    \text{Var}(y) = n\text{Var}(w)\text{Var}(x), \tag{1}
+$$
+where $n$ is the size of the vectors $w_k$ and $x_k$.</p>
+<p>Consider one layer $(i)$ of a neural network, with:</p>
 <ul>
-<li>weights $w_{jk}^{(i)}$</li>
-<li>activations $x_{k}^{(i)}$ coming in from the previous layer from $1 \leq k \leq n_{i}$ with $n_i$ being the number of nodes in layer $(i)$</li>
-<li>activations $x_{j}^{(i+1)}$ at the next layer from $1 \leq j \leq n_{i+1}$ with $n_{i+1}$ being the number of nodes in layer $(i+1)$</li>
+<li>Weights $w_{jk}^{(i)}$ &mdash; denoting the weight of the connection from node $k$ of the previous layer, $(i-1)$, to node $j$ in layer $(i)$</li>
+<li>Activations $x_{k}^{(i)}$ &mdash; denoting the activation value of node $k$ at layer $i$, where $1 \leq k \leq n_{i}$ with $n_i$ being the number of nodes in layer $(i)$</li>
+<li>Activations $x_{j}^{(i+1)}$ &mdash; denoting the activation value of node $j$ at the next layer, where $1 \leq j \leq n_{i+1}$ with $n_{i+1}$ being the number of nodes in layer $(i+1)$</li>
 </ul>
 <p>The activation value at each node in the next layer is given by:</p>
 $$
@@ -13123,9 +13108,11 @@ $$
 $$<p>From $(1)$ and $(2)$, we have</p>
 $$
     \text{Var}(\sum_{k=1}^{n_i} w_{jk}^{(i)} x_{k}^{(i)}) = n_i \text{Var}(w_{jk}^{(i)}) \text{Var}(x_{k}^{(i)}),
-$$$$
+$$<p>then substituting $\sum_{k=1}^{n_i} w_{jk}^{(i)} x_{k}^{(i)}$ for $x^{(i+1)}$,
+$$
     \text{Var}(x^{(i+1)}) \approx G_0 n_i \text{Var}(w^{(i)}) \text{Var}(x^{(i)}), \tag{3}
-$$<p>where $G_0$ is a constant to account for the activation function &mdash; normally we just set it to $G_0 = \frac{1}{2}$.</p>
+$$
+where $G_0$ is a constant to account for the activation function &mdash; normally we just set it to $G_0 = \frac{1}{2}$.</p>
 <p>Suppose a network has $D$ layers, with input vector $x^{(i)}$ and output $z$. From $(3)$ collected across $D$ layers, we have</p>
 $$
     \text{Var}(z) \approx \underbrace{\prod_{i=1}^{D} \big( G_0 n_i \text{Var}(w_i) \big)}_{\text{We want this to be } \approx \space 1} \cdot \text{Var}(x). \tag{4}
@@ -13145,7 +13132,7 @@ $$<p>where $G_1 = \frac{1}{2}$, usually.</p>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="Example:">Example:<a class="anchor-link" href="#Example:">&#182;</a></h4><p><img src="images/weight-initialisation-1.png" width="50%">
+<h4 id="Example-of-Weight-Initialisation:">Example of Weight Initialisation:<a class="anchor-link" href="#Example-of-Weight-Initialisation:">&#182;</a></h4><p><img src="images/weight-initialisation-1.png" width="50%">
 <em><p style="text-align: center;">Error on the y axis</p></em></p>
 <p>The above graph shows the difference in training speed for a 22-layer $\texttt{ReLU}$ network for when suboptimal initial weights are chosen (blue line) vs. when weights are chosen according to $(6)$.</p>
 
@@ -13155,20 +13142,19 @@ $$<p>where $G_1 = \frac{1}{2}$, usually.</p>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Batch-Normalisation:">Batch Normalisation:<a class="anchor-link" href="#Batch-Normalisation:">&#182;</a></h3><p>Technique for making deeper networks faster and stabler by recentering and rescaling the inputs to chosen layers in the network (normalisation) for each <em>mini-batch</em> .</p>
+<h3 id="Batch-Normalisation:">Batch Normalisation:<a class="anchor-link" href="#Batch-Normalisation:">&#182;</a></h3><p>Batch normalistion is a technique for making deeper networks faster to train and stabler by recentering and rescaling the inputs to chosen layers in the network (normalisation) for each <em>mini-batch</em> .</p>
 <ul>
-<li>Standardisation &mdash; making the mini-batch have $\mu = 0$ and $\sigma = 1$ through $z=\frac{x-\mu_d}{\sigma_d}$ where $\mu_d$ and $\sigma_d$ are calculated from the current mini-batch<ul>
+<li><em>Standardisation</em> &mdash; recentering and rescaling the mini-batch to have mean $\mu = 0$ and standard deviation $\sigma = 1$ by applying the linear transformation, $z=\frac{x-\mu_d}{\sigma_d}$, where $\mu_d$ and $\sigma_d$ are calculated from the current mini-batch.<ul>
 <li>Without standardising input values, having disproportionately large input values will cause the exploding gradient problem. A large activation value in an earlier layer will be transferred onto the next layer, cascading through the network and causing unstable weight changes</li>
 </ul>
 </li>
-<li>Covariate Shift &mdash; Covariate shift is the change in the distribution of input values. This may happen, for instance, if the training set comes from images downloaded from the web while the test set comes from an iPhone camera.<ul>
+<li><em>Covariate shift</em> &mdash; covariate shift is the change in the distribution of input values. This may happen, for instance, if the training set's items come from images downloaded from the web while the test set's training items comes from an iPhone camera, for instance.<ul>
 <li>The aim of batch normalisation is to reduce covariate shift by normalising the activations of each layer.</li>
 <li>Batch normalisation reduces the impact that earlier layers have on the distribution of inputs into later hidden layers. Ie. this 'decouples' the later layer's parameters from the earlier's layer's parameters</li>
 </ul>
 </li>
 </ul>
-<p>Normalising the activations of each layer to have mean $\mu = 0$ and standard deviation $\sigma = 1$ may limit the expressive power of the network.</p>
-<p>Because of this, we introduce addtional trainable parameters $\gamma$ and $\beta$.</p>
+<p>Normalising the activations of each layer to have mean $\mu = 0$ and standard deviation $\sigma = 1$ may limit the expressive power of the network. Because of this, we introduce addtional trainable parameters $\gamma$ and $\beta$.</p>
 <h4 id="Algorithm:">Algorithm:<a class="anchor-link" href="#Algorithm:">&#182;</a></h4><p>Suppose we have a batch of size $m$</p>
 <table>
     <tr>
@@ -13188,15 +13174,6 @@ $$<p>where $G_1 = \frac{1}{2}$, usually.</p>
 <li><p>This introduces more independent parameters to the network, but it keeps the activations within a 'healthy' range</p>
 </li>
 </ul>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Skip-Connections:">Skip Connections:<a class="anchor-link" href="#Skip-Connections:">&#182;</a></h3><p>Skip connections are connections that bypass intermediate layers, so the output of one layer is fed directly as the input into some later layer.</p>
-<p><img src="images/skip-connection.png" width="25%"></p>
 
 </div>
 </div>

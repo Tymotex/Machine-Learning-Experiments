@@ -13107,12 +13107,10 @@ Note the $\frac{1}{2}$ is chosen so that the coefficient is conveniently cancele
 $$
   E(z_i, t_i)=-\sum_{i}t_i\log{(z_i)}. \tag{2}
 $$
-One way to interpret cross-entropy is to see it as a negative log-likelihood for the network to produce $t_i$(?). TODO: What is negative log likelihood even... 
-Cross-entropy is a good error function for measuring the 'distance' between the vector of the output layer's predicted probabilities for each class and the expected label vector (which is 1-hot encoded).</p>
+Cross-entropy is a good error function for measuring the 'distance' between the vector of the output layer's predicted probabilities for each class and the expected label vector, which is 1-hot encoded.</p>
 </li>
 <li>Binary cross-entropy loss &mdash; a variation on regular cross-entropy loss </li>
-<li>Categorical cross-entropy loss &mdash; also called <em>softmax loss</em>. It is just softmax followed by a cross-entropy loss
-<a href="https://gombru.github.io/2018/05/23/cross_entropy_loss/">https://gombru.github.io/2018/05/23/cross_entropy_loss/</a> AMAZING RESOURCE</li>
+<li>Categorical cross-entropy loss &mdash; also called <em>softmax loss</em>. It is just softmax followed by a cross-entropy loss</li>
 </ul>
 
 </div>
@@ -13206,6 +13204,26 @@ $$</p>
 <p>There are variations on gradient descent which introduce concepts like <em>momentum</em> and <em>acceleration</em>.</p>
 <p>There also exists many other optimisers such as <em>adagrad</em>, <em>adam</em>, <em>rms-prop</em>, <em>Nesterov accelerated gradient</em>, etc.</p>
 
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Momentum:">Momentum:<a class="anchor-link" href="#Momentum:">&#182;</a></h4><p>With gradient descent + momentum, we're introducing a <em>momentum factor</em>, $\delta w$, which retains a proportion of the previously computed gradient $\frac{\partial E}{\partial w}$ for use in the current weight update:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+$$
+    \begin{align}
+    \delta w &amp;:= \alpha \delta w - \eta \frac{\partial E}{\partial w}, \\
+    w &amp;:= w + \delta w.
+    \end{align}
+$$
 </div>
 </div>
 </div>

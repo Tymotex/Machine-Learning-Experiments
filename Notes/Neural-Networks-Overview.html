@@ -13204,7 +13204,7 @@ div#notebook {
 <p><strong><em>Mean squared error</em></strong> &mdash; the sum of the squared difference between expected value $t$ and the forward-propagation's predicted value $z$,
 $$E(t, z) = \frac{1}{2}\sum_{i=1}^{m} (t-z)^2. \tag{1}$$</p>
 <p><strong><em>Cross-entropy</em></strong> &mdash; very frequently used for classification tasks.
-$$E(t, z)=-\sum_i^C t_i \log (s_i), \tag{2}$$ where $C$ is the number of output classes.</p>
+$$E(t, z)=-\sum_i^C t_i \log (z_i), \tag{2}$$ where $C$ is the number of output classes.</p>
 <ul>
 <li><strong><em>Binary cross-entropy</em></strong> &mdash; used for when there are two output classes. This is just a special case derived from when you substitute $C=2$ in the cross-entropy function $(2)$,
 $$E(t, z) = -(t\log z + (1-t)\log (1-z)).$$ <ul>

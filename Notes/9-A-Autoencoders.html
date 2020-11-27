@@ -13239,8 +13239,8 @@ $$</p>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>For autoencoders, the decoder can be seen as defining a conditional probability distribution $p_\theta(x|z)$ of possible output images given a particular hidden layer vector $z$, based on the decoder network with parameters $\theta$.</p>
-<p>The encoder part can be seen as defining a conditional probability distribution $q_\phi (z | x)$ of possible hidden layer vectors given input image $x$, based on the encoder network with parameters $\phi$.</p>
+<p>For regular autoencoders, the decoder half of the network with parameters $\theta$ outputs a conditional probability distribution $p_\theta(x|z)$ of the possible output images $x$ it can produce, given a particular hidden layer vector $z$.</p>
+<p>Similarly, the encoder half of the encoder network with parameters $\phi$ outputs a conditional probability distribution $q_\phi (z | x)$ of possible hidden layer vectors $z$ that it can produce, given the input image $x$.</p>
 
 </div>
 </div>
@@ -13251,57 +13251,12 @@ $$</p>
 <p>For <em>variational autoencoders</em>, instead of producing just a hidden layer vector $z$ for each $x^{(i)}$, the encoder network with parameters $\phi$ can also give the mean $\mu_{z|x^{(i)}}$ and standard deviation $\sigma_{z | x^{(i)}}$ of the normal probability distribution of the possible hidden layer outputs $q_\phi (z | x^{(i)})$, given the input $x^{(i)}$.</p>
 <p>We can then train the system to maximise:</p>
 $$
-    \underbrace{E_{z \text{~} q_\phi(z|x^{(i)})}\big( \log(p_\theta(x^{(i)}|z)) \big)}_{\text{Probability to reproduce image }x^{(i)} \text{ given }z} - \underbrace{D_{KL}\big( q_\phi(z|x^{(i)}) \parallel p(z)\big).}_{\text{KL-divergence between } q_\phi(z|x^{(i)} \text{ and standard normal dist}}
-$$<p>TODO: What the fuck does this even mean. 38:00</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
+    \underbrace{E_{z \text{~} q_\phi(z|x^{(i)})}\big( \log(p_\theta(x^{(i)}|z)) \big)}_{\text{Probability to reproduce image }x^{(i)} \text{ given }z} - \underbrace{D_{KL}\big( q_\phi(z|x^{(i)}) \parallel p(z)\big).}_{\text{KL-divergence between } q_\phi(z|x^{(i)} \text{ and standard normal dist}} \tag{3}
+$$<p>The first term involves maximising the log probability that an input image $x^{(i)}$ can be reproduced by the decoder at the output layer.</p>
+<p>The second term involves minimising the 'distance' between the $q_\phi (z| x^{(i)})$, the distribution of hidden layer vectors produced by the encoder, and the standard normal distribution, $p(z)$.</p>
+<ul>
+<li>Remember, we rely on sampling vectors from the standard normal distribution $p(z)$ and passing those vectors to the decoder to generate new items </li>
+</ul>
 
 </div>
 </div>
